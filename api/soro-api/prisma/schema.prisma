@@ -1,0 +1,166 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String         @id @default(uuid())
+  email          String         @unique
+  password       String
+  name           String
+  lastName       String
+  documentNumber String         @unique
+  documentType   typeDocument
+  phone          String
+  companyId      String
+  roles          UserRole[]
+  signature      Signature?
+  refreshTokens  RefreshToken[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  // Relationships
+  company        Company              @relation("UserCompany", fields: [companyId], references: [id], onDelete: Cascade)
+  enlacedRecords UserEnlacedRecords[]
+
+  // Indexes
+  @@index([email])
+  @@index([companyId])
+  @@index([documentNumber])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  tokenHash String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Relationships
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Role {
+  id          String           @id @default(uuid())
+  name        String           @unique
+  userRoles   UserRole[]
+  permissions RolePermission[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  //indexes
+  @@index([name])
+}
+
+model Permission {
+  id          String           @id @default(uuid())
+  name        String           @unique
+  description String?
+  roles       RolePermission[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model RolePermission {
+  id           String @id @default(uuid())
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+}
+
+model UserRole {
+  id        String @id @default(uuid())
+  userId    String
+  roleId    String
+  companyId String
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  company   Company  @relation("UserCompanyRoles", fields: [companyId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, roleId, companyId])
+  @@index([companyId])
+}
+
+model Company {
+  id        String   @id @default(uuid())
+  name      String
+  nit       String   @unique
+  address   String
+  phone     String   @unique @default("")
+  parentId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  parent         Company?         @relation("CompanyToChildren", fields: [parentId], references: [id], onDelete: SetNull)
+  children       Company[]        @relation("CompanyToChildren")
+  users          User[]           @relation("UserCompany")
+  roles          UserRole[]       @relation("UserCompanyRoles")
+  enlacedRecords EnlacedRecords[]
+
+  @@unique([name, parentId])
+  @@index([parentId])
+}
+
+model Signature {
+  id        String   @id @default(uuid())
+  userId    String
+  signature String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+  @@index([userId])
+}
+
+model EnlacedRecords {
+  id         String   @id @default(uuid())
+  recordId   String
+  fromRecord String
+  companyId  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relationships
+  company Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  users   UserEnlacedRecords[]
+
+  @@unique([companyId])
+  @@index([companyId, recordId])
+}
+
+model UserEnlacedRecords {
+  id              String @id @default(uuid())
+  enlacedRecordId String
+  userId          String
+
+  enlacedRecord EnlacedRecords @relation(fields: [enlacedRecordId], references: [id], onDelete: Cascade)
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([enlacedRecordId, userId])
+}
+
+enum typeDocument {
+  CC
+  CE
+  TI
+}
