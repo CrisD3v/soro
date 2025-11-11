@@ -6,6 +6,8 @@
 'use client';
 
 import { FormField } from '@/components/molecules/FormField/FormField';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useResetPassword } from '@/lib/queries/auth.queries';
 import {
   resetPasswordSchema,
@@ -64,15 +66,13 @@ export const ResetPasswordForm = ({
         htmlFor="email"
       >
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
+          <Input
             id="email"
             type="email"
             placeholder="tu@email.com"
-            className={`w-full pl-11 pr-4 py-2 rounded-lg border ${errors.email
-                ? 'border-red-500 focus:ring-red-500'
-                : 'border-gray-300 dark:border-gray-600 focus:ring-purple-500'
-              } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors`}
+            className="pl-11"
+            aria-invalid={!!errors.email}
             {...register('email')}
           />
         </div>
@@ -104,35 +104,36 @@ export const ResetPasswordForm = ({
         </motion.div>
       )}
 
-      <motion.button
-        type="submit"
-        disabled={resetMutation.isPending || resetMutation.isSuccess}
-        className="w-full py-3 px-4 bg-purple-500 hover:bg-purple-600 disabled:bg-purple-300 dark:disabled:bg-purple-800 text-white rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        {resetMutation.isPending ? (
-          <motion.div
-            className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          />
-        ) : (
-          <>
-            <Send className="w-5 h-5" />
-            Enviar Instrucciones
-          </>
-        )}
-      </motion.button>
+      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+        <Button
+          type="submit"
+          disabled={resetMutation.isPending || resetMutation.isSuccess}
+          className="w-full bg-purple-500 hover:bg-purple-600 disabled:bg-purple-300 dark:disabled:bg-purple-800"
+        >
+          {resetMutation.isPending ? (
+            <motion.div
+              className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+            />
+          ) : (
+            <>
+              <Send className="w-5 h-5" />
+              Enviar Instrucciones
+            </>
+          )}
+        </Button>
+      </motion.div>
 
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={onSwitchToLogin}
-        className="w-full flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-purple-500 dark:hover:text-purple-400 transition-colors"
+        className="w-full"
       >
         <ArrowLeft className="w-4 h-4" />
         Volver al inicio de sesión
-      </button>
+      </Button>
     </motion.form>
   );
 };

@@ -37,13 +37,13 @@ describe('PasswordInput', () => {
   it('debe aplicar estilos de error cuando error=true', () => {
     const { container } = render(<PasswordInput error={true} />);
     const input = container.querySelector('input');
-    expect(input).toHaveClass('border-red-500');
+    expect(input).toHaveAttribute('aria-invalid', 'true');
   });
 
   it('debe aplicar estilos normales cuando error=false', () => {
     const { container } = render(<PasswordInput error={false} />);
     const input = container.querySelector('input');
-    expect(input).toHaveClass('border-gray-300');
+    expect(input).toHaveAttribute('aria-invalid', 'false');
   });
 
   it('debe permitir escribir en el input', async () => {

@@ -5,6 +5,7 @@
 
 'use client';
 
+import { Label } from '@/components/ui/label';
 import { AnimatePresence, motion } from 'motion/react';
 import type { FormFieldProps } from './FormField.types';
 
@@ -18,13 +19,10 @@ export const FormField = ({
 }: FormFieldProps) => {
   return (
     <div className={`space-y-2 ${className}`}>
-      <label
-        htmlFor={htmlFor}
-        className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-      >
+      <Label htmlFor={htmlFor}>
         {label}
         {required && <span className="text-purple-500 ml-1">*</span>}
-      </label>
+      </Label>
       {children}
       <AnimatePresence mode="wait">
         {error && (

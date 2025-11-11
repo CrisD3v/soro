@@ -7,6 +7,15 @@
 
 import { FormField } from '@/components/molecules/FormField/FormField';
 import { PasswordInput } from '@/components/molecules/PasswordInput/PasswordInput';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useRegister } from '@/lib/queries/auth.queries';
 import { registerSchema, type RegisterFormData } from '@/lib/utils/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,6 +39,7 @@ export const RegisterForm = ({
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -62,15 +72,13 @@ export const RegisterForm = ({
           htmlFor="name"
         >
           <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
+            <Input
               id="name"
               type="text"
               placeholder="Juan"
-              className={`w-full pl-11 pr-4 py-2 rounded-lg border ${errors.name
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 dark:border-gray-600 focus:ring-purple-500'
-                } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors`}
+              className="pl-11"
+              aria-invalid={!!errors.name}
               {...register('name')}
             />
           </div>
@@ -83,15 +91,13 @@ export const RegisterForm = ({
           htmlFor="lastName"
         >
           <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
+            <Input
               id="lastName"
               type="text"
               placeholder="Pérez"
-              className={`w-full pl-11 pr-4 py-2 rounded-lg border ${errors.lastName
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 dark:border-gray-600 focus:ring-purple-500'
-                } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors`}
+              className="pl-11"
+              aria-invalid={!!errors.lastName}
               {...register('lastName')}
             />
           </div>
@@ -105,15 +111,13 @@ export const RegisterForm = ({
         htmlFor="email"
       >
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
+          <Input
             id="email"
             type="email"
             placeholder="tu@email.com"
-            className={`w-full pl-11 pr-4 py-2 rounded-lg border ${errors.email
-                ? 'border-red-500 focus:ring-red-500'
-                : 'border-gray-300 dark:border-gray-600 focus:ring-purple-500'
-              } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors`}
+            className="pl-11"
+            aria-invalid={!!errors.email}
             {...register('email')}
           />
         </div>
@@ -126,7 +130,7 @@ export const RegisterForm = ({
         htmlFor="password"
       >
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
           <PasswordInput
             id="password"
             placeholder="••••••••"
@@ -145,20 +149,24 @@ export const RegisterForm = ({
           htmlFor="documentType"
         >
           <div className="relative">
-            <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <select
-              id="documentType"
-              className={`w-full pl-11 pr-4 py-2 rounded-lg border ${errors.documentType
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 dark:border-gray-600 focus:ring-purple-500'
-                } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors`}
-              {...register('documentType')}
+            <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
+            <Select
+              onValueChange={(value) =>
+                setValue('documentType', value as 'CC' | 'CE' | 'TI')
+              }
             >
-              <option value="">Seleccionar</option>
-              <option value="CC">Cédula de Ciudadanía</option>
-              <option value="CE">Cédula de Extranjería</option>
-              <option value="TI">Tarjeta de Identidad</option>
-            </select>
+              <SelectTrigger
+                className="pl-11 w-full"
+                aria-invalid={!!errors.documentType}
+              >
+                <SelectValue placeholder="Seleccionar" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="CC">Cédula de Ciudadanía</SelectItem>
+                <SelectItem value="CE">Cédula de Extranjería</SelectItem>
+                <SelectItem value="TI">Tarjeta de Identidad</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </FormField>
 
@@ -168,14 +176,11 @@ export const RegisterForm = ({
           required
           htmlFor="documentNumber"
         >
-          <input
+          <Input
             id="documentNumber"
             type="text"
             placeholder="1234567890"
-            className={`w-full px-4 py-2 rounded-lg border ${errors.documentNumber
-                ? 'border-red-500 focus:ring-red-500'
-                : 'border-gray-300 dark:border-gray-600 focus:ring-purple-500'
-              } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors`}
+            aria-invalid={!!errors.documentNumber}
             {...register('documentNumber')}
           />
         </FormField>
@@ -188,15 +193,13 @@ export const RegisterForm = ({
         htmlFor="phone"
       >
         <div className="relative">
-          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
+          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
+          <Input
             id="phone"
             type="tel"
             placeholder="+573001234567"
-            className={`w-full pl-11 pr-4 py-2 rounded-lg border ${errors.phone
-                ? 'border-red-500 focus:ring-red-500'
-                : 'border-gray-300 dark:border-gray-600 focus:ring-purple-500'
-              } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors`}
+            className="pl-11"
+            aria-invalid={!!errors.phone}
             {...register('phone')}
           />
         </div>
@@ -209,15 +212,13 @@ export const RegisterForm = ({
         htmlFor="companyId"
       >
         <div className="relative">
-          <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
+          <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground z-10" />
+          <Input
             id="companyId"
             type="text"
             placeholder="UUID de la empresa"
-            className={`w-full pl-11 pr-4 py-2 rounded-lg border ${errors.companyId
-                ? 'border-red-500 focus:ring-red-500'
-                : 'border-gray-300 dark:border-gray-600 focus:ring-purple-500'
-              } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 transition-colors`}
+            className="pl-11"
+            aria-invalid={!!errors.companyId}
             {...register('companyId')}
           />
         </div>
@@ -237,36 +238,38 @@ export const RegisterForm = ({
         </motion.div>
       )}
 
-      <motion.button
-        type="submit"
-        disabled={registerMutation.isPending}
-        className="w-full py-3 px-4 bg-purple-500 hover:bg-purple-600 disabled:bg-purple-300 dark:disabled:bg-purple-800 text-white rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        {registerMutation.isPending ? (
-          <motion.div
-            className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          />
-        ) : (
-          <>
-            <UserPlus className="w-5 h-5" />
-            Registrarse
-          </>
-        )}
-      </motion.button>
+      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+        <Button
+          type="submit"
+          disabled={registerMutation.isPending}
+          className="w-full bg-purple-500 hover:bg-purple-600 disabled:bg-purple-300 dark:disabled:bg-purple-800"
+        >
+          {registerMutation.isPending ? (
+            <motion.div
+              className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+            />
+          ) : (
+            <>
+              <UserPlus className="w-5 h-5" />
+              Registrarse
+            </>
+          )}
+        </Button>
+      </motion.div>
 
       <div className="text-center text-sm text-gray-600 dark:text-gray-400">
         ¿Ya tienes cuenta?{' '}
-        <button
+        <Button
           type="button"
+          variant="link"
+          size="sm"
           onClick={onSwitchToLogin}
-          className="text-purple-500 hover:text-purple-600 dark:text-purple-400 dark:hover:text-purple-300 font-medium transition-colors"
+          className="text-purple-500 hover:text-purple-600 dark:text-purple-400 dark:hover:text-purple-300 p-0 h-auto font-medium"
         >
           Inicia sesión
-        </button>
+        </Button>
       </div>
     </motion.form>
   );
