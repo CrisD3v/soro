@@ -20,5 +20,6 @@ async function bootstrap() {
   await app.listen(PORT);
 
   Logger.log(`Servidor corriendo en: http://localhost:${PORT}/api`);
+  Logger.log(`cors para : ${process.env.FRONTEND_URL}`)
 }
 bootstrap();
