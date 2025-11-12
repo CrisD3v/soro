@@ -24,8 +24,8 @@ export const NavBar = ({ className = '' }: NavBarProps) => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-          ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-lg'
-          : 'bg-transparent'
+        ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-lg'
+        : 'bg-transparent'
         } ${className}`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,7 +54,7 @@ export const NavBar = ({ className = '' }: NavBarProps) => {
               variant="ghost"
               size="sm"
               onClick={() => router.push('/auth')}
-              className="hidden sm:inline-flex"
+              className="hidden sm:inline-flex cursor-pointer"
             >
               Iniciar Sesión
             </Button>
@@ -65,7 +65,7 @@ export const NavBar = ({ className = '' }: NavBarProps) => {
                 const element = document.querySelector('#demo');
                 element?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="bg-purple-500 hover:bg-purple-600"
+              className="bg-purple-500 hover:bg-purple-600 cursor-pointer"
             >
               Demo
             </Button>
