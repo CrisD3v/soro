@@ -11,9 +11,8 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
   user: UserData;
+  // Tokens enviados en cookies HttpOnly por el backend
 }
 
 // Register types
@@ -43,17 +42,17 @@ export interface UserData {
 
 // Refresh token types
 export interface RefreshTokenRequest {
-  refreshToken: string;
+  // RefreshToken enviado automáticamente en cookie
 }
 
 export interface RefreshTokenResponse {
-  accessToken: string;
-  refreshToken: string;
+  message: string;
+  // Tokens actualizados en cookies HttpOnly por el backend
 }
 
 // Logout types
 export interface LogoutRequest {
-  refreshToken: string;
+  // RefreshToken enviado automáticamente en cookie
 }
 
 // Reset password types

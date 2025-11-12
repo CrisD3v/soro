@@ -5,13 +5,11 @@
 import type {
   LoginRequest,
   LoginResponse,
-  LogoutRequest,
-  RefreshTokenRequest,
   RefreshTokenResponse,
   RegisterRequest,
   ResetPasswordRequest,
   ResetPasswordResponse,
-  UserData,
+  UserData
 } from './auth.types';
 import { apiClient } from './client';
 
@@ -32,18 +30,18 @@ export const authApi = {
 
   /**
    * Refresh Token - Renovar access token
+   * RefreshToken enviado automáticamente en cookie
    */
-  refreshToken: async (
-    request: RefreshTokenRequest
-  ): Promise<RefreshTokenResponse> => {
-    return apiClient.post<RefreshTokenResponse>('/auth/refresh', request);
+  refreshToken: async (): Promise<RefreshTokenResponse> => {
+    return apiClient.post<RefreshTokenResponse>('/auth/refresh', {});
   },
 
   /**
    * Logout - Cerrar sesión
+   * RefreshToken enviado automáticamente en cookie
    */
-  logout: async (request: LogoutRequest): Promise<void> => {
-    return apiClient.post<void>('/auth/logout', request, {
+  logout: async (): Promise<void> => {
+    return apiClient.post<void>('/auth/logout', {}, {
       requiresAuth: true,
     });
   },

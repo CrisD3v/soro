@@ -48,10 +48,8 @@ class ApiClient {
       ...(headers as Record<string, string>),
     };
 
-    // Agregar token si es requerido
-    if (requiresAuth && this.accessToken) {
-      requestHeaders['Authorization'] = `Bearer ${this.accessToken}`;
-    }
+    // Token enviado automáticamente en cookies HttpOnly
+    // No necesitamos agregar Authorization header manualmente
 
     const url = `${this.baseURL}${endpoint}`;
 
@@ -59,6 +57,7 @@ class ApiClient {
       const response = await fetch(url, {
         ...restConfig,
         headers: requestHeaders,
+        credentials: 'include', // Enviar cookies automáticamente
       });
 
       // Manejar respuestas sin contenido (204)
@@ -70,36 +69,28 @@ class ApiClient {
       if (response.status === 401 && !isRetry && requiresAuth) {
         console.log('[Auth] Access token expired, attempting refresh...');
 
-        const refreshToken = this.getRefreshToken();
-        if (refreshToken) {
-          try {
-            // Attempt to refresh the token
-            const refreshResponse = await fetch(`${this.baseURL}/auth/refresh`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ refreshToken }),
-            });
+        try {
+          // Attempt to refresh the token (refreshToken en cookie)
+          const refreshResponse = await fetch(`${this.baseURL}/auth/refresh`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include', // Enviar cookies con refreshToken
+          });
 
-            if (refreshResponse.ok) {
-              const { accessToken, refreshToken: newRefreshToken } = await refreshResponse.json();
+          if (refreshResponse.ok) {
+            // Backend actualiza cookies automáticamente
+            console.log('[Auth] Token refreshed successfully, retrying request');
 
-              // Update tokens
-              this.setAccessToken(accessToken);
-              this.setRefreshToken(newRefreshToken || refreshToken);
-
-              console.log('[Auth] Token refreshed successfully, retrying request');
-
-              // Retry the original request with new token
-              return this.request<T>(endpoint, config, true);
-            }
-          } catch (refreshError) {
-            console.error('[Auth] Token refresh failed:', refreshError);
+            // Retry the original request (cookies ya actualizadas)
+            return this.request<T>(endpoint, config, true);
           }
+        } catch (refreshError) {
+          console.error('[Auth] Token refresh failed:', refreshError);
         }
 
-        // If refresh failed or no refresh token, clear and redirect
+        // If refresh failed, clear and redirect
         this.clearTokens();
         if (typeof window !== 'undefined') {
           const currentPath = window.location.pathname;
@@ -134,31 +125,11 @@ class ApiClient {
   }
 
   /**
-   * Obtiene el refresh token del localStorage
-   */
-  private getRefreshToken(): string | null {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem('refreshToken');
-  }
-
-  /**
-   * Establece el refresh token en localStorage
-   */
-  private setRefreshToken(token: string) {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('refreshToken', token);
-    }
-  }
-
-  /**
-   * Limpia todos los tokens
+   * Limpia el access token local
+   * Las cookies son manejadas por el backend
    */
   private clearTokens() {
     this.accessToken = null;
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-    }
   }
 
   /**
