@@ -101,7 +101,7 @@ export const HeroSection = ({ className = '' }: HeroSectionProps) => {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 size="lg"
-                className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-6 text-lg"
+                className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-6 text-lg cursor-pointer"
                 onClick={() => {
                   const element = document.querySelector('#demo');
                   element?.scrollIntoView({ behavior: 'smooth' });
@@ -116,7 +116,7 @@ export const HeroSection = ({ className = '' }: HeroSectionProps) => {
               <Button
                 size="lg"
                 variant="outline"
-                className="px-8 py-6 text-lg border-2"
+                className="px-8 py-6 text-lg border-2 cursor-pointer"
                 onClick={() => router.push('/auth')}
               >
                 <Play className="mr-2 w-5 h-5" />
@@ -155,12 +155,16 @@ export const HeroSection = ({ className = '' }: HeroSectionProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 cursor-pointer"
+        onClick={() => {
+          const element = document.querySelector('#features');
+          element?.scrollIntoView({ behavior: 'smooth' });
+        }}
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="w-6 h-10 border-2 border-gray-400 dark:border-gray-600 rounded-full flex items-start justify-center p-2"
+          className="w-6 h-10 border-2 border-gray-400 dark:border-gray-600 rounded-full flex items-start justify-center p-2 hover:border-purple-500 dark:hover:border-purple-400 transition-colors"
         >
           <motion.div className="w-1.5 h-1.5 bg-gray-400 dark:bg-gray-600 rounded-full" />
         </motion.div>
