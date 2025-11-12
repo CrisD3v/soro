@@ -29,11 +29,13 @@ export const InventorySummaryCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.3, delay }}
-      whileHover={{ y: -4 }}
-      className={`p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all ${className}`}
+      className={`relative p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden ${className}`}
     >
+      {/* Gradient Background */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/10 to-transparent rounded-full blur-3xl" />
+
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="relative flex items-center justify-between mb-6">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
             Resumen de Inventario
@@ -42,7 +44,7 @@ export const InventorySummaryCard = ({
             Estado actual del stock
           </p>
         </div>
-        <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600">
+        <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg shadow-purple-500/30">
           <Package className="w-6 h-6 text-white" />
         </div>
       </div>
@@ -69,8 +71,8 @@ export const InventorySummaryCard = ({
             Nivel de Stock
           </span>
           <span className={`text-sm font-semibold ${stockLevel >= 70 ? 'text-green-600 dark:text-green-400' :
-              stockLevel >= 40 ? 'text-orange-600 dark:text-orange-400' :
-                'text-red-600 dark:text-red-400'
+            stockLevel >= 40 ? 'text-orange-600 dark:text-orange-400' :
+              'text-red-600 dark:text-red-400'
             }`}>
             {stockLevel}% - {getStockStatus()}
           </span>

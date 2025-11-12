@@ -41,11 +41,13 @@ export const RecentAssignmentsCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.3, delay }}
-      whileHover={{ y: -4 }}
-      className={`p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all ${className}`}
+      className={`relative p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden ${className}`}
     >
+      {/* Gradient Background */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-3xl" />
+
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="relative flex items-center justify-between mb-6">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
             Asignaciones Recientes
@@ -54,13 +56,13 @@ export const RecentAssignmentsCard = ({
             Últimos movimientos de materiales
           </p>
         </div>
-        <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500 to-cyan-600">
+        <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500 to-cyan-600 shadow-lg shadow-cyan-500/30">
           <UserCheck className="w-6 h-6 text-white" />
         </div>
       </div>
 
       {/* Assignments List */}
-      <div className="space-y-3">
+      <div className="space-y-3 max-h-80 overflow-y-auto p-4 scrollbar-thin">
         {assignments.length === 0 ? (
           <p className="text-center text-gray-500 dark:text-gray-400 py-8">
             No hay asignaciones recientes
@@ -72,9 +74,9 @@ export const RecentAssignmentsCard = ({
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: delay + (index * 0.1) }}
-              whileHover={{ x: 4, scale: 1.01 }}
-              className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 cursor-pointer transition-all"
+              transition={{ duration: 0.15, delay: delay + (index * 0.05) }}
+              // whileHover={{ x: 2 }}
+              className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 cursor-pointer transition-all duration-150"
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex-1">

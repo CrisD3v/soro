@@ -61,11 +61,13 @@ export const MovementHistoryCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.3, delay }}
-      whileHover={{ y: -4 }}
-      className={`p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all ${className}`}
+      className={`relative p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden ${className}`}
     >
+      {/* Gradient Background */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/10 to-transparent rounded-full blur-3xl" />
+
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="relative flex items-center justify-between mb-6">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
             Historial de Movimientos
@@ -74,7 +76,7 @@ export const MovementHistoryCard = ({
             Registro de entradas, salidas y transferencias
           </p>
         </div>
-        <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600">
+        <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg shadow-purple-500/30">
           <History className="w-6 h-6 text-white" />
         </div>
       </div>
@@ -89,8 +91,8 @@ export const MovementHistoryCard = ({
             whileTap={{ scale: 0.95 }}
             onClick={() => setFilter(type)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${filter === type
-                ? 'bg-purple-500 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+              ? 'bg-purple-500 text-white'
+              : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
               }`}
           >
             {type === 'all' ? 'Todos' : type.charAt(0).toUpperCase() + type.slice(1)}
@@ -99,7 +101,7 @@ export const MovementHistoryCard = ({
       </div>
 
       {/* Movements Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto max-h-96 scrollbar-thin">
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-200 dark:border-gray-700">
@@ -137,8 +139,8 @@ export const MovementHistoryCard = ({
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: delay + (index * 0.05) }}
-                  className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                  transition={{ duration: 0.15, delay: delay + (index * 0.03) }}
+                  className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
                 >
                   <td className="py-3 px-2">
                     <div className="flex items-center gap-2">

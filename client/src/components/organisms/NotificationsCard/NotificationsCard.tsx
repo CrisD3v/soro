@@ -54,11 +54,13 @@ export const NotificationsCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.3, delay }}
-      whileHover={{ y: -4 }}
-      className={`p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all ${className}`}
+      className={`relative p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden ${className}`}
     >
+      {/* Gradient Background */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-orange-500/10 to-transparent rounded-full blur-3xl" />
+
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="relative flex items-center justify-between mb-6">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
             Notificaciones Automáticas
@@ -67,13 +69,13 @@ export const NotificationsCard = ({
             Alertas y actualizaciones del sistema
           </p>
         </div>
-        <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600">
+        <div className="p-3 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30">
           <Bell className="w-6 h-6 text-white" />
         </div>
       </div>
 
       {/* Notifications List */}
-      <div className="space-y-3 max-h-96 overflow-y-auto">
+      <div className="space-y-3 p-4 max-h-80 overflow-y-auto scrollbar-thin">
         {notifications.length === 0 ? (
           <p className="text-center text-gray-500 dark:text-gray-400 py-8">
             No hay notificaciones pendientes
@@ -85,9 +87,9 @@ export const NotificationsCard = ({
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: delay + (index * 0.1) }}
-              whileHover={{ x: 4, scale: 1.01 }}
-              className={`p-4 rounded-xl border cursor-pointer transition-all ${getNotificationBg(notification.type)}`}
+              transition={{ duration: 0.11, delay: delay + (index * 0.05) }}
+              // whileHover={{ x: 2 }}
+              className={`p-4 rounded-xl border cursor-pointer transition-all duration-150 ${getNotificationBg(notification.type)}`}
             >
               <div className="flex items-start gap-3">
                 <div className={`p-2 rounded-lg bg-gradient-to-br ${getNotificationColor(notification.type)} flex-shrink-0`}>
