@@ -6,7 +6,9 @@
 'use client';
 
 import { FeatureCard } from '@/components/molecules/FeatureCard/FeatureCard';
+import { Button } from '@/components/ui/button';
 import {
+  ArrowRight,
   BarChart3,
   Bell,
   Building2,
@@ -121,17 +123,23 @@ export const FeaturesSection = ({ className = '' }: FeaturesSectionProps) => {
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             ¿Quieres ver SORO en acción?
           </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
+          <motion.div
+            whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(168, 85, 247, 0.4)' }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              const element = document.querySelector('#demo');
-              element?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-colors"
           >
-            Solicitar una Demo
-          </motion.button>
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => {
+                const element = document.querySelector('#demo');
+                element?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="px-8 py-6 text-lg border-2 border-purple-500 text-purple-600 dark:text-purple-400 hover:bg-purple-500 hover:text-white cursor-pointer transition-all duration-300"
+            >
+              Solicitar una Demo
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Button>
+          </motion.div>
         </motion.div>
       </div>
     </section>
