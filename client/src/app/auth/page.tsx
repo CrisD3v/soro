@@ -12,7 +12,7 @@ export default function AuthPage() {
 
   const handleAuthSuccess = () => {
     // Redirigir al dashboard o home después del login exitoso
-    router.push('/');
+    router.push('/dashboard');
   };
 
   return <AuthTemplate onAuthSuccess={handleAuthSuccess} />;
