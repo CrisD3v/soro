@@ -29,7 +29,7 @@ export default function Home() {
               Sistema de Gestión Inteligente de Recursos
             </p>
             <p className="text-sm text-gray-500">
-              © 2024 SORO. Todos los derechos reservados.
+              © 2025 SORO. Todos los derechos reservados.
             </p>
           </div>
         </div>
