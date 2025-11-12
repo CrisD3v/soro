@@ -21,8 +21,8 @@ export const FeatureCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.5, delay }}
-      whileHover={{ y: -5, scale: 1.02 }}
-      className="group p-6 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:border-purple-500/50 dark:hover:border-purple-500/50 transition-all duration-300"
+      whileHover={{ y: -8, scale: 1.02 }}
+      className="group relative p-6 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:border-purple-500/50 dark:hover:border-purple-500/50 hover:shadow-xl transition-all duration-200"
     >
       <FeatureIcon icon={icon} />
 

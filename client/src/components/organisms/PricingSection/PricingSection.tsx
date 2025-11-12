@@ -101,7 +101,7 @@ export const PricingSection = ({ className = '' }: PricingSectionProps) => {
         </motion.div>
 
         {/* Pricing cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
           {plans.map((plan, index) => (
             <motion.div
               key={index}
@@ -109,11 +109,11 @@ export const PricingSection = ({ className = '' }: PricingSectionProps) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
-              className={`relative p-8 rounded-2xl ${plan.popular
+              whileHover={{ y: -8, scale: 1.02 }}
+              className={`relative p-8 rounded-2xl flex flex-col ${plan.popular
                   ? 'bg-gradient-to-b from-purple-500 to-purple-600 text-white shadow-2xl scale-105'
-                  : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700'
-                }`}
+                  : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-xl'
+                } transition-all duration-200`}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-cyan-400 text-gray-900 text-sm font-medium rounded-full">
@@ -151,7 +151,7 @@ export const PricingSection = ({ className = '' }: PricingSectionProps) => {
                 </span>
               </div>
 
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-4 mb-8 flex-grow">
                 {plan.features.map((feature, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <Check
@@ -169,7 +169,7 @@ export const PricingSection = ({ className = '' }: PricingSectionProps) => {
               </ul>
 
               <Button
-                className={`w-full ${plan.popular
+                className={`w-full cursor-pointer mt-auto ${plan.popular
                     ? 'bg-white text-purple-600 hover:bg-gray-100'
                     : 'bg-purple-500 text-white hover:bg-purple-600'
                   }`}
