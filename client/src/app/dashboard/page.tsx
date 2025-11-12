@@ -35,6 +35,89 @@ export default function DashboardPage() {
     },
   ];
 
+  const mockNotifications = [
+    {
+      id: '1',
+      type: 'alert' as const,
+      title: 'Stock Bajo',
+      message: 'Tela de Algodón Premium tiene solo 50 unidades disponibles',
+      time: 'Hace 5 minutos',
+      read: false,
+    },
+    {
+      id: '2',
+      type: 'alert' as const,
+      title: 'Material Vencido',
+      message: 'Adhesivo Industrial vence en 3 días',
+      time: 'Hace 1 hora',
+      read: false,
+    },
+    {
+      id: '3',
+      type: 'info' as const,
+      title: 'Pedido Recibido',
+      message: 'Se recibieron 500 unidades de Hilo Poliéster',
+      time: 'Hace 2 horas',
+      read: true,
+    },
+    {
+      id: '4',
+      type: 'success' as const,
+      title: 'Auditoría Completada',
+      message: 'Auditoría del sector textil finalizada exitosamente',
+      time: 'Hace 3 horas',
+      read: true,
+    },
+  ];
+
+  const mockMovements = [
+    {
+      id: '1',
+      type: 'entrada' as const,
+      material: 'Tela de Algodón',
+      quantity: 500,
+      user: 'Juan Pérez',
+      date: '2024-11-11',
+      status: 'completed' as const,
+    },
+    {
+      id: '2',
+      type: 'salida' as const,
+      material: 'Hilo Poliéster',
+      quantity: 200,
+      user: 'María García',
+      date: '2024-11-11',
+      status: 'completed' as const,
+    },
+    {
+      id: '3',
+      type: 'transferencia' as const,
+      material: 'Botones Metálicos',
+      quantity: 300,
+      user: 'Carlos López',
+      date: '2024-11-10',
+      status: 'pending' as const,
+    },
+    {
+      id: '4',
+      type: 'entrada' as const,
+      material: 'Cremalleras',
+      quantity: 150,
+      user: 'Ana Martínez',
+      date: '2024-11-10',
+      status: 'completed' as const,
+    },
+    {
+      id: '5',
+      type: 'salida' as const,
+      material: 'Etiquetas',
+      quantity: 1000,
+      user: 'Pedro Sánchez',
+      date: '2024-11-09',
+      status: 'completed' as const,
+    },
+  ];
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -102,6 +185,21 @@ export default function DashboardPage() {
           <RecentAssignmentsCard
             assignments={mockAssignments}
             delay={0.5}
+          />
+        </div>
+
+        {/* Secondary Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Notifications */}
+          <NotificationsCard
+            notifications={mockNotifications}
+            delay={0.6}
+          />
+
+          {/* Movement History */}
+          <MovementHistoryCard
+            movements={mockMovements}
+            delay={0.7}
           />
         </div>
       </div>
