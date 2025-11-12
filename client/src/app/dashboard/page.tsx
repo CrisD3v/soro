@@ -2,9 +2,9 @@
 
 import { StatCard } from '@/components/molecules/StatCard/StatCard';
 import { InventorySummaryCard } from '@/components/organisms/InventorySummaryCard/InventorySummaryCard';
-import { RecentAssignmentsCard } from '@/components/organisms/RecentAssignmentsCard/RecentAssignmentsCard';
-import { NotificationsCard } from '@/components/organisms/NotificationsCard/NotificationsCard';
 import { MovementHistoryCard } from '@/components/organisms/MovementHistoryCard/MovementHistoryCard';
+import { NotificationsCard } from '@/components/organisms/NotificationsCard/NotificationsCard';
+import { RecentAssignmentsCard } from '@/components/organisms/RecentAssignmentsCard/RecentAssignmentsCard';
 import { DashboardLayout } from '@/components/templates/DashboardLayout/DashboardLayout';
 import { AlertCircle, Package, TrendingUp, Users } from 'lucide-react';
 
@@ -134,7 +134,7 @@ export default function DashboardPage() {
         </div>
 
         {/* KPI Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           <StatCard
             title="Total Materiales"
             value="1,234"
@@ -151,7 +151,7 @@ export default function DashboardPage() {
             trend="up"
             trendValue="+3"
             color="cyan"
-            delay={0.1}
+            delay={0.05}
           />
           <StatCard
             title="Eficiencia"
@@ -160,7 +160,7 @@ export default function DashboardPage() {
             trend="up"
             trendValue="+2.3%"
             color="green"
-            delay={0.2}
+            delay={0.1}
           />
           <StatCard
             title="Alertas Activas"
@@ -169,39 +169,39 @@ export default function DashboardPage() {
             trend="down"
             trendValue="-3"
             color="red"
-            delay={0.3}
+            delay={0.15}
           />
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* Inventory Summary */}
           <InventorySummaryCard
             totalMaterials={1234}
             lowStockCount={7}
             stockLevel={68}
-            delay={0.4}
+            delay={0.2}
           />
 
           {/* Recent Assignments */}
           <RecentAssignmentsCard
             assignments={mockAssignments}
-            delay={0.5}
+            delay={0.25}
           />
         </div>
 
         {/* Secondary Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* Notifications */}
           <NotificationsCard
             notifications={mockNotifications}
-            delay={0.6}
+            delay={0.3}
           />
 
           {/* Movement History */}
           <MovementHistoryCard
             movements={mockMovements}
-            delay={0.7}
+            delay={0.35}
           />
         </div>
       </div>
