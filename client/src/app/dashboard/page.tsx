@@ -3,6 +3,8 @@
 import { StatCard } from '@/components/molecules/StatCard/StatCard';
 import { InventorySummaryCard } from '@/components/organisms/InventorySummaryCard/InventorySummaryCard';
 import { RecentAssignmentsCard } from '@/components/organisms/RecentAssignmentsCard/RecentAssignmentsCard';
+import { NotificationsCard } from '@/components/organisms/NotificationsCard/NotificationsCard';
+import { MovementHistoryCard } from '@/components/organisms/MovementHistoryCard/MovementHistoryCard';
 import { DashboardLayout } from '@/components/templates/DashboardLayout/DashboardLayout';
 import { AlertCircle, Package, TrendingUp, Users } from 'lucide-react';
 
