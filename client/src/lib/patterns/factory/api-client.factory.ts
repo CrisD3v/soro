@@ -42,8 +42,10 @@ export class ApiClientFactory {
 
   /**
    * Configura el token de autenticación para todos los clientes
+   * @deprecated Tokens ahora manejados en cookies HttpOnly por el backend
    */
   static setAuthToken(token: string | null): void {
-    apiClient.setAccessToken(token);
+    // No-op: Tokens manejados en cookies
+    console.warn('[ApiClientFactory] setAuthToken is deprecated. Tokens are now handled in HttpOnly cookies.');
   }
 }

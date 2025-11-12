@@ -4,7 +4,6 @@
 
 import { useMutation } from '@tanstack/react-query';
 import { authApi } from '../api/auth.api';
-import { ApiClientFactory } from '../patterns/factory/api-client.factory';
 import { authRepository } from '../patterns/repository/auth.repository';
 import type {
   LoginMutationOptions,
@@ -16,15 +15,14 @@ import type {
 
 /**
  * Hook para login
+ * Tokens manejados automáticamente en cookies HttpOnly por el backend
  */
 export const useLogin = (options?: LoginMutationOptions) => {
   return useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
-      // Guardar sesión en localStorage
-      authRepository.saveSession(data);
-      // Configurar token en API client
-      ApiClientFactory.setAuthToken(data.accessToken);
+      // Solo guardar userData (tokens ya están en cookies)
+      authRepository.saveUserData(data.user);
     },
     ...options,
   });
@@ -42,31 +40,26 @@ export const useRegister = (options?: RegisterMutationOptions) => {
 
 /**
  * Hook para refresh token
+ * Backend lee refreshToken de cookie y actualiza cookies automáticamente
  */
 export const useRefreshToken = (options?: RefreshTokenMutationOptions) => {
   return useMutation({
     mutationFn: authApi.refreshToken,
-    onSuccess: (data) => {
-      // Actualizar tokens en localStorage
-      authRepository.updateTokens(data.accessToken, data.refreshToken);
-      // Actualizar token en API client
-      ApiClientFactory.setAuthToken(data.accessToken);
-    },
+    // Backend maneja cookies automáticamente, no hay nada que hacer aquí
     ...options,
   });
 };
 
 /**
  * Hook para logout
+ * Backend limpia las cookies automáticamente
  */
 export const useLogout = (options?: LogoutMutationOptions) => {
   return useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
-      // Limpiar sesión
-      authRepository.clearSession();
-      // Limpiar token del API client
-      ApiClientFactory.setAuthToken(null);
+      // Solo limpiar userData (cookies limpiadas por backend)
+      authRepository.clearUserData();
     },
     ...options,
   });

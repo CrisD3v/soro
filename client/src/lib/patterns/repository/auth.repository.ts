@@ -1,48 +1,22 @@
 /**
  * Repository Pattern para abstracción de datos de autenticación
- * Maneja el almacenamiento local de tokens y estado de sesión
+ * Maneja solo el almacenamiento de userData
+ * Los tokens son manejados por el backend en cookies HttpOnly
  */
 
-import type { LoginResponse, UserData } from '../../api/auth.types';
+import type { UserData } from '../../api/auth.types';
 
 const STORAGE_KEYS = {
-  ACCESS_TOKEN: 'soro_access_token',
-  REFRESH_TOKEN: 'soro_refresh_token',
   USER_DATA: 'soro_user_data',
 } as const;
 
 export class AuthRepository {
   /**
-   * Guarda los datos de sesión en localStorage
+   * Guarda los datos del usuario en localStorage
    */
-  saveSession(loginResponse: LoginResponse): void {
+  saveUserData(user: UserData): void {
     if (typeof window === 'undefined') return;
-
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, loginResponse.accessToken);
-    localStorage.setItem(
-      STORAGE_KEYS.REFRESH_TOKEN,
-      loginResponse.refreshToken
-    );
-    localStorage.setItem(
-      STORAGE_KEYS.USER_DATA,
-      JSON.stringify(loginResponse.user)
-    );
-  }
-
-  /**
-   * Obtiene el access token almacenado
-   */
-  getAccessToken(): string | null {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
-  }
-
-  /**
-   * Obtiene el refresh token almacenado
-   */
-  getRefreshToken(): string | null {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
+    localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(user));
   }
 
   /**
@@ -62,38 +36,20 @@ export class AuthRepository {
   }
 
   /**
-   * Actualiza solo el access token
+   * Limpia los datos del usuario
+   * Las cookies son limpiadas por el backend en /auth/logout
    */
-  updateAccessToken(accessToken: string): void {
+  clearUserData(): void {
     if (typeof window === 'undefined') return;
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-  }
-
-  /**
-   * Actualiza ambos tokens
-   */
-  updateTokens(accessToken: string, refreshToken: string): void {
-    if (typeof window === 'undefined') return;
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
-  }
-
-  /**
-   * Limpia toda la sesión
-   */
-  clearSession(): void {
-    if (typeof window === 'undefined') return;
-
-    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
     localStorage.removeItem(STORAGE_KEYS.USER_DATA);
   }
 
   /**
    * Verifica si existe una sesión activa
+   * Solo verifica userData, las cookies son verificadas por el middleware
    */
   hasActiveSession(): boolean {
-    return this.getAccessToken() !== null && this.getUserData() !== null;
+    return this.getUserData() !== null;
   }
 }
 
