@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import {
   BarChart3,
   Bell,
@@ -89,7 +88,10 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-gray-50 via-purple-50/30 to-cyan-50/20 dark:from-gray-950 dark:via-purple-950/30 dark:to-cyan-950/20 ${className}`}>
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-950 relative ${className}`}>
+      {/* Gradient Background - Bottom Right Corner */}
+      <div className="fixed bottom-0 right-0 w-[800px] h-[800px] bg-gradient-radial from-purple-500/10 via-purple-500/5 to-transparent pointer-events-none" />
+      <div className="fixed bottom-0 right-0 w-[600px] h-[600px] bg-gradient-radial from-cyan-500/5 via-transparent to-transparent pointer-events-none" />
       {/* Sidebar */}
       <Sidebar
         groups={sidebarGroups}
@@ -97,9 +99,17 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
         onToggle={() => setIsCollapsed(!isCollapsed)}
       />
 
+      {/* Mobile Overlay */}
+      {!isCollapsed && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          onClick={() => setIsCollapsed(true)}
+        />
+      )}
+
       {/* Main Content */}
       <div
-        className="transition-all duration-300"
+        className="transition-all duration-200 ease-in-out"
         style={{
           marginLeft: isCollapsed ? '80px' : '280px',
         }}
@@ -117,14 +127,9 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
         />
 
         {/* Page Content */}
-        <motion.main
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.1 }}
-          className="p-6"
-        >
+        <main className="p-6">
           {children}
-        </motion.main>
+        </main>
       </div>
     </div>
   );
