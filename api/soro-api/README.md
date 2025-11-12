@@ -102,8 +102,46 @@ Verifica el estado de la API y la conexión a la base de datos.
 
 ### 🔐 Autenticación
 
+La API utiliza **cookies HttpOnly** para almacenar tokens JWT de forma segura, protegiendo contra ataques XSS y CSRF.
+
+#### Configuración de Cookies
+
+Todas las cookies tienen los siguientes atributos de seguridad:
+- **HttpOnly**: `true` - No accesibles desde JavaScript (previene XSS)
+- **Secure**: `true` en producción - Solo se envían por HTTPS
+- **SameSite**: `strict` - Previene ataques CSRF
+- **Path**: `/` - Disponibles en toda la aplicación
+
+**Cookies establecidas:**
+- `accessToken`: Expira en 15 minutos
+- `refreshToken`: Expira en 7 días
+
+#### Configuración del Cliente
+
+Para que las cookies funcionen correctamente, el cliente debe incluir credenciales en las peticiones:
+
+**Fetch API:**
+```javascript
+fetch('http://localhost:3000/api/auth/login', {
+  method: 'POST',
+  credentials: 'include', // ← Importante
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ email, password })
+})
+```
+
+**Axios:**
+```javascript
+axios.post('http://localhost:3000/api/auth/login',
+  { email, password },
+  { withCredentials: true } // ← Importante
+)
+```
+
 #### POST /auth/login
-Iniciar sesión con email y contraseña.
+Iniciar sesión con email y contraseña. Los tokens se establecen automáticamente como cookies HttpOnly.
 
 **Request:**
 ```json
@@ -116,8 +154,6 @@ Iniciar sesión con email y contraseña.
 **Response:**
 ```json
 {
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refreshToken": "a1b2c3d4e5f6...",
   "user": {
     "id": "uuid",
     "email": "user@example.com",
@@ -127,38 +163,36 @@ Iniciar sesión con email y contraseña.
 }
 ```
 
-#### POST /auth/refresh
-Renovar access token usando refresh token.
+**Cookies establecidas:**
+- `accessToken` (HttpOnly, 15 min)
+- `refreshToken` (HttpOnly, 7 días)
 
-**Request:**
-```json
-{
-  "refreshToken": "a1b2c3d4e5f6..."
-}
-```
+#### POST /auth/refresh
+Renovar access token. Lee el refreshToken desde la cookie automáticamente.
+
+**Request:** No requiere body
 
 **Response:**
 ```json
 {
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refreshToken": "new-refresh-token..."
+  "message": "Tokens refreshed successfully"
 }
 ```
+
+**Cookies actualizadas:**
+- `accessToken` (nuevo token, 15 min)
+- `refreshToken` (nuevo token, 7 días)
 
 #### POST /auth/logout
-Cerrar sesión (requiere autenticación).
+Cerrar sesión. Elimina las cookies de tokens.
 
-**Headers:**
-```
-Authorization: Bearer <access-token>
-```
+**Request:** No requiere body (lee cookies automáticamente)
 
-**Request:**
-```json
-{
-  "refreshToken": "a1b2c3d4e5f6..."
-}
-```
+**Response:** 204 No Content
+
+**Cookies eliminadas:**
+- `accessToken`
+- `refreshToken`
 
 ---
 
