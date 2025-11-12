@@ -86,8 +86,15 @@ export const TestimonialsSection = ({
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -8, scale: 1.02 }}
+              transition={{ duration: 0.03, delay: index * 0.01 }}
+              whileHover={{
+                y: -8,
+                scale: 1.02,
+                transition: {
+                  duration: 0.1,
+                  ease: ["easeInOut", "easeOut"],
+                }
+              }}
               className="p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-all duration-200"
             >
               {/* Rating */}

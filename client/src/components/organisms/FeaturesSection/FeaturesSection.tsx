@@ -123,10 +123,7 @@ export const FeaturesSection = ({ className = '' }: FeaturesSectionProps) => {
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             ¿Quieres ver SORO en acción?
           </p>
-          <motion.div
-            whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(168, 85, 247, 0.4)' }}
-            whileTap={{ scale: 0.95 }}
-          >
+          <motion.div>
             <Button
               variant="outline"
               size="lg"
@@ -134,7 +131,7 @@ export const FeaturesSection = ({ className = '' }: FeaturesSectionProps) => {
                 const element = document.querySelector('#demo');
                 element?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="px-8 py-6 text-lg border-2 border-purple-500 text-purple-600 dark:text-purple-400 hover:bg-purple-500 hover:text-white cursor-pointer transition-all duration-300"
+              className="px-8 py-6 text-lg scale-95 border-2 border-purple-500 text-purple-600 dark:text-purple-400 hover:bg-purple-500 hover:text-white cursor-pointer hover:scale-100 transition-all duration-300"
             >
               Solicitar una Demo
               <ArrowRight className="ml-2 w-5 h-5" />
