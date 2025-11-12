@@ -2,7 +2,84 @@
 
 Todos los cambios notables del proyecto serán documentados en este archivo.
 
-## [1.4.0] - 2024-11-11
+## [2.0.0] - 2025-11-11
+
+### ✅ Completado - Dashboard SORO
+
+#### Dashboard Layout
+- DashboardLayout template con sidebar y topbar
+- Sidebar colapsable con tooltips
+- TopBar con nombre de empresa y user menu
+- Background con degradado sutil en esquina
+- Responsive completo (mobile, tablet, desktop)
+- Dark/light mode integrado
+
+#### Componentes Dashboard
+- **StatCard**: KPI cards con animaciones spring (scale 1.02)
+- **InventorySummaryCard**: Resumen de inventario con progress bar
+- **RecentAssignmentsCard**: Lista de asignaciones recientes
+- **NotificationsCard**: Alertas automáticas del sistema
+- **MovementHistoryCard**: Historial con tabla filtrable
+- Diseño inspirado en FeatureCard con gradientessutiles
+
+#### Navegación
+- Sidebar con 3 grupos: Principal, Gestión, Sistema
+- Tooltips en sidebar colapsado (shadcn/ui)
+- Iconos con lucide-react
+- Badges para notificaciones
+- Animaciones smooth en navegación
+
+#### APIs Integradas
+- **User API**: CRUD completo de usuarios
+- **Company API**: CRUD de empresas con jerarquía
+- Refresh token automático en interceptor
+- Repository pattern implementado
+
+#### Middleware y Seguridad
+- Middleware de autenticación en rutas /dashboard
+- Refresh token automático
+- Protected routes
+- Redirección con preservación de URL
+
+#### Hooks y Context
+- **useDashboard**: Estado global del dashboard
+- **DashboardContext**: Provider para empresa activa
+- **useScrollPosition**: Detección de scroll
+- **useScrollReveal**: Animaciones en scroll
+
+#### Estilos y Animaciones
+- Scrollbar personalizado (.scrollbar-thin)
+- Gradiente radial utility
+- Animaciones optimizadas (150-300ms)
+- Hover effects profesionales
+- Spring animations en StatCards
+
+## [1.5.0] - 2025-11-11
+
+### ✅ Completado - Landing Page
+
+#### Landing Page Completa
+- HeroSection con animaciones y scroll indicator
+- FeaturesSection con grid 2x3
+- PricingSection con 3 planes
+- TestimonialsSection con carrusel
+- NavBar con navegación smooth
+- Footer completo
+
+#### Componentes Landing
+- **FeatureCard**: Cards con iconos y animaciones
+- **NavLink**: Links de navegación con active state
+- **NavBar**: Navegación con scroll detection
+- Animaciones con motion en todas las secciones
+
+#### Mejoras UX Landing
+- Animaciones de hover optimizadas (200ms)
+- Scroll indicator funcional
+- Botón demo con estilo outline
+- Cards de pricing alineadas
+- Cursor pointer en todos los botones
+
+## [1.4.0] - 2025-11-11
 
 ### ✅ Completado
 
@@ -20,7 +97,7 @@ Todos los cambios notables del proyecto serán documentados en este archivo.
 - Configuración de Storybook con Next.js
 - Preview con estilos globales
 
-## [1.3.0] - 2024-11-11
+## [1.3.0] - 2025-11-11
 
 ### ✅ Completado
 
@@ -30,7 +107,7 @@ Todos los cambios notables del proyecto serán documentados en este archivo.
 - API_INTEGRATION.md - Integración con backend
 - README.md completo con instrucciones
 
-## [1.2.0] - 2024-11-11
+## [1.2.0] - 2025-11-11
 
 ### ✅ Completado
 
@@ -48,7 +125,7 @@ Todos los cambios notables del proyecto serán documentados en este archivo.
 - Types para API en lib/api/auth.types.ts
 - Types para queries en lib/queries/auth.queries.types.ts
 
-## [1.1.0] - 2024-11-11
+## [1.1.0] - 2025-11-11
 
 ### ✅ Completado
 
@@ -74,7 +151,7 @@ Todos los cambios notables del proyecto serán documentados en este archivo.
 - useTheme para dark/light mode
 - useAuth para estado de autenticación
 
-## [1.0.0] - 2024-11-11
+## [1.0.0] - 2025-11-11
 
 ### ✅ Completado
 
@@ -104,9 +181,21 @@ Todos los cambios notables del proyecto serán documentados en este archivo.
 
 ---
 
-## Request ID
+## Request IDs
 
 ```
+REQUEST-ID: DASHBOARD-v2.0.0-20251111
+Context: Dashboard completo con UX mejorada
+Scope: Layout + Components + APIs + Middleware + Animations
+Library: motion v12.23.24 + shadcn/ui
+Status: ✅ COMPLETED
+
+REQUEST-ID: LANDING-v1.5.0-20251111
+Context: Landing page completa
+Scope: Hero + Features + Pricing + Testimonials
+Library: motion v12.23.24
+Status: ✅ COMPLETED
+
 REQUEST-ID: AUTH-FORMS-v1.4.0-20241111
 Context: API_DOCUMENTATION.md + package.json
 Scope: Authentication Forms + API Integration + Tests + Storybook
@@ -117,20 +206,20 @@ Status: ✅ COMPLETED
 
 ## Próximas Versiones
 
-### [1.5.0] - Pendiente
-- Implementar módulos de usuarios
-- Implementar módulos de empresas
-- Implementar módulos de roles
+### [2.1.0] - Pendiente
+- Implementar páginas de inventario
+- Implementar páginas de empleados
+- Implementar páginas de proyectos
 - Agregar más tests de integración
 
-### [1.6.0] - Pendiente
-- Middleware de autenticación
-- Refresh token automático
-- Protected routes
-- Manejo de sesiones expiradas
+### [2.2.0] - Pendiente
+- Implementar reportes y analytics
+- Gráficos interactivos
+- Exportación de datos
+- Filtros avanzados
 
-### [1.7.0] - Pendiente
+### [2.3.0] - Pendiente
 - Internacionalización (i18n)
-- Más animaciones
+- Notificaciones en tiempo real
 - Optimizaciones de rendimiento
 - SEO improvements

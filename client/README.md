@@ -1,29 +1,67 @@
-# 🚀 SORO - Sistema de Gestión
+# 🚀 SORO - Sistema de Gestión Empresarial
 
-Sistema de gestión empresarial con autenticación completa, construido con Next.js 16, React 19 y Tailwind CSS 4.
+Sistema de gestión empresarial completo con autenticación, dashboard interactivo y landing page, construido con Next.js 16, React 19 y Tailwind CSS 4.
 
-## ✨ Características
+## ✨ Características Principales
 
-- 🎨 **Atomic Design** - Componentes organizados y escalables
-- 🎭 **Patrones de Diseño** - Factory, Repository, Compound Components
-- 🌈 **Animaciones Suaves** - motion v12 para transiciones fluidas
-- 🌓 **Dark Mode** - Soporte completo con persistencia
-- 📱 **Responsive** - Diseño mobile-first
-- 🔐 **Autenticación Completa** - Login, registro y recuperación de contraseña
-- 🧪 **Testing** - Vitest + Testing Library
-- 📚 **Storybook** - Documentación interactiva de componentes
-- 🎯 **TypeScript** - Tipado estricto
-- 🔄 **TanStack Query** - Gestión de estado del servidor
+### 🎯 Dashboard Completo
+- **Layout Profesional** - Sidebar colapsable + TopBar con empresa activa
+- **KPI Cards** - 4 indicadores principales con animaciones spring
+- **Gestión de Inventario** - Resumen con alertas y progress bars
+- **Asignaciones** - Tracking de materiales asignados
+- **Notificaciones** - Sistema de alertas automáticas
+- **Historial** - Tabla filtrable de movimientos
+
+### 🌐 Landing Page
+- **Hero Section** - Con animaciones y scroll indicator funcional
+- **Features** - Grid 2x3 con cards animadas
+- **Pricing** - 3 planes con diseño profesional
+- **Testimonials** - Sección de testimonios
+- **Navegación** - NavBar con scroll detection
+
+### 🔐 Autenticación
+- **Login** - Con validación completa
+- **Registro** - Formulario multi-campo
+- **Recuperación** - Reset de contraseña
+- **Refresh Token** - Automático en interceptor
+- **Middleware** - Protección de rutas /dashboard
+
+### 🎨 Diseño y UX
+- **Atomic Design** - Componentes organizados y escalables
+- **Animaciones Suaves** - motion v12 con spring effects
+- **Dark Mode** - Soporte completo con persistencia
+- **Responsive** - Mobile-first design
+- **Tooltips** - shadcn/ui en sidebar colapsado
+- **Scrollbar Personalizado** - Estilo elegante y sutil
+
+### 🏗️ Arquitectura
+- **Patrones de Diseño** - Factory, Repository, Compound Components
+- **TypeScript** - Tipado estricto
+- **TanStack Query** - Gestión de estado del servidor
+- **API Integration** - User, Company, Auth endpoints
+- **Context API** - DashboardContext para estado global
+
+### 🧪 Testing y Documentación
+- **Vitest** - Tests unitarios y de integración
+- **Testing Library** - Tests de componentes
+- **Storybook** - Documentación interactiva
+- **Docs** - ARCHITECTURE.md, COMPONENTS.md, API_INTEGRATION.md
 
 ## 🎨 Tema
 
-Paleta de colores morados basada en `oklch(62.7% 0.265 303.9)` con soporte completo para modo claro y oscuro.
+Paleta de colores morados basada en `oklch(62.7% 0.265 303.9)` con:
+- Degradado sutil en esquina inferior derecha
+- Soporte completo para modo claro y oscuro
+- Gradientes personalizados por componente
 
 ## 📦 Instalación
 
 ```bash
 # Clonar el repositorio
-git clone <repository-url>
+git clone https://github.com/CrisD3v/soro.git
+
+# Navegar al directorio del cliente
+cd soro/client
 
 # Instalar dependencias
 pnpm install
@@ -52,10 +90,10 @@ pnpm dev
 # Ejecutar tests
 pnpm test
 
-# Tests con UI interactiva
+# Tests con UI
 pnpm test:ui
 
-# Tests con coverage
+# Coverage
 pnpm test:coverage
 ```
 
@@ -81,154 +119,134 @@ pnpm start
 ## 📁 Estructura del Proyecto
 
 ```
-src/
-├── app/                          # Next.js App Router
-│   ├── auth/                     # Página de autenticación
-│   ├── layout.tsx                # Layout principal
-│   └── globals.css               # Estilos globales
-│
-├── components/                   # Componentes UI (Atomic Design)
-│   ├── ui/                       # shadcn/ui components
-│   ├── atoms/                    # Logo, ThemeToggle
-│   ├── molecules/                # FormField, PasswordInput
-│   ├── organisms/                # LoginForm, RegisterForm, ResetPasswordForm
-│   └── templates/                # AuthTemplate
-│
-├── lib/                          # Lógica de negocio
-│   ├── api/                      # API clients y endpoints
-│   ├── queries/                  # TanStack Query hooks
-│   ├── patterns/                 # Factory, Repository patterns
-│   ├── providers/                # React providers
-│   ├── types/                    # Types globales
-│   └── utils/                    # Validadores y utilidades
-│
-├── hooks/                        # Custom hooks
-│   ├── useTheme/                 # Dark/Light mode
-│   └── useAuth/                  # Estado de autenticación
-│
-├── docs/                         # Documentación
-│   ├── ARCHITECTURE.md           # Arquitectura del proyecto
-│   ├── COMPONENTS.md             # Guía de componentes
-│   └── API_INTEGRATION.md        # Integración con API
-│
-├── stories/                      # Storybook stories
-│   ├── atoms/
-│   ├── molecules/
-│   └── organisms/
-│
-└── __tests__/                    # Tests con Vitest
-    ├── atoms/
-    ├── molecules/
-    ├── organisms/
-    └── hooks/
+client/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── page.tsx           # Landing page
+│   │   ├── auth/              # Página de autenticación
+│   │   └── dashboard/         # Dashboard principal
+│   ├── components/            # Componentes Atomic Design
+│   │   ├── atoms/            # Logo, ThemeToggle, NavLink
+│   │   ├── molecules/        # FormField, PasswordInput, StatCard, FeatureCard
+│   │   ├── organisms/        # Forms, Sidebar, TopBar, Cards grandes
+│   │   ├── templates/        # AuthTemplate, DashboardLayout
+│   │   └── ui/              # shadcn/ui components
+│   ├── hooks/                # Custom hooks
+│   │   ├── useAuth/
+│   │   ├── useTheme/
+│   │   ├── useDashboard/
+│   │   ├── useScrollPosition/
+│   │   └── useScrollReveal/
+│   ├── lib/                  # Utilidades y configuración
+│   │   ├── api/             # API clients (auth, user, company)
+│   │   ├── patterns/        # Factory, Repository
+│   │   ├── queries/         # TanStack Query hooks
+│   │   └── utils/           # Helpers y validadores
+│   ├── context/             # React Context
+│   │   └── DashboardContext.tsx
+│   ├── docs/                # Documentación
+│   │   ├── ARCHITECTURE.md
+│   │   ├── COMPONENTS.md
+│   │   └── API_INTEGRATION.md
+│   └── __tests__/           # Tests
+├── public/                   # Assets estáticos
+├── .storybook/              # Configuración Storybook
+└── vitest.config.ts         # Configuración Vitest
 ```
 
-## 🎯 Componentes Principales
+## 🎯 Rutas Principales
 
-### Atoms
-- **Logo** - Logo animado de la aplicación
-- **ThemeToggle** - Botón para cambiar tema
+- `/` - Landing page
+- `/auth` - Autenticación (login/register/reset)
+- `/dashboard` - Dashboard principal (protegido)
+- `/dashboard/inventory` - Gestión de inventario
+- `/dashboard/employees` - Gestión de empleados
+- `/dashboard/projects` - Gestión de proyectos
+- `/dashboard/reports` - Reportes
+- `/dashboard/settings` - Configuración
 
-### Molecules
-- **FormField** - Wrapper para inputs con label y error
-- **PasswordInput** - Input de contraseña con toggle de visibilidad
-
-### Organisms
-- **LoginForm** - Formulario de inicio de sesión
-- **RegisterForm** - Formulario de registro
-- **ResetPasswordForm** - Formulario de recuperación de contraseña
-
-### Templates
-- **AuthTemplate** - Template principal para autenticación
-
-## 🔌 API
-
-El proyecto consume la API SORO. Ver [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) para detalles completos.
-
-### Endpoints Principales
-
-- `POST /auth/login` - Iniciar sesión
-- `POST /users` - Registrar usuario
-- `POST /auth/refresh` - Renovar token
-- `POST /auth/logout` - Cerrar sesión
-
-## 🧪 Testing
-
-Tests organizados por tipo de componente:
-
-```bash
-src/__tests__/
-├── atoms/
-│   └── Logo.test.tsx
-├── molecules/
-│   ├── FormField.test.tsx
-│   └── PasswordInput.test.tsx
-└── hooks/
-    └── useTheme.test.tsx
-```
-
-## 📚 Documentación
-
-- [Arquitectura](./src/docs/ARCHITECTURE.md) - Patrones y estructura
-- [Componentes](./src/docs/COMPONENTS.md) - Guía de uso de componentes
-- [API Integration](./src/docs/API_INTEGRATION.md) - Integración con backend
-
-## 🎨 Storybook
-
-Todos los componentes están documentados en Storybook con ejemplos interactivos:
-
-```bash
-pnpm storybook
-```
-
-## 🛠️ Stack Tecnológico
+## 🔧 Tecnologías
 
 - **Framework**: Next.js 16 (App Router)
-- **React**: 19.2.0
-- **TypeScript**: 5.x
-- **Styling**: Tailwind CSS 4
-- **Animaciones**: motion 12.23.24
+- **UI**: React 19
+- **Estilos**: Tailwind CSS 4
+- **Animaciones**: motion v12.23.24
 - **Forms**: React Hook Form + Zod
 - **State**: TanStack Query 5
 - **Testing**: Vitest + Testing Library
 - **Docs**: Storybook 10
-- **Icons**: Lucide React
+- **UI Components**: shadcn/ui (Radix UI)
+- **Icons**: lucide-react
+- **TypeScript**: 5.x
 
-## 📝 Convenciones
+## 📚 Documentación
 
-### Nomenclatura
-- Componentes: `PascalCase`
-- Hooks: `camelCase` con prefijo `use`
-- Types: `PascalCase` con sufijo descriptivo
-- Archivos: Mismo nombre que el componente/hook
+- [Arquitectura](./src/docs/ARCHITECTURE.md) - Patrones y estructura
+- [Componentes](./src/docs/COMPONENTS.md) - Guía de componentes
+- [API Integration](./src/docs/API_INTEGRATION.md) - Integración con backend
+- [Changelog](./CHANGELOG.md) - Historial de cambios
 
-### Organización
-- Cada componente/hook en su propia carpeta
-- Archivo `.types.ts` para types
-- Tests co-localizados
-- Stories en carpeta `stories/`
+## 🎨 Componentes Destacados
 
-### Comentarios
-- Documentación en español
-- Términos técnicos en inglés
-- JSDoc para funciones públicas
+### Dashboard
+- **DashboardLayout** - Layout principal con sidebar y topbar
+- **Sidebar** - Navegación colapsable con tooltips
+- **TopBar** - Header con empresa activa y user menu
+- **StatCard** - KPI cards con animaciones spring
+- **InventorySummaryCard** - Resumen de inventario
+- **MovementHistoryCard** - Historial con filtros
+
+### Landing
+- **HeroSection** - Hero con animaciones
+- **FeaturesSection** - Grid de características
+- **PricingSection** - Planes de precios
+- **TestimonialsSection** - Testimonios
+
+### Auth
+- **LoginForm** - Formulario de login
+- **RegisterForm** - Formulario de registro
+- **ResetPasswordForm** - Recuperación de contraseña
+- **AuthTemplate** - Template con compound components
 
 ## 🔐 Seguridad
 
-- Tokens almacenados en localStorage
-- Access token expira en 15 minutos
-- Refresh token expira en 7 días
-- Validación de inputs con Zod
-- Sanitización de datos
+- Middleware de autenticación en rutas protegidas
+- Refresh token automático
+- Tokens en localStorage
+- Interceptor para manejo de 401
+- Validación con Zod
+- CSRF protection ready
 
-## 🚧 Roadmap
+## 🚀 Deployment
 
-- [ ] Implementar módulos de usuarios, empresas y roles
-- [ ] Agregar middleware de autenticación
-- [ ] Implementar refresh token automático
-- [ ] Agregar más tests de integración
-- [ ] Implementar SSR para SEO
-- [ ] Agregar internacionalización (i18n)
+```bash
+# Build
+pnpm build
+
+# El output estará en .next/
+# Deployable en Vercel, Netlify, o cualquier plataforma Node.js
+```
+
+## 📝 Scripts Disponibles
+
+```bash
+pnpm dev          # Desarrollo
+pnpm build        # Build producción
+pnpm start        # Servidor producción
+pnpm lint         # Linter
+pnpm test         # Tests
+pnpm test:ui      # Tests con UI
+pnpm test:coverage # Coverage
+pnpm storybook    # Storybook
+```
+
+## 🤝 Contribuir
+
+1. Fork el proyecto
+2. Crea tu feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la branch (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
 
 ## 📄 Licencia
 
@@ -240,26 +258,6 @@ Desarrollado por el equipo de SORO.
 
 ---
 
-## 🆔 Request ID
-
-```
-REQUEST-ID: AUTH-FORMS-v1.0.0-20241111
-Context: API_DOCUMENTATION.md + package.json
-Scope: Authentication Forms + API Integration
-Library: motion v12.23.24
-Types: Co-located with components/modules
-```
-
-## 📌 Versionamiento
-
-```
-v1.0.0 - Initial setup ✅
-v1.1.0 - Components implementation ✅
-v1.2.0 - API integration ✅
-v1.3.0 - Storybook stories ✅
-v1.4.0 - Tests implementation ✅
-```
-
----
-
-**¿Necesitas ayuda?** Consulta la [documentación](./src/docs/) o contacta al equipo.
+**Versión**: 2.0.0
+**Última actualización**: 2025-11-11
+**Estado**: ✅ En producción

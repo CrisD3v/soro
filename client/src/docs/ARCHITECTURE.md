@@ -257,3 +257,404 @@ Tema morado basado en `oklch(62.7% 0.265 303.9)`:
 3. Implementar refresh token automático
 4. Agregar más tests de integración
 5. Documentar componentes en Storybook
+
+
+---
+
+## Dashboard Architecture
+
+### Layout Structure
+
+```
+DashboardLayout
+├── Sidebar (fixed, colapsable)
+│   ├── Logo / Toggle button
+│   └── Navigation Groups
+│       ├── Principal (Dashboard, Inventario, Notificaciones)
+│       ├── Gestión (Empleados, Proyectos, Reportes)
+│       └── Sistema (Ajustes)
+├── TopBar (sticky)
+│   ├── Company Name
+│   ├── Breadcrumbs
+│   └── Actions (Theme, Notifications, Language, User Menu)
+└── Main Content
+    ├── Page Header
+    ├── KPI Stats Grid (4 StatCards)
+    └── Content Grid (Cards grandes)
+```
+
+### State Management
+
+#### Dashboard Context
+
+```typescript
+// Global state para dashboard
+DashboardContext
+├── activeCompany: string
+├── setActiveCompany: (company: string) => void
+├── sidebarCollapsed: boolean
+└── setSidebarCollapsed: (collapsed: boolean) => void
+```
+
+#### Local State
+
+- **Sidebar**: `isCollapsed` state
+- **TopBar**: `showUserMenu`, `showNotifications` states
+- **Cards**: Data fetching con TanStack Query
+
+### Data Flow
+
+```
+API Layer (user.api.ts, company.api.ts)
+    ↓
+TanStack Query Hooks (useQuery, useMutation)
+    ↓
+Dashboard Components
+    ↓
+UI Updates
+```
+
+### Routing
+
+```
+/ (Landing)
+├── /auth (Public)
+│   ├── Login
+│   ├── Register
+│   └── Reset Password
+└── /dashboard (Protected)
+    ├── / (Overview)
+    ├── /inventory
+    ├── /employees
+    ├── /projects
+    ├── /reports
+    └── /settings
+```
+
+### Middleware
+
+```typescript
+// src/middleware.ts
+- Verifica accessToken en cookies
+- Protege rutas /dashboard/*
+- Redirige a /auth si no autenticado
+- Preserva URL destino en query param
+```
+
+### API Integration
+
+#### Endpoints
+
+```typescript
+// User API
+GET    /users
+GET    /users/:id
+POST   /users
+PATCH  /users/:id
+POST   /users/:id/assign-role
+
+// Company API
+GET    /companies
+GET    /companies/:id
+POST   /companies
+PATCH  /companies/:id
+DELETE /companies/:id
+POST   /companies/:id/restore
+GET    /companies/:id/hierarchy
+```
+
+#### Interceptor
+
+```typescript
+// Refresh token automático
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 401) {
+      // Intenta refresh
+      const refreshToken = getRefreshToken();
+      const newToken = await refreshTokenApi(refreshToken);
+      // Retry request con nuevo token
+      return apiClient(originalRequest);
+    }
+  }
+);
+```
+
+### Component Patterns
+
+#### Dashboard Cards
+
+Todas las cards grandes siguen este patrón:
+
+```typescript
+// 1. Gradiente sutil en esquina
+<div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-{color}-500/10 to-transparent rounded-full blur-3xl" />
+
+// 2. Header con icono
+<div className="relative flex items-center justify-between mb-6">
+  <div>
+    <h3>Título</h3>
+    <p>Descripción</p>
+  </div>
+  <div className="p-3 rounded-xl bg-gradient-to-br from-{color}-500 to-{color}-600 shadow-lg shadow-{color}-500/30">
+    <Icon />
+  </div>
+</div>
+
+// 3. Contenido con scroll
+<div className="space-y-3 max-h-80 overflow-y-auto scrollbar-thin">
+  {/* Items */}
+</div>
+
+// 4. Sin hover effect
+// Solo scroll reveal animation
+```
+
+#### StatCards
+
+```typescript
+// Animaciones spring
+<motion.div
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.98 }}
+  className="cursor-pointer"
+>
+  {/* Content */}
+</motion.div>
+```
+
+### Performance Optimizations
+
+#### Animaciones
+
+- **Durations**: 150-300ms (profesional)
+- **Delays**: Secuenciales y cortos
+- **Spring**: Solo en StatCards
+- **Scroll reveal**: Una vez (viewport: { once: true })
+
+#### Scrollbars
+
+```css
+/* Custom scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 3px;
+}
+```
+
+#### Background
+
+```tsx
+// Gradiente solo en esquina (no afecta performance)
+<div className="fixed bottom-0 right-0 w-[800px] h-[800px] bg-gradient-radial from-purple-500/10 via-purple-500/5 to-transparent pointer-events-none" />
+```
+
+### Responsive Breakpoints
+
+```typescript
+// Tailwind breakpoints
+sm: '640px'   // Mobile landscape
+md: '768px'   // Tablet
+lg: '1024px'  // Desktop
+xl: '1280px'  // Large desktop
+2xl: '1536px' // Extra large
+
+// Dashboard usage
+- StatCards: sm:grid-cols-2 lg:grid-cols-4
+- Cards grandes: xl:grid-cols-2
+- Sidebar: Overlay en mobile, fixed en desktop
+```
+
+### Security
+
+#### Protected Routes
+
+```typescript
+// middleware.ts
+const protectedRoutes = ['/dashboard'];
+
+if (isProtectedRoute && !token) {
+  redirect('/auth?redirect=' + pathname);
+}
+```
+
+#### Token Management
+
+```typescript
+// Tokens en localStorage
+- accessToken: JWT de corta duración
+- refreshToken: JWT de larga duración
+
+// Refresh automático
+- Interceptor detecta 401
+- Llama a /auth/refresh
+- Actualiza tokens
+- Retry request original
+```
+
+### Testing Strategy
+
+#### Unit Tests
+
+```typescript
+// Componentes
+- StatCard.test.tsx
+- Sidebar.test.tsx
+- TopBar.test.tsx
+
+// Hooks
+- useDashboard.test.tsx
+- useScrollPosition.test.tsx
+```
+
+#### Integration Tests
+
+```typescript
+// Flujos completos
+- Dashboard flow
+- Auth flow con refresh
+- CRUD operations
+```
+
+### Deployment
+
+```bash
+# Build
+pnpm build
+
+# Output
+.next/
+├── static/
+├── server/
+└── standalone/
+
+# Environment variables
+NEXT_PUBLIC_API_URL=https://api.soro.com
+```
+
+### Monitoring
+
+```typescript
+// Logs en consola (desarrollo)
+console.log('[Auth] Token refreshed successfully');
+console.error('[Auth] Token refresh failed:', error);
+
+// TODO: Implementar
+- Sentry para error tracking
+- Analytics para user behavior
+- Performance monitoring
+```
+
+---
+
+## Landing Page Architecture
+
+### Structure
+
+```
+Landing Page
+├── NavBar (sticky)
+├── HeroSection
+├── FeaturesSection (Grid 2x3)
+├── PricingSection (3 planes)
+├── TestimonialsSection
+└── Footer
+```
+
+### Animations
+
+```typescript
+// Scroll reveal pattern
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.3, delay }}
+>
+```
+
+### Navigation
+
+```typescript
+// Smooth scroll
+<a href="#features" className="scroll-smooth">
+  Features
+</a>
+
+// Scroll indicator
+<button onClick={() => scrollTo('#features')}>
+  <ChevronDown />
+</button>
+```
+
+---
+
+## Best Practices
+
+### Component Organization
+
+```
+ComponentName/
+├── ComponentName.tsx       # Component logic
+├── ComponentName.types.ts  # TypeScript types
+├── ComponentName.test.tsx  # Tests (opcional)
+└── ComponentName.stories.tsx # Storybook (opcional)
+```
+
+### Naming Conventions
+
+- **Components**: PascalCase (StatCard, DashboardLayout)
+- **Files**: PascalCase para componentes, camelCase para utils
+- **Props**: Descriptivos (companyName, notificationCount)
+- **Hooks**: useNombre (useDashboard, useScrollPosition)
+
+### Code Style
+
+```typescript
+// Imports ordenados
+import { motion } from 'framer-motion';
+import { Icon } from 'lucide-react';
+import { Component } from '@/components';
+import { hook } from '@/hooks';
+import { util } from '@/lib';
+
+// Props interface
+interface ComponentProps {
+  required: string;
+  optional?: number;
+  className?: string;
+}
+
+// Component
+export const Component = ({ required, optional = 0, className = '' }: ComponentProps) => {
+  // Hooks
+  const { data } = useHook();
+
+  // Handlers
+  const handleClick = () => {};
+
+  // Render
+  return <div className={className}>{/* JSX */}</div>;
+};
+```
+
+### Performance
+
+- **Lazy loading**: Para rutas y componentes pesados
+- **Memoization**: React.memo para componentes puros
+- **Code splitting**: Automático con Next.js
+- **Image optimization**: next/image
+- **Font optimization**: next/font
+
+### Accessibility
+
+- **ARIA labels**: En botones y links
+- **Keyboard navigation**: Tab, Enter, Escape
+- **Focus visible**: Outline en elementos interactivos
+- **Semantic HTML**: header, nav, main, footer
+- **Alt text**: En todas las imágenes

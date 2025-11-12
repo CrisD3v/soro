@@ -387,3 +387,455 @@ pnpm storybook
 ```
 
 Navega a `http://localhost:6006`
+
+
+---
+
+## Dashboard Components
+
+### Templates
+
+#### DashboardLayout
+
+Layout principal del dashboard con sidebar y topbar.
+
+**Ubicación**: `src/components/templates/DashboardLayout/`
+
+**Props**:
+```typescript
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+  className?: string;
+}
+```
+
+**Características**:
+- Sidebar colapsable
+- TopBar con empresa activa
+- Background con degradado sutil
+- Responsive completo
+- Dark/light mode
+
+**Uso**:
+```tsx
+<DashboardLayout>
+  <YourPageContent />
+</DashboardLayout>
+```
+
+### Organisms
+
+#### Sidebar
+
+Navegación lateral colapsable con tooltips.
+
+**Ubicación**: `src/components/organisms/Sidebar/`
+
+**Props**:
+```typescript
+interface SidebarProps {
+  groups: SidebarGroup[];
+  isCollapsed?: boolean;
+  onToggle?: () => void;
+  className?: string;
+}
+```
+
+**Características**:
+- Colapsable con animación
+- Tooltips en modo colapsado
+- Grupos de navegación
+- Badges para notificaciones
+- Scroll personalizado
+
+#### TopBar
+
+Barra superior con empresa activa y user menu.
+
+**Ubicación**: `src/components/organisms/TopBar/`
+
+**Props**:
+```typescript
+interface TopBarProps {
+  companyName: string;
+  userName: string;
+  userAvatar?: string;
+  notificationCount?: number;
+  breadcrumbs?: BreadcrumbItem[];
+  onLogout?: () => void;
+  className?: string;
+}
+```
+
+**Características**:
+- Nombre de empresa destacado
+- Breadcrumbs dinámicos
+- Theme toggle
+- Notificaciones
+- User menu dropdown
+- Selector de idioma
+
+#### InventorySummaryCard
+
+Card de resumen de inventario con progress bar.
+
+**Ubicación**: `src/components/organisms/InventorySummaryCard/`
+
+**Props**:
+```typescript
+interface InventorySummaryCardProps {
+  totalMaterials: number;
+  lowStockCount: number;
+  stockLevel: number; // 0-100
+  delay?: number;
+  className?: string;
+}
+```
+
+**Características**:
+- Progress bar con colores dinámicos
+- Alertas de stock bajo
+- Gradiente sutil en background
+- Botón de acción rápida
+
+#### RecentAssignmentsCard
+
+Card de asignaciones recientes.
+
+**Ubicación**: `src/components/organisms/RecentAssignmentsCard/`
+
+**Props**:
+```typescript
+interface RecentAssignmentsCardProps {
+  assignments: Assignment[];
+  delay?: number;
+  className?: string;
+}
+```
+
+**Características**:
+- Lista de asignaciones
+- Estados con badges
+- Scroll personalizado
+- Trazabilidad completa
+
+#### NotificationsCard
+
+Card de notificaciones automáticas.
+
+**Ubicación**: `src/components/organisms/NotificationsCard/`
+
+**Props**:
+```typescript
+interface NotificationsCardProps {
+  notifications: Notification[];
+  delay?: number;
+  className?: string;
+}
+```
+
+**Características**:
+- Tipos: alert, info, success
+- Iconos dinámicos
+- Indicador de no leídas
+- Scroll personalizado
+
+#### MovementHistoryCard
+
+Card de historial de movimientos con tabla filtrable.
+
+**Ubicación**: `src/components/organisms/MovementHistoryCard/`
+
+**Props**:
+```typescript
+interface MovementHistoryCardProps {
+  movements: Movement[];
+  delay?: number;
+  className?: string;
+}
+```
+
+**Características**:
+- Tabla filtrable
+- Tipos: entrada, salida, transferencia
+- Estados con badges
+- Iconos de movimiento
+
+### Molecules
+
+#### StatCard
+
+Card de estadísticas con animaciones spring.
+
+**Ubicación**: `src/components/molecules/StatCard/`
+
+**Props**:
+```typescript
+interface StatCardProps {
+  title: string;
+  value: string | number;
+  icon: React.ReactNode;
+  trend?: 'up' | 'down';
+  trendValue?: string;
+  color?: 'purple' | 'cyan' | 'red' | 'green' | 'orange';
+  delay?: number;
+  className?: string;
+}
+```
+
+**Características**:
+- Animaciones spring (scale 1.02)
+- Indicadores de tendencia
+- Colores personalizables
+- Gradiente en background
+
+**Uso**:
+```tsx
+<StatCard
+  title="Total Materiales"
+  value="1,234"
+  icon={<Package className="w-6 h-6" />}
+  trend="up"
+  trendValue="+12%"
+  color="purple"
+/>
+```
+
+---
+
+## Landing Components
+
+### Organisms
+
+#### HeroSection
+
+Sección hero de la landing page.
+
+**Ubicación**: `src/components/organisms/HeroSection/`
+
+**Características**:
+- Animaciones de entrada
+- Scroll indicator funcional
+- CTAs principales
+- Responsive
+
+#### FeaturesSection
+
+Sección de características con grid 2x3.
+
+**Ubicación**: `src/components/organisms/FeaturesSection/`
+
+**Características**:
+- Grid responsive
+- FeatureCards animadas
+- Botón demo con outline
+- Scroll reveal
+
+#### PricingSection
+
+Sección de planes de precios.
+
+**Ubicación**: `src/components/organisms/PricingSection/`
+
+**Características**:
+- 3 planes
+- Plan popular destacado
+- Cards alineadas
+- Hover effects
+
+#### TestimonialsSection
+
+Sección de testimonios.
+
+**Ubicación**: `src/components/organisms/TestimonialsSection/`
+
+**Características**:
+- Grid de testimonios
+- Avatares
+- Ratings
+- Animaciones staggered
+
+### Molecules
+
+#### FeatureCard
+
+Card de característica con icono.
+
+**Ubicación**: `src/components/molecules/FeatureCard/`
+
+**Props**:
+```typescript
+interface FeatureCardProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  delay?: number;
+  className?: string;
+}
+```
+
+**Características**:
+- Icono con gradiente
+- Animaciones hover
+- Scroll reveal
+- Responsive
+
+#### NavBar
+
+Barra de navegación de la landing.
+
+**Ubicación**: `src/components/molecules/NavBar/`
+
+**Características**:
+- Scroll detection
+- Logo
+- Links de navegación
+- CTAs
+- Theme toggle
+
+---
+
+## Hooks
+
+### useDashboard
+
+Hook para gestión del estado del dashboard.
+
+**Ubicación**: `src/hooks/useDashboard/`
+
+**Retorna**:
+```typescript
+interface UseDashboardReturn {
+  stats: DashboardStats | null;
+  isLoading: boolean;
+  error: Error | null;
+  refetch: () => void;
+}
+```
+
+**Uso**:
+```tsx
+const { stats, isLoading, error, refetch } = useDashboard();
+```
+
+### useScrollPosition
+
+Hook para detectar posición del scroll.
+
+**Ubicación**: `src/hooks/useScrollPosition/`
+
+**Retorna**:
+```typescript
+interface UseScrollPositionReturn {
+  scrollY: number;
+  scrollDirection: 'up' | 'down' | null;
+}
+```
+
+### useScrollReveal
+
+Hook para animaciones en scroll.
+
+**Ubicación**: `src/hooks/useScrollReveal/`
+
+**Retorna**:
+```typescript
+interface UseScrollRevealReturn {
+  ref: RefObject<HTMLElement>;
+  isVisible: boolean;
+}
+```
+
+---
+
+## Context
+
+### DashboardContext
+
+Context para estado global del dashboard.
+
+**Ubicación**: `src/context/DashboardContext.tsx`
+
+**Valores**:
+```typescript
+interface DashboardContextType {
+  activeCompany: string;
+  setActiveCompany: (company: string) => void;
+  sidebarCollapsed: boolean;
+  setSidebarCollapsed: (collapsed: boolean) => void;
+}
+```
+
+**Uso**:
+```tsx
+const { activeCompany, sidebarCollapsed } = useDashboardContext();
+```
+
+---
+
+## Estilos Globales
+
+### Scrollbar Personalizado
+
+Clase utility para scrollbars elegantes.
+
+```css
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+}
+```
+
+**Uso**:
+```tsx
+<div className="overflow-y-auto scrollbar-thin">
+  {/* Content */}
+</div>
+```
+
+### Gradiente Radial
+
+Clase utility para gradientes circulares.
+
+```css
+.bg-gradient-radial {
+  background-image: radial-gradient(circle, var(--tw-gradient-stops));
+}
+```
+
+**Uso**:
+```tsx
+<div className="bg-gradient-radial from-purple-500/10 to-transparent">
+  {/* Content */}
+</div>
+```
+
+---
+
+## Mejores Prácticas Dashboard
+
+### Animaciones
+
+- **StatCards**: Usar `whileHover={{ scale: 1.02 }}` + `whileTap={{ scale: 0.98 }}`
+- **Cards grandes**: Sin hover, solo scroll reveal
+- **Durations**: 150-300ms para profesionalismo
+- **Spring**: Para efectos dinámicos
+
+### Layout
+
+- **Gaps**: `gap-4 lg:gap-6` para StatCards, `gap-6` para cards grandes
+- **Grid**: `sm:grid-cols-2 lg:grid-cols-4` para StatCards
+- **Responsive**: `xl:grid-cols-2` para cards grandes
+
+### Colores
+
+- **Purple**: Inventario, principal
+- **Cyan**: Asignaciones, secundario
+- **Orange**: Notificaciones, alertas
+- **Red**: Alertas críticas
+- **Green**: Success, óptimo
+
+### Delays
+
+- Secuenciales: 0, 0.05, 0.1, 0.15 para StatCards
+- Escalonados: 0.2, 0.25, 0.3, 0.35 para cards grandes

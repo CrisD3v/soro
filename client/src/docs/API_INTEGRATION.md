@@ -474,3 +474,575 @@ const wrapper = ({ children }) => (
 
 renderHook(() => useLogin(), { wrapper });
 ```
+
+
+---
+
+## User API
+
+### Endpoints
+
+#### Get All Users
+
+```typescript
+GET /users
+
+Response: User[]
+```
+
+#### Get User by ID
+
+```typescript
+GET /users/:id
+
+Response: User
+```
+
+#### Create User
+
+```typescript
+POST /users
+
+Body: CreateUserDto
+{
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  documentType: string;
+  documentNumber: string;
+  phone?: string;
+  companyId: string;
+  roleId?: string;
+}
+
+Response: User
+```
+
+#### Update User
+
+```typescript
+PATCH /users/:id
+
+Body: UpdateUserDto
+{
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  isActive?: boolean;
+}
+
+Response: User
+```
+
+#### Assign Role
+
+```typescript
+POST /users/:id/assign-role
+
+Body: AssignRoleDto
+{
+  roleId: string;
+  companyId: string;
+}
+
+Response: User
+```
+
+#### Get Current User
+
+```typescript
+GET /users/me
+
+Response: User
+```
+
+### Usage
+
+```typescript
+import { userApi } from '@/lib/api/user.api';
+
+// Get all users
+const users = await userApi.getUsers();
+
+// Get user by ID
+const user = await userApi.getUserById('user-id');
+
+// Create user
+const newUser = await userApi.createUser({
+  email: 'user@example.com',
+  password: 'password123',
+  firstName: 'John',
+  lastName: 'Doe',
+  documentType: 'CC',
+  documentNumber: '123456789',
+  companyId: 'company-id',
+});
+
+// Update user
+const updatedUser = await userApi.updateUser('user-id', {
+  firstName: 'Jane',
+});
+
+// Assign role
+const userWithRole = await userApi.assignRole('user-id', {
+  roleId: 'role-id',
+  companyId: 'company-id',
+});
+
+// Get current user
+const currentUser = await userApi.getCurrentUser();
+```
+
+---
+
+## Company API
+
+### Endpoints
+
+#### Get All Companies
+
+```typescript
+GET /companies
+
+Response: Company[]
+```
+
+#### Get Company by ID
+
+```typescript
+GET /companies/:id
+
+Response: Company
+```
+
+#### Create Company
+
+```typescript
+POST /companies
+
+Body: CreateCompanyDto
+{
+  name: string;
+  nit: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  sector?: string;
+  parentCompanyId?: string;
+}
+e: Company
+```
+
+#### Update Company
+
+```typescript
+PATCH /companies/:id
+
+Body: UpdateCompanyDto
+{
+  name?: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  sector?: string;
+  isActive?: boolean;
+}
+
+Response: Company
+```
+
+#### Delete Company (Soft Delete)
+
+```typescript
+DELETE /companies/:id
+
+Response: void
+```
+
+#### Restore Company
+
+```typescript
+POST /companies/:id/restore
+
+Response: Company
+```
+
+#### Get Company Hierarchy
+
+```typescript
+GET /companies/:id/hierarchy
+
+Response: CompanyHierarchy
+{
+  ...Company,
+  children?: CompanyHierarchy[]
+}
+```
+
+### Usage
+
+```typescript
+import { companyApi } from '@/lib/api/company.api';
+
+// Get all companies
+const companies = await companyApi.getCompanies();
+
+// Get company by ID
+const company = await companyApi.getCompanyById('company-id');
+
+// Create company
+const newCompany = await companyApi.createCompany({
+  name: 'GRUPO MATEX',
+  nit: '900123456-7',
+  address: 'Calle 123 #45-67',
+  phone: '+57 300 1234567',
+  email: 'info@grupomatex.com',
+  sector: 'Textil',
+});
+
+// Update company
+const updatedCompany = await companyApi.updateCompany('company-id', {
+  name: 'GRUPO MATEX S.A.S.',
+});
+
+// Delete company (soft delete)
+await companyApi.deleteCompany('company-id');
+
+// Restore company
+const restoredCompany = await companyApi.restoreCompany('company-id');
+
+// Get company hierarchy
+const hierarchy = await companyApi.getCompanyHierarchy('company-id');
+```
+
+---
+
+## Dashboard API Integration
+
+### useDashboard Hook
+
+```typescript
+import { useDashboard } from '@/hooks/useDashboard/useDashboard';
+
+function DashboardPage() {
+  const { stats, isLoading, error, refetch } = useDashboard();
+
+  if (isLoading) return <Loading />;
+  if (error) return <Error message={error.message} />;
+
+  return (
+    <div>
+      <StatCard
+        title="Total Materiales"
+        value={stats.totalMaterials}
+        trend="up"
+        trendValue="+12%"
+      />
+      {/* More stats */}
+    </div>
+  );
+}
+```
+
+### DashboardContext
+
+```typescript
+import { useDashboardContext } from '@/context/DashboardContext';
+
+function TopBar() {
+  const { activeCompany, setActiveCompany } = useDashboardContext();
+
+  return (
+    <header>
+      <h1>{activeCompany} - Soro Platform</h1>
+    </header>
+  );
+}
+```
+
+---
+
+## Refresh Token Flow
+
+### Automatic Refresh
+
+```typescript
+// src/lib/api/client.ts
+
+private async request<T>(endpoint: string, config: RequestConfig = {}, isRetry = false): Promise<T> {
+  try {
+    const response = await fetch(url, { ...config, headers });
+
+    // Handle 401 Unauthorized
+    if (response.status === 401 && !isRetry && requiresAuth) {
+      const refreshToken = this.getRefreshToken();
+
+      if (refreshToken) {
+        // Attempt to refresh
+        const refreshResponse = await fetch(`${this.baseURL}/auth/refresh`, {
+          method: 'POST',
+          body: JSON.stringify({ refreshToken }),
+        });
+
+        if (refreshResponse.ok) {
+          const { accessToken, refreshToken: newRefreshToken } = await refreshResponse.json();
+
+          // Update tokens
+          this.setAccessToken(accessToken);
+          this.setRefreshToken(newRefreshToken);
+
+          // Retry original request
+          return this.request<T>(endpoint, config, true);
+        }
+      }
+
+      // Refresh failed, logout
+      this.clearTokens();
+      window.location.href = '/auth';
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+}
+```
+
+### Manual Refresh
+
+```typescript
+import { useRefreshToken } from '@/lib/queries/auth.queries';
+
+function Component() {
+  const refreshMutation = useRefreshToken();
+
+  const handleRefresh = async () => {
+    try {
+      await refreshMutation.mutateAsync();
+      console.log('Token refreshed');
+    } catch (error) {
+      console.error('Refresh failed:', error);
+    }
+  };
+
+  return <button onClick={handleRefresh}>Refresh Token</button>;
+}
+```
+
+---
+
+## Error Handling
+
+### API Errors
+
+```typescript
+interface ApiError {
+  statusCode: number;
+  message: string | string[];
+  error: string;
+}
+
+// Usage
+try {
+  const user = await userApi.getUserById('invalid-id');
+} catch (error) {
+  if (isApiError(error)) {
+    console.error(`Error ${error.statusCode}: ${error.message}`);
+  }
+}
+```
+
+### Query Errors
+
+```typescript
+import { useQuery } from '@tanstack/react-query';
+
+function Component() {
+  const { data, error, isError } = useQuery({
+    queryKey: ['users'],
+    queryFn: userApi.getUsers,
+  });
+
+  if (isError) {
+    return <ErrorMessage error={error} />;
+  }
+
+  return <UserList users={data} />;
+}
+```
+
+---
+
+## Middleware Integration
+
+### Protected Routes
+
+```typescript
+// src/middleware.ts
+
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get('accessToken')?.value;
+  const { pathname } = request.nextUrl;
+
+  const isProtectedRoute = protectedRoutes.some(route =>
+    pathname.startsWith(route)
+  );
+
+  if (isProtectedRoute && !token) {
+    const url = new URL('/auth', request.url);
+    url.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
+}
+```
+
+### Usage in Components
+
+```typescript
+// No need to check auth manually
+// Middleware handles it automatically
+
+function DashboardPage() {
+  // This page is protected by middleware
+  // User is guaranteed to be authenticated
+
+  return <DashboardLayout>{/* Content */}</DashboardLayout>;
+}
+```
+
+---
+
+## Best Practices
+
+### API Calls
+
+```typescript
+// ✅ Good: Use TanStack Query
+const { data } = useQuery({
+  queryKey: ['users'],
+  queryFn: userApi.getUsers,
+});
+
+// ❌ Bad: Direct API calls in components
+const [users, setUsers] = useState([]);
+useEffect(() => {
+  userApi.getUsers().then(setUsers);
+}, []);
+```
+
+### Error Handling
+
+```typescript
+// ✅ Good: Handle errors gracefully
+const { data, error, isError } = useQuery({
+  queryKey: ['users'],
+  queryFn: userApi.getUsers,
+  retry: 3,
+  retryDelay: 1000,
+});
+
+if (isError) {
+  return <ErrorBoundary error={error} />;
+}
+
+// ❌ Bad: Ignore errors
+const { data } = useQuery({
+  queryKey: ['users'],
+  queryFn: userApi.getUsers,
+});
+```
+
+### Loading States
+
+```typescript
+// ✅ Good: Show loading states
+const { data, isLoading } = useQuery({
+  queryKey: ['users'],
+  queryFn: userApi.getUsers,
+});
+
+if (isLoading) {
+  return <Skeleton />;
+}
+
+// ❌ Bad: No loading state
+const { data } = useQuery({
+  queryKey: ['users'],
+  queryFn: userApi.getUsers,
+});
+
+return <UserList users={data} />; // data might be undefined
+```
+
+### Mutations
+
+```typescript
+// ✅ Good: Use mutations for write operations
+const createMutation = useMutation({
+  mutationFn: userApi.createUser,
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['users'] });
+  },
+});
+
+// ❌ Bad: Direct API calls
+const handleCreate = async (data) => {
+  await userApi.createUser(data);
+  // No cache invalidation
+};
+```
+
+---
+
+## Testing API Integration
+
+### Mock API Responses
+
+```typescript
+import { vi } from 'vitest';
+import { userApi } from '@/lib/api/user.api';
+
+vi.mock('@/lib/api/user.api', () => ({
+  userApi: {
+    getUsers: vi.fn(() => Promise.resolve([
+      { id: '1', name: 'John Doe' },
+    ])),
+  },
+}));
+
+test('renders users', async () => {
+  render(<UserList />);
+
+  await waitFor(() => {
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+  });
+});
+```
+
+### Test Queries
+
+```typescript
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: false },
+  },
+});
+
+test('fetches users', async () => {
+  render(
+    <QueryClientProvider client={queryClient}>
+      <UserList />
+    </QueryClientProvider>
+  );
+
+  await waitFor(() => {
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+  });
+});
+```
