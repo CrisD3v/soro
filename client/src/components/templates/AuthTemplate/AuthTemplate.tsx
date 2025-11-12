@@ -14,6 +14,7 @@ import { ResetPasswordForm } from '@/components/organisms/ResetPasswordForm/Rese
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import type { AuthTemplateProps, AuthView } from './AuthTemplate.types';
+import Link from 'next/link';
 
 export const AuthTemplate = ({
   initialView = 'login',
@@ -47,7 +48,9 @@ export const AuthTemplate = ({
       >
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 space-y-6 border border-purple-100 dark:border-purple-900/50">
           <div className="flex flex-col items-center space-y-4">
-            <Logo size="md" />
+            <Link href="/">
+              <Logo size="md" />
+            </Link>
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentView}
@@ -99,7 +102,7 @@ export const AuthTemplate = ({
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          © 2024 SORO. Todos los derechos reservados.
+          © 2025 SORO. Todos los derechos reservados.
         </motion.p>
       </motion.div>
     </div>
