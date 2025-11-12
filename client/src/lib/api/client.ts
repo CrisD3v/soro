@@ -34,11 +34,12 @@ class ApiClient {
   }
 
   /**
-   * Realiza un request HTTP con manejo de errores
+   * Realiza un request HTTP con manejo de errores y refresh token automático
    */
   private async request<T>(
     endpoint: string,
-    config: RequestConfig = {}
+    config: RequestConfig = {},
+    isRetry = false
   ): Promise<T> {
     const { requiresAuth = false, headers = {}, ...restConfig } = config;
 
@@ -65,6 +66,50 @@ class ApiClient {
         return {} as T;
       }
 
+      // Handle 401 Unauthorized - Automatic token refresh
+      if (response.status === 401 && !isRetry && requiresAuth) {
+        console.log('[Auth] Access token expired, attempting refresh...');
+
+        const refreshToken = this.getRefreshToken();
+        if (refreshToken) {
+          try {
+            // Attempt to refresh the token
+            const refreshResponse = await fetch(`${this.baseURL}/auth/refresh`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ refreshToken }),
+            });
+
+            if (refreshResponse.ok) {
+              const { accessToken, refreshToken: newRefreshToken } = await refreshResponse.json();
+
+              // Update tokens
+              this.setAccessToken(accessToken);
+              this.setRefreshToken(newRefreshToken || refreshToken);
+
+              console.log('[Auth] Token refreshed successfully, retrying request');
+
+              // Retry the original request with new token
+              return this.request<T>(endpoint, config, true);
+            }
+          } catch (refreshError) {
+            console.error('[Auth] Token refresh failed:', refreshError);
+          }
+        }
+
+        // If refresh failed or no refresh token, clear and redirect
+        this.clearTokens();
+        if (typeof window !== 'undefined') {
+          const currentPath = window.location.pathname;
+          if (currentPath !== '/auth') {
+            sessionStorage.setItem('redirectAfterLogin', currentPath);
+          }
+          window.location.href = '/auth';
+        }
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -85,6 +130,34 @@ class ApiClient {
         message: 'Network error or server unavailable',
         error: 'Internal Server Error',
       } as ApiError;
+    }
+  }
+
+  /**
+   * Obtiene el refresh token del localStorage
+   */
+  private getRefreshToken(): string | null {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem('refreshToken');
+  }
+
+  /**
+   * Establece el refresh token en localStorage
+   */
+  private setRefreshToken(token: string) {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('refreshToken', token);
+    }
+  }
+
+  /**
+   * Limpia todos los tokens
+   */
+  private clearTokens() {
+    this.accessToken = null;
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     }
   }
 
