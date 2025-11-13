@@ -7,10 +7,11 @@ import { ProjectModule } from '@context/project/project.module';
 import { RoleModule } from '@context/role/role.module';
 import { TaskModule } from '@context/task/task.module';
 import { UserModule } from '@context/user/user.module';
-import { DealModule } from './context/deal/deal.module';
-import { InvoiceModule } from './context/invoice/invoice.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { DealModule } from './context/deal/deal.module';
+import { InvoiceModule } from './context/invoice/invoice.module';
+import { NotificationModule } from './context/notification/notification.module';
 
 @Module({
   imports: [
@@ -29,8 +30,9 @@ import { ConfigModule } from '@nestjs/config';
     ContactModule,
     DealModule,
     InvoiceModule,
+    NotificationModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
