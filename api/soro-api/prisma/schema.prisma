@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,6 +9,23 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// ============================================
+// SYSTEM & VERSIONING
+// ============================================
+
+model SystemVersion {
+  id          String   @id @default(uuid())
+  version     String   @unique
+  description String?
+  appliedAt   DateTime @default(now())
+
+  @@index([version])
+}
+
+// ============================================
+// USERS & AUTHENTICATION
+// ============================================
 
 model User {
   id             String         @id @default(uuid())
@@ -23,6 +37,8 @@ model User {
   documentType   typeDocument
   phone          String
   companyId      String
+  isActive       Boolean        @default(true)
+  lastLoginAt    DateTime?
   roles          UserRole[]
   signature      Signature?
   refreshTokens  RefreshToken[]
@@ -30,45 +46,79 @@ model User {
   updatedAt      DateTime       @updatedAt
 
   // Relationships
-  company        Company              @relation("UserCompany", fields: [companyId], references: [id], onDelete: Cascade)
-  enlacedRecords UserEnlacedRecords[]
+  company            Company              @relation("UserCompany", fields: [companyId], references: [id], onDelete: Cascade)
+  enlacedRecords     UserEnlacedRecords[]
+  createdProjects    Project[]            @relation("ProjectCreator")
+  assignedTasks      Task[]               @relation("TaskAssignee")
+  auditLogs          AuditLog[]           @relation("AuditPerformer")
+  notifications      Notification[]       @relation("UserNotifications")
+  createdContacts    Contact[]            @relation("ContactCreator")
+  createdDeals       Deal[]               @relation("DealCreator")
+  assignedDeals      Deal[]               @relation("DealAssignee")
+  createdInvoices    Invoice[]            @relation("InvoiceCreator")
+  createdDocuments   Document[]           @relation("DocumentCreator")
+  createdWorkflows   Workflow[]           @relation("WorkflowCreator")
+  eventLogs          EventLog[]           @relation("EventPerformer")
 
   // Indexes
   @@index([email])
   @@index([companyId])
   @@index([documentNumber])
+  @@index([isActive])
 }
 
 model RefreshToken {
   id        String   @id @default(uuid())
   userId    String
-  tokenHash String
+  tokenHash String   @unique
   expiresAt DateTime
   createdAt DateTime @default(now())
 
-  // Relationships
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@index([expiresAt])
 }
+
+// ============================================
+// ROLES & PERMISSIONS (Hierarchical)
+// ============================================
 
 model Role {
   id          String           @id @default(uuid())
   name        String           @unique
+  description String?
+  isGlobal    Boolean          @default(false) // Global roles vs company-scoped
+  level       Int              @default(0) // Hierarchy level
   userRoles   UserRole[]
   permissions RolePermission[]
+  parentId    String?
+  parent      Role?            @relation("RoleHierarchy", fields: [parentId], references: [id])
+  children    Role[]           @relation("RoleHierarchy")
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 
-  //indexes
   @@index([name])
+  @@index([isGlobal])
+  @@index([level])
+  @@index([parentId])
 }
 
 model Permission {
   id          String           @id @default(uuid())
   name        String           @unique
   description String?
+  resource    String // Entity name (users, companies, projects, etc.)
+  action      String // create, read, update, delete, etc.
+  scope       PermissionScope  @default(COMPANY)
   roles       RolePermission[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
+
+  @@index([resource])
+  @@index([action])
+  @@index([scope])
 }
 
 model RolePermission {
@@ -80,14 +130,15 @@ model RolePermission {
   permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
 
   @@unique([roleId, permissionId])
+  @@index([roleId])
+  @@index([permissionId])
 }
 
 model UserRole {
-  id        String @id @default(uuid())
+  id        String   @id @default(uuid())
   userId    String
   roleId    String
   companyId String
-
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
   company   Company  @relation("UserCompanyRoles", fields: [companyId], references: [id])
@@ -95,58 +146,571 @@ model UserRole {
 
   @@unique([userId, roleId, companyId])
   @@index([companyId])
+  @@index([userId])
+  @@index([roleId])
 }
+
+// ============================================
+// COMPANIES (Multi-tenant)
+// ============================================
 
 model Company {
   id        String    @id @default(uuid())
   name      String
   nit       String    @unique
-  address   String
-  phone     String    @unique @default("")
+  sector    String?
+  address   String?
+  phone     String?
+  email     String?
+  logoUrl   String?
   parentId  String?
+  isActive  Boolean   @default(true)
   deletedAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
   // Relationships
-  parent         Company?         @relation("CompanyToChildren", fields: [parentId], references: [id], onDelete: SetNull)
-  children       Company[]        @relation("CompanyToChildren")
-  users          User[]           @relation("UserCompany")
-  roles          UserRole[]       @relation("UserCompanyRoles")
-  enlacedRecords EnlacedRecords[]
+  parent           Company?           @relation("CompanyToChildren", fields: [parentId], references: [id], onDelete: SetNull)
+  children         Company[]          @relation("CompanyToChildren")
+  users            User[]             @relation("UserCompany")
+  projects         Project[]          @relation("ProjectCompany")
+  roles            UserRole[]         @relation("UserCompanyRoles")
+  enlacedRecords   EnlacedRecords[]
+  settings         Setting[]          @relation("CompanySettings")
+  subscriptions    Subscription[]     @relation("CompanySubscriptions")
+  contacts         Contact[]          @relation("CompanyContacts")
+  deals            Deal[]             @relation("CompanyDeals")
+  invoices         Invoice[]          @relation("CompanyInvoices")
+  documents        Document[]         @relation("CompanyDocuments")
+  workflows        Workflow[]         @relation("CompanyWorkflows")
+  integrations     Integration[]      @relation("CompanyIntegrations")
+  customFields     CustomField[]      @relation("CompanyCustomFields")
+  tenantConfig     TenantConfig?      @relation("CompanyTenantConfig")
+  resources        Resource[]         @relation("CompanyResources")
+  apiKeys          ApiKey[]           @relation("CompanyApiKeys")
 
   @@unique([name, parentId])
   @@index([parentId])
   @@index([deletedAt])
+  @@index([isActive])
+  @@index([sector])
 }
+
+model TenantConfig {
+  id                String   @id @default(uuid())
+  companyId         String   @unique
+  maxUsers          Int      @default(10)
+  maxProjects       Int      @default(5)
+  maxStorage        BigInt   @default(1073741824) // 1GB in bytes
+  features          Json     @default("{}") // Feature flags
+  customDomain      String?
+  timezone          String   @default("UTC")
+  locale            String   @default("en")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  company Company @relation("CompanyTenantConfig", fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+}
+
+// ============================================
+// CUSTOM FIELDS (Dynamic Configuration)
+// ============================================
+
+model CustomField {
+  id          String   @id @default(uuid())
+  companyId   String
+  entity      String // users, projects, contacts, etc.
+  fieldName   String
+  fieldType   String // text, number, date, select, etc.
+  fieldConfig Json     @default("{}") // Options, validations, etc.
+  isRequired  Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  company Company @relation("CompanyCustomFields", fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, entity, fieldName])
+  @@index([companyId])
+  @@index([entity])
+}
+
+// ============================================
+// PROJECTS & TASKS
+// ============================================
+
+model Project {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  status      String    @default("pending")
+  startDate   DateTime?
+  endDate     DateTime?
+  companyId   String
+  createdBy   String
+  tasks       Task[]
+  documents   Document[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  company  Company   @relation("ProjectCompany", fields: [companyId], references: [id], onDelete: Cascade)
+  creator  User      @relation("ProjectCreator", fields: [createdBy], references: [id])
+  invoices Invoice[] @relation("ProjectInvoices")
+
+  @@index([companyId])
+  @@index([createdBy])
+  @@index([status])
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  status      String    @default("todo")
+  priority    String    @default("normal")
+  dueDate     DateTime?
+  projectId   String
+  assignedTo  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignee User?  @relation("TaskAssignee", fields: [assignedTo], references: [id])
+
+  @@index([projectId])
+  @@index([assignedTo])
+  @@index([status])
+  @@index([dueDate])
+}
+
+// ============================================
+// CRM (Contacts & Deals)
+// ============================================
+
+model Contact {
+  id          String   @id @default(uuid())
+  companyId   String
+  type        String   @default("lead") // lead, client, supplier, partner
+  name        String
+  email       String?
+  phone       String?
+  address     String?
+  notes       String?
+  customData  Json     @default("{}") // Custom fields data
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  company  Company   @relation("CompanyContacts", fields: [companyId], references: [id], onDelete: Cascade)
+  creator  User      @relation("ContactCreator", fields: [createdBy], references: [id])
+  deals    Deal[]    @relation("ContactDeals")
+  invoices Invoice[] @relation("ContactInvoices")
+
+  @@index([companyId])
+  @@index([type])
+  @@index([createdBy])
+  @@index([email])
+}
+
+model Deal {
+  id          String    @id @default(uuid())
+  companyId   String
+  contactId   String
+  title       String
+  description String?
+  value       Float
+  currency    String    @default("USD")
+  stage       String    @default("prospecting") // prospecting, qualified, proposal, negotiation, closed_won, closed_lost
+  probability Int       @default(0) // 0-100
+  expectedCloseDate DateTime?
+  closedAt    DateTime?
+  assignedTo  String?
+  createdBy   String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  company  Company @relation("CompanyDeals", fields: [companyId], references: [id], onDelete: Cascade)
+  contact  Contact @relation("ContactDeals", fields: [contactId], references: [id])
+  assignee User?   @relation("DealAssignee", fields: [assignedTo], references: [id])
+  creator  User    @relation("DealCreator", fields: [createdBy], references: [id])
+  invoices Invoice[] @relation("DealInvoices")
+
+  @@index([companyId])
+  @@index([contactId])
+  @@index([stage])
+  @@index([assignedTo])
+  @@index([createdBy])
+}
+
+// ============================================
+// INVOICING & PAYMENTS
+// ============================================
+
+model Invoice {
+  id             String    @id @default(uuid())
+  companyId      String
+  dealId         String?
+  contactId      String?
+  projectId      String?
+  invoiceNumber  String    @unique
+  status         String    @default("draft") // draft, sent, paid, overdue, cancelled
+  subtotal       Float
+  tax            Float     @default(0)
+  discountAmount Float     @default(0)
+  total          Float
+  currency       String    @default("USD")
+  issueDate      DateTime  @default(now())
+  dueDate        DateTime?
+  paidAt         DateTime?
+  notes          String?   @db.Text
+  terms          String?   @db.Text
+  createdBy      String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  company  Company        @relation("CompanyInvoices", fields: [companyId], references: [id], onDelete: Cascade)
+  deal     Deal?          @relation("DealInvoices", fields: [dealId], references: [id])
+  contact  Contact?       @relation("ContactInvoices", fields: [contactId], references: [id])
+  project  Project?       @relation("ProjectInvoices", fields: [projectId], references: [id])
+  creator  User           @relation("InvoiceCreator", fields: [createdBy], references: [id])
+  items    InvoiceItem[]  @relation("InvoiceItems")
+  payments Payment[]      @relation("InvoicePayments")
+
+  @@index([companyId])
+  @@index([dealId])
+  @@index([contactId])
+  @@index([projectId])
+  @@index([status])
+  @@index([invoiceNumber])
+  @@index([issueDate])
+}
+
+model InvoiceItem {
+  id           String  @id @default(uuid())
+  invoiceId    String
+  description  String
+  quantity     Float
+  unitPrice    Float
+  total        Float
+  taxRate      Float   @default(0)
+  discountRate Float   @default(0)
+
+  invoice Invoice @relation("InvoiceItems", fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  invoiceId     String
+  amount        Float
+  currency      String   @default("USD")
+  method        String // card, transfer, cash, etc.
+  transactionId String?
+  status        String   @default("pending") // pending, completed, failed
+  paidAt        DateTime?
+  createdAt     DateTime @default(now())
+
+  invoice Invoice @relation("InvoicePayments", fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+  @@index([status])
+}
+
+// ============================================
+// RESOURCES & INVENTORY
+// ============================================
+
+model Resource {
+  id          String   @id @default(uuid())
+  companyId   String
+  name        String
+  type        String // material, equipment, vehicle, etc.
+  sku         String?
+  quantity    Float    @default(0)
+  unit        String   @default("unit")
+  cost        Float?
+  currency    String   @default("USD")
+  location    String?
+  notes       String?
+  customData  Json     @default("{}")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  company Company @relation("CompanyResources", fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@index([type])
+  @@index([sku])
+}
+
+// ============================================
+// DOCUMENTS & FILES
+// ============================================
+
+model Document {
+  id          String   @id @default(uuid())
+  companyId   String
+  projectId   String?
+  name        String
+  type        String // contract, invoice, report, etc.
+  fileUrl     String
+  fileSize    BigInt
+  mimeType    String
+  uploadedBy  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  company  Company  @relation("CompanyDocuments", fields: [companyId], references: [id], onDelete: Cascade)
+  project  Project? @relation(fields: [projectId], references: [id])
+  uploader User     @relation("DocumentCreator", fields: [uploadedBy], references: [id])
+
+  @@index([companyId])
+  @@index([projectId])
+  @@index([type])
+  @@index([uploadedBy])
+}
+
+// ============================================
+// WORKFLOWS & AUTOMATION
+// ============================================
+
+model Workflow {
+  id          String         @id @default(uuid())
+  companyId   String
+  name        String
+  description String?
+  trigger     String // manual, scheduled, event-based
+  triggerConfig Json         @default("{}")
+  isActive    Boolean        @default(true)
+  createdBy   String
+  steps       WorkflowStep[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  company Company @relation("CompanyWorkflows", fields: [companyId], references: [id], onDelete: Cascade)
+  creator User    @relation("WorkflowCreator", fields: [createdBy], references: [id])
+
+  @@index([companyId])
+  @@index([isActive])
+}
+
+model WorkflowStep {
+  id          String   @id @default(uuid())
+  workflowId  String
+  order       Int
+  action      String // send_email, create_task, update_field, etc.
+  config      Json     @default("{}")
+  createdAt   DateTime @default(now())
+
+  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+  @@index([workflowId])
+  @@index([order])
+}
+
+// ============================================
+// EVENTS & AUDIT
+// ============================================
+
+model Event {
+  id          String    @id @default(uuid())
+  type        String // user.created, invoice.paid, etc.
+  entity      String
+  entityId    String
+  payload     Json
+  status      String    @default("pending") // pending, processing, completed, failed
+  processedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model EventLog {
+  id          String   @id @default(uuid())
+  eventId     String
+  action      String
+  performedBy String?
+  result      String // success, failure
+  error       String?
+  createdAt   DateTime @default(now())
+
+  performer User? @relation("EventPerformer", fields: [performedBy], references: [id])
+
+  @@index([eventId])
+  @@index([performedBy])
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  entity      String
+  entityId    String
+  action      String // created, updated, deleted, etc.
+  performedBy String
+  changes     Json? // Before/after data
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  performer User @relation("AuditPerformer", fields: [performedBy], references: [id])
+
+  @@index([entity])
+  @@index([entityId])
+  @@index([performedBy])
+  @@index([createdAt])
+}
+
+// ============================================
+// INTEGRATIONS
+// ============================================
+
+model Integration {
+  id          String   @id @default(uuid())
+  companyId   String
+  name        String // stripe, mercadopago, google_drive, slack, etc.
+  type        String // payment, storage, communication, etc.
+  config      Json     @default("{}") // API keys, webhooks, etc.
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  company Company @relation("CompanyIntegrations", fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@index([type])
+  @@index([isActive])
+}
+
+model ApiKey {
+  id          String    @id @default(uuid())
+  companyId   String
+  name        String
+  key         String    @unique
+  permissions Json      @default("[]") // Array of allowed endpoints/actions
+  isActive    Boolean   @default(true)
+  expiresAt   DateTime?
+  lastUsedAt  DateTime?
+  createdAt   DateTime  @default(now())
+
+  company Company @relation("CompanyApiKeys", fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@index([key])
+  @@index([isActive])
+}
+
+// ============================================
+// NOTIFICATIONS
+// ============================================
+
+model Notification {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  message     String
+  type        String // info, warning, task, approval, etc.
+  entityType  String? // project, task, invoice, etc.
+  entityId    String?
+  read        Boolean  @default(false)
+  readAt      DateTime?
+  createdAt   DateTime @default(now())
+
+  user User @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([read])
+  @@index([type])
+  @@index([createdAt])
+}
+
+// ============================================
+// SUBSCRIPTIONS & PLANS
+// ============================================
+
+model Subscription {
+  id          String    @id @default(uuid())
+  companyId   String
+  planId      String
+  status      String    @default("active") // active, cancelled, expired, trial
+  startDate   DateTime  @default(now())
+  endDate     DateTime?
+  trialEndsAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  company Company @relation("CompanySubscriptions", fields: [companyId], references: [id], onDelete: Cascade)
+  plan    Plan    @relation("PlanSubscriptions", fields: [planId], references: [id])
+
+  @@index([companyId])
+  @@index([planId])
+  @@index([status])
+}
+
+model Plan {
+  id            String         @id @default(uuid())
+  name          String         @unique
+  description   String?
+  price         Float
+  currency      String         @default("USD")
+  interval      String         @default("monthly") // monthly, yearly
+  features      Json           @default("{}") // Feature limits and flags
+  isActive      Boolean        @default(true)
+  trialDays     Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  subscriptions Subscription[] @relation("PlanSubscriptions")
+
+  @@index([isActive])
+}
+
+// ============================================
+// SETTINGS
+// ============================================
+
+model Setting {
+  id        String   @id @default(uuid())
+  companyId String
+  key       String
+  value     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  company Company @relation("CompanySettings", fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, key])
+  @@index([companyId])
+}
+
+// ============================================
+// SIGNATURE & ENLACED RECORDS
+// ============================================
 
 model Signature {
   id        String   @id @default(uuid())
-  userId    String
+  userId    String   @unique
   signature String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relationships
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId])
   @@index([userId])
 }
 
 model EnlacedRecords {
-  id         String   @id @default(uuid())
+  id         String               @id @default(uuid())
   recordId   String
   fromRecord String
-  companyId  String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  companyId  String               @unique
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  company    Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  users      UserEnlacedRecords[]
 
-  // Relationships
-  company Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  users   UserEnlacedRecords[]
-
-  @@unique([companyId])
   @@index([companyId, recordId])
 }
 
@@ -159,10 +723,23 @@ model UserEnlacedRecords {
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([enlacedRecordId, userId])
+  @@index([enlacedRecordId])
+  @@index([userId])
 }
+
+// ============================================
+// ENUMS
+// ============================================
 
 enum typeDocument {
   CC
   CE
   TI
+}
+
+enum PermissionScope {
+  GLOBAL // System-wide
+  COMPANY // Company-scoped
+  PROJECT // Project-scoped
+  RESOURCE // Resource-scoped
 }
