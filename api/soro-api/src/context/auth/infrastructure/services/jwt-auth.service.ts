@@ -19,7 +19,7 @@ export class JwtAuthService implements AuthServicePort {
     private readonly configService: ConfigService,
     private readonly userRepository: UserRepositoryPort,
     private readonly tokenRepository: TokenRepositoryPort,
-  ) { }
+  ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.userRepository.findByEmail(email);

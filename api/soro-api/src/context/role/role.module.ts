@@ -32,4 +32,4 @@ import { PrismaRoleRepository } from './infrastructure/persistence/prisma-role.r
   ],
   exports: [RoleRepositoryPort],
 })
-export class RoleModule { }
+export class RoleModule {}

@@ -1,10 +1,14 @@
 import { RoleRepositoryPort } from '@context/role/domain/ports/role.repository.port';
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { AssignPermissionDto } from '../dto/assign-permission.dto';
 
 @Injectable()
 export class AssignPermissionUseCase {
-  constructor(private readonly roleRepository: RoleRepositoryPort) { }
+  constructor(private readonly roleRepository: RoleRepositoryPort) {}
 
   async execute(roleId: string, dto: AssignPermissionDto): Promise<void> {
     const role = await this.roleRepository.findById(roleId);

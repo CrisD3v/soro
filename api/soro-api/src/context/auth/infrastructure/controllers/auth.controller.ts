@@ -1,4 +1,7 @@
-import { AuthResponseDto, RefreshResponseDto } from '@context/auth/application/dto/auth-response.dto';
+import {
+  AuthResponseDto,
+  RefreshResponseDto,
+} from '@context/auth/application/dto/auth-response.dto';
 import { LoginDto } from '@context/auth/application/dto/login.dto';
 import { LoginUseCase } from '@context/auth/application/use-cases/login.use-case';
 import { LogoutUseCase } from '@context/auth/application/use-cases/logout.use-case';
@@ -24,7 +27,7 @@ export class AuthController {
     private readonly refreshTokenUseCase: RefreshTokenUseCase,
     private readonly logoutUseCase: LogoutUseCase,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   @Post('login')
   @HttpCode(HttpStatus.OK)

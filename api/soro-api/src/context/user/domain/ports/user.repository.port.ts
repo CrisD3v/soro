@@ -47,7 +47,11 @@ export abstract class UserRepositoryPort {
   abstract delete(id: string): Promise<void>;
   abstract list(filters?: ListUsersFilters): Promise<User[]>;
   abstract assignRole(data: AssignRoleData): Promise<void>;
-  abstract removeRole(userId: string, roleId: string, companyId: string): Promise<void>;
+  abstract removeRole(
+    userId: string,
+    roleId: string,
+    companyId: string,
+  ): Promise<void>;
   abstract assignSignature(data: AssignSignatureData): Promise<void>;
   abstract updateSignature(userId: string, signature: string): Promise<void>;
 }

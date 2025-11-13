@@ -17,9 +17,95 @@ async function main() {
   await prisma.user.deleteMany();
   await prisma.permission.deleteMany();
   await prisma.role.deleteMany();
+  await prisma.subscription.deleteMany();
+  await prisma.plan.deleteMany();
+  await prisma.tenantConfig.deleteMany();
   await prisma.company.deleteMany();
+  await prisma.systemVersion.deleteMany();
 
-  // 1. Crear Permisos
+  // 0. Crear System Version
+  console.log('📌 Creating system version...');
+  await prisma.systemVersion.create({
+    data: {
+      version: '2.0.0',
+      description: 'Phase V2 - Multi-tenant core with advanced features',
+    },
+  });
+  console.log('✅ System version created');
+
+  // 1. Crear Planes
+  console.log('💳 Creating plans...');
+  const freePlan = await prisma.plan.create({
+    data: {
+      name: 'Free',
+      description: 'Plan gratuito con funcionalidades básicas',
+      price: 0,
+      currency: 'USD',
+      interval: 'monthly',
+      trialDays: 14,
+      features: {
+        maxUsers: 5,
+        maxProjects: 3,
+        maxStorage: 1073741824, // 1GB
+        projects: true,
+        crm: false,
+        invoicing: false,
+        workflows: false,
+        customFields: false,
+        apiAccess: false,
+      },
+    },
+  });
+
+  const proPlan = await prisma.plan.create({
+    data: {
+      name: 'Professional',
+      description: 'Plan profesional con todas las funcionalidades',
+      price: 49.99,
+      currency: 'USD',
+      interval: 'monthly',
+      trialDays: 14,
+      features: {
+        maxUsers: 50,
+        maxProjects: 100,
+        maxStorage: 107374182400, // 100GB
+        projects: true,
+        crm: true,
+        invoicing: true,
+        workflows: true,
+        customFields: true,
+        apiAccess: true,
+      },
+    },
+  });
+
+  const enterprisePlan = await prisma.plan.create({
+    data: {
+      name: 'Enterprise',
+      description: 'Plan empresarial con recursos ilimitados',
+      price: 199.99,
+      currency: 'USD',
+      interval: 'monthly',
+      trialDays: 30,
+      features: {
+        maxUsers: -1, // Unlimited
+        maxProjects: -1,
+        maxStorage: -1,
+        projects: true,
+        crm: true,
+        invoicing: true,
+        workflows: true,
+        customFields: true,
+        apiAccess: true,
+        dedicatedSupport: true,
+        customIntegrations: true,
+      },
+    },
+  });
+
+  console.log('✅ Created 3 plans');
+
+  // 2. Crear Permisos
   console.log('📋 Creating permissions...');
   const permissions = await Promise.all([
     // User permissions
@@ -27,24 +113,36 @@ async function main() {
       data: {
         name: 'users.create',
         description: 'Create new users',
+        resource: 'users',
+        action: 'create',
+        scope: 'COMPANY',
       },
     }),
     prisma.permission.create({
       data: {
         name: 'users.read',
         description: 'View users',
+        resource: 'users',
+        action: 'read',
+        scope: 'COMPANY',
       },
     }),
     prisma.permission.create({
       data: {
         name: 'users.update',
         description: 'Update users',
+        resource: 'users',
+        action: 'update',
+        scope: 'COMPANY',
       },
     }),
     prisma.permission.create({
       data: {
         name: 'users.delete',
         description: 'Delete users',
+        resource: 'users',
+        action: 'delete',
+        scope: 'COMPANY',
       },
     }),
     // Company permissions
@@ -52,24 +150,36 @@ async function main() {
       data: {
         name: 'companies.create',
         description: 'Create new companies',
+        resource: 'companies',
+        action: 'create',
+        scope: 'GLOBAL',
       },
     }),
     prisma.permission.create({
       data: {
         name: 'companies.read',
         description: 'View companies',
+        resource: 'companies',
+        action: 'read',
+        scope: 'COMPANY',
       },
     }),
     prisma.permission.create({
       data: {
         name: 'companies.update',
         description: 'Update companies',
+        resource: 'companies',
+        action: 'update',
+        scope: 'COMPANY',
       },
     }),
     prisma.permission.create({
       data: {
         name: 'companies.delete',
         description: 'Delete companies',
+        resource: 'companies',
+        action: 'delete',
+        scope: 'GLOBAL',
       },
     }),
     // Role permissions
@@ -77,84 +187,133 @@ async function main() {
       data: {
         name: 'roles.create',
         description: 'Create new roles',
+        resource: 'roles',
+        action: 'create',
+        scope: 'COMPANY',
       },
     }),
     prisma.permission.create({
       data: {
         name: 'roles.read',
         description: 'View roles',
+        resource: 'roles',
+        action: 'read',
+        scope: 'COMPANY',
       },
     }),
     prisma.permission.create({
       data: {
         name: 'roles.update',
         description: 'Update roles',
+        resource: 'roles',
+        action: 'update',
+        scope: 'COMPANY',
       },
     }),
     prisma.permission.create({
       data: {
         name: 'roles.delete',
         description: 'Delete roles',
+        resource: 'roles',
+        action: 'delete',
+        scope: 'GLOBAL',
       },
     }),
-    // Records permissions
+    // Project permissions
     prisma.permission.create({
       data: {
-        name: 'records.create',
-        description: 'Create records',
-      },
-    }),
-    prisma.permission.create({
-      data: {
-        name: 'records.read',
-        description: 'View records',
-      },
-    }),
-    prisma.permission.create({
-      data: {
-        name: 'records.update',
-        description: 'Update records',
+        name: 'projects.create',
+        description: 'Create projects',
+        resource: 'projects',
+        action: 'create',
+        scope: 'COMPANY',
       },
     }),
     prisma.permission.create({
       data: {
-        name: 'records.delete',
-        description: 'Delete records',
+        name: 'projects.read',
+        description: 'View projects',
+        resource: 'projects',
+        action: 'read',
+        scope: 'COMPANY',
+      },
+    }),
+    prisma.permission.create({
+      data: {
+        name: 'projects.update',
+        description: 'Update projects',
+        resource: 'projects',
+        action: 'update',
+        scope: 'PROJECT',
+      },
+    }),
+    prisma.permission.create({
+      data: {
+        name: 'projects.delete',
+        description: 'Delete projects',
+        resource: 'projects',
+        action: 'delete',
+        scope: 'COMPANY',
       },
     }),
   ]);
 
   console.log(`✅ Created ${permissions.length} permissions`);
 
-  // 2. Crear Roles
+  // 3. Crear Roles
   console.log('👥 Creating roles...');
+  const superAdminRole = await prisma.role.create({
+    data: {
+      name: 'super_admin',
+      description: 'Super administrador del sistema',
+      isGlobal: true,
+      level: 0,
+    },
+  });
+
   const adminRole = await prisma.role.create({
     data: {
       name: 'admin',
+      description: 'Administrador de la empresa',
+      isGlobal: false,
+      level: 1,
+      parentId: superAdminRole.id,
     },
   });
 
   const managerRole = await prisma.role.create({
     data: {
       name: 'manager',
+      description: 'Manager de proyectos',
+      isGlobal: false,
+      level: 2,
+      parentId: adminRole.id,
     },
   });
 
   const employeeRole = await prisma.role.create({
     data: {
       name: 'employee',
+      description: 'Empleado',
+      isGlobal: false,
+      level: 3,
+      parentId: managerRole.id,
     },
   });
 
   const viewerRole = await prisma.role.create({
     data: {
       name: 'viewer',
+      description: 'Solo lectura',
+      isGlobal: false,
+      level: 4,
+      parentId: employeeRole.id,
     },
   });
 
-  console.log('✅ Created 4 roles');
+  console.log('✅ Created 5 roles with hierarchy');
 
-  // 3. Asignar permisos a roles
+  // 4. Asignar permisos a roles
   console.log('🔗 Assigning permissions to roles...');
 
   // Admin: todos los permisos
@@ -214,7 +373,7 @@ async function main() {
 
   console.log('✅ Assigned permissions to roles');
 
-  // 4. Crear Empresas
+  // 5. Crear Empresas
   console.log('🏢 Creating companies...');
 
   // Empresa matriz
@@ -222,8 +381,31 @@ async function main() {
     data: {
       name: 'ACME Corporation',
       nit: '900123456-7',
+      sector: 'Technology',
       address: 'Calle 100 #15-20, Bogotá',
       phone: '+573001234567',
+      email: 'contact@acme.com',
+      isActive: true,
+    },
+  });
+
+  // Crear TenantConfig para ACME
+  await prisma.tenantConfig.create({
+    data: {
+      companyId: acmeCorp.id,
+      maxUsers: 50,
+      maxProjects: 100,
+      maxStorage: 107374182400, // 100GB
+      features: {
+        projects: true,
+        crm: true,
+        invoicing: true,
+        workflows: false,
+        customFields: true,
+        apiAccess: true,
+      },
+      timezone: 'America/Bogota',
+      locale: 'es',
     },
   });
 
@@ -232,9 +414,31 @@ async function main() {
     data: {
       name: 'ACME Tech Solutions',
       nit: '900234567-8',
+      sector: 'Software Development',
       address: 'Carrera 7 #71-21, Bogotá',
       phone: '+573002345678',
+      email: 'tech@acme.com',
       parentId: acmeCorp.id,
+      isActive: true,
+    },
+  });
+
+  await prisma.tenantConfig.create({
+    data: {
+      companyId: acmeTech.id,
+      maxUsers: 20,
+      maxProjects: 50,
+      maxStorage: 53687091200, // 50GB
+      features: {
+        projects: true,
+        crm: false,
+        invoicing: false,
+        workflows: false,
+        customFields: false,
+        apiAccess: false,
+      },
+      timezone: 'America/Bogota',
+      locale: 'es',
     },
   });
 
@@ -242,9 +446,31 @@ async function main() {
     data: {
       name: 'ACME Logistics',
       nit: '900345678-9',
+      sector: 'Logistics',
       address: 'Avenida 68 #25-47, Bogotá',
       phone: '+573003456789',
+      email: 'logistics@acme.com',
       parentId: acmeCorp.id,
+      isActive: true,
+    },
+  });
+
+  await prisma.tenantConfig.create({
+    data: {
+      companyId: acmeLogistics.id,
+      maxUsers: 15,
+      maxProjects: 30,
+      maxStorage: 21474836480, // 20GB
+      features: {
+        projects: true,
+        crm: false,
+        invoicing: false,
+        workflows: false,
+        customFields: false,
+        apiAccess: false,
+      },
+      timezone: 'America/Bogota',
+      locale: 'es',
     },
   });
 
@@ -253,8 +479,30 @@ async function main() {
     data: {
       name: 'Global Industries Inc',
       nit: '900456789-0',
+      sector: 'Manufacturing',
       address: 'Calle 26 #92-32, Bogotá',
       phone: '+573004567890',
+      email: 'contact@global.com',
+      isActive: true,
+    },
+  });
+
+  await prisma.tenantConfig.create({
+    data: {
+      companyId: globalInc.id,
+      maxUsers: 100,
+      maxProjects: 200,
+      maxStorage: 214748364800, // 200GB
+      features: {
+        projects: true,
+        crm: true,
+        invoicing: true,
+        workflows: true,
+        customFields: true,
+        apiAccess: true,
+      },
+      timezone: 'America/Bogota',
+      locale: 'es',
     },
   });
 
@@ -263,15 +511,79 @@ async function main() {
     data: {
       name: 'Global Services',
       nit: '900567890-1',
+      sector: 'Services',
       address: 'Carrera 15 #93-40, Bogotá',
       phone: '+573005678901',
+      email: 'services@global.com',
       parentId: globalInc.id,
+      isActive: true,
     },
   });
 
-  console.log('✅ Created 5 companies');
+  await prisma.tenantConfig.create({
+    data: {
+      companyId: globalServices.id,
+      maxUsers: 30,
+      maxProjects: 60,
+      maxStorage: 53687091200, // 50GB
+      features: {
+        projects: true,
+        crm: true,
+        invoicing: false,
+        workflows: false,
+        customFields: false,
+        apiAccess: false,
+      },
+      timezone: 'America/Bogota',
+      locale: 'es',
+    },
+  });
 
-  // 5. Crear Usuarios
+  console.log('✅ Created 5 companies with tenant configs');
+
+  // 6. Crear Suscripciones
+  console.log('💳 Creating subscriptions...');
+  await Promise.all([
+    prisma.subscription.create({
+      data: {
+        companyId: acmeCorp.id,
+        planId: proPlan.id,
+        status: 'active',
+      },
+    }),
+    prisma.subscription.create({
+      data: {
+        companyId: acmeTech.id,
+        planId: freePlan.id,
+        status: 'trial',
+        trialEndsAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+      },
+    }),
+    prisma.subscription.create({
+      data: {
+        companyId: acmeLogistics.id,
+        planId: freePlan.id,
+        status: 'active',
+      },
+    }),
+    prisma.subscription.create({
+      data: {
+        companyId: globalInc.id,
+        planId: enterprisePlan.id,
+        status: 'active',
+      },
+    }),
+    prisma.subscription.create({
+      data: {
+        companyId: globalServices.id,
+        planId: proPlan.id,
+        status: 'active',
+      },
+    }),
+  ]);
+  console.log('✅ Created 5 subscriptions');
+
+  // 7. Crear Usuarios
   console.log('👤 Creating users...');
 
   const hashedPassword = await bcrypt.hash('Test123456!', 10);
@@ -376,7 +688,7 @@ async function main() {
 
   console.log('✅ Created 7 users');
 
-  // 6. Asignar roles a usuarios
+  // 8. Asignar roles a usuarios
   console.log('🎭 Assigning roles to users...');
 
   await Promise.all([
@@ -440,7 +752,7 @@ async function main() {
 
   console.log('✅ Assigned roles to users');
 
-  // 7. Crear algunas firmas
+  // 9. Crear algunas firmas
   console.log('✍️ Creating signatures...');
 
   await Promise.all([
@@ -460,7 +772,7 @@ async function main() {
 
   console.log('✅ Created 2 signatures');
 
-  // 8. Crear algunos registros enlazados
+  // 10. Crear algunos registros enlazados
   console.log('🔗 Creating enlaced records...');
 
   const enlacedRecord1 = await prisma.enlacedRecords.create({

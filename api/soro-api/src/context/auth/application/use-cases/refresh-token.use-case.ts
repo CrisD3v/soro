@@ -3,7 +3,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class RefreshTokenUseCase {
-  constructor(private readonly authService: AuthServicePort) { }
+  constructor(private readonly authService: AuthServicePort) {}
 
   async execute(dto: { refreshToken: string }) {
     try {

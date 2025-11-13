@@ -13,7 +13,7 @@ import { UserMapper } from '../mappers/user.mapper';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepositoryPort {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateUserData): Promise<User> {
     const user = await this.prisma.user.create({

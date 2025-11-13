@@ -11,7 +11,7 @@ export class Company {
     public readonly updatedAt: Date,
     public parent?: Company | null,
     public children?: Company[],
-  ) { }
+  ) {}
 
   isDeleted(): boolean {
     return this.deletedAt !== null;

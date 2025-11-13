@@ -4,7 +4,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class GetRolePermissionsUseCase {
-  constructor(private readonly roleRepository: RoleRepositoryPort) { }
+  constructor(private readonly roleRepository: RoleRepositoryPort) {}
 
   async execute(roleId: string): Promise<Permission[]> {
     const role = await this.roleRepository.findById(roleId);

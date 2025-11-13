@@ -18,7 +18,7 @@ import {
   Param,
   Post,
   Put,
-  Query
+  Query,
 } from '@nestjs/common';
 
 @Controller('users')
@@ -30,7 +30,7 @@ export class UserController {
     private readonly listUsersUseCase: ListUsersUseCase,
     private readonly assignRoleUseCase: AssignRoleUseCase,
     private readonly assignSignatureUseCase: AssignSignatureUseCase,
-  ) { }
+  ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)

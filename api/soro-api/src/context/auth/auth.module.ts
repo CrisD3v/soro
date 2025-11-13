@@ -48,4 +48,4 @@ import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
   ],
   exports: [AuthServicePort, JwtAuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

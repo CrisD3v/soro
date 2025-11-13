@@ -4,7 +4,7 @@ import { AssignSignatureDto } from '../dto/assign-signature.dto';
 
 @Injectable()
 export class AssignSignatureUseCase {
-  constructor(private readonly userRepository: UserRepositoryPort) { }
+  constructor(private readonly userRepository: UserRepositoryPort) {}
 
   async execute(userId: string, dto: AssignSignatureDto): Promise<void> {
     // Verificar que el usuario existe

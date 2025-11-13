@@ -21,7 +21,13 @@ export abstract class RoleRepositoryPort {
   abstract delete(id: string): Promise<void>;
   abstract list(): Promise<Role[]>;
   abstract assignPermission(data: AssignPermissionData): Promise<void>;
-  abstract removePermission(roleId: string, permissionId: string): Promise<void>;
+  abstract removePermission(
+    roleId: string,
+    permissionId: string,
+  ): Promise<void>;
   abstract getPermissions(roleId: string): Promise<Permission[]>;
-  abstract hasPermission(roleId: string, permissionId: string): Promise<boolean>;
+  abstract hasPermission(
+    roleId: string,
+    permissionId: string,
+  ): Promise<boolean>;
 }

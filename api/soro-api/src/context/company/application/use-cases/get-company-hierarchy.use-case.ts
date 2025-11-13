@@ -4,7 +4,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class GetCompanyHierarchyUseCase {
-  constructor(private readonly companyRepository: CompanyRepositoryPort) { }
+  constructor(private readonly companyRepository: CompanyRepositoryPort) {}
 
   async execute(companyId: string): Promise<Company> {
     const company = await this.companyRepository.findHierarchy(companyId);

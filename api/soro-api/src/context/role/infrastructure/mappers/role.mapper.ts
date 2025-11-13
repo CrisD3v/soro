@@ -1,5 +1,9 @@
 import { Permission, Role } from '@context/role/domain/entities/role.entity';
-import { Permission as PrismaPermission, Role as PrismaRole, RolePermission } from '@prisma/client';
+import {
+  Permission as PrismaPermission,
+  Role as PrismaRole,
+  RolePermission,
+} from '@prisma/client';
 
 type PrismaRoleWithRelations = PrismaRole & {
   permissions?: (RolePermission & {
@@ -38,7 +42,9 @@ export class RoleMapper {
     };
   }
 
-  static permissionsToDomain(prismaPermissions: PrismaPermission[]): Permission[] {
+  static permissionsToDomain(
+    prismaPermissions: PrismaPermission[],
+  ): Permission[] {
     return prismaPermissions.map((p) => this.permissionToDomain(p));
   }
 }

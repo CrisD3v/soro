@@ -11,7 +11,7 @@ export class Role {
     public permissions?: Permission[],
     public readonly createdAt?: Date,
     public readonly updatedAt?: Date,
-  ) { }
+  ) {}
 
   hasPermission(permissionId: string): boolean {
     return this.permissions?.some((p) => p.id === permissionId) ?? false;

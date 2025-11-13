@@ -1,12 +1,16 @@
 import { User } from '@context/user/domain/entities/user.entity';
 import { UserRepositoryPort } from '@context/user/domain/ports/user.repository.port';
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from '../dto/update-user.dto';
 
 @Injectable()
 export class UpdateUserUseCase {
-  constructor(private readonly userRepository: UserRepositoryPort) { }
+  constructor(private readonly userRepository: UserRepositoryPort) {}
 
   async execute(userId: string, dto: UpdateUserDto): Promise<User> {
     // Verificar que el usuario existe

@@ -5,7 +5,7 @@ import { CreateRoleDto } from '../dto/create-role.dto';
 
 @Injectable()
 export class CreateRoleUseCase {
-  constructor(private readonly roleRepository: RoleRepositoryPort) { }
+  constructor(private readonly roleRepository: RoleRepositoryPort) {}
 
   async execute(dto: CreateRoleDto): Promise<Role> {
     // Verificar si el nombre ya existe

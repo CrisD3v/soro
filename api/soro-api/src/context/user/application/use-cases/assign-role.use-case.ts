@@ -4,7 +4,7 @@ import { AssignRoleDto } from '../dto/assign-role.dto';
 
 @Injectable()
 export class AssignRoleUseCase {
-  constructor(private readonly userRepository: UserRepositoryPort) { }
+  constructor(private readonly userRepository: UserRepositoryPort) {}
 
   async execute(userId: string, dto: AssignRoleDto): Promise<void> {
     // Verificar que el usuario existe

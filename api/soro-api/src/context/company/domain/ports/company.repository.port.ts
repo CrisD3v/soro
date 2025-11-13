@@ -23,12 +23,21 @@ export interface ListCompaniesFilters {
 
 export abstract class CompanyRepositoryPort {
   abstract create(data: CreateCompanyData): Promise<Company>;
-  abstract findById(id: string, includeDeleted?: boolean): Promise<Company | null>;
-  abstract findByNit(nit: string, includeDeleted?: boolean): Promise<Company | null>;
+  abstract findById(
+    id: string,
+    includeDeleted?: boolean,
+  ): Promise<Company | null>;
+  abstract findByNit(
+    nit: string,
+    includeDeleted?: boolean,
+  ): Promise<Company | null>;
   abstract update(id: string, data: UpdateCompanyData): Promise<Company>;
   abstract softDelete(id: string): Promise<void>;
   abstract restore(id: string): Promise<void>;
   abstract list(filters?: ListCompaniesFilters): Promise<Company[]>;
-  abstract findChildren(parentId: string, includeDeleted?: boolean): Promise<Company[]>;
+  abstract findChildren(
+    parentId: string,
+    includeDeleted?: boolean,
+  ): Promise<Company[]>;
   abstract findHierarchy(companyId: string): Promise<Company>;
 }

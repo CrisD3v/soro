@@ -1,11 +1,15 @@
 import { Company } from '@context/company/domain/entities/company.entity';
 import { CompanyRepositoryPort } from '@context/company/domain/ports/company.repository.port';
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCompanyDto } from '../dto/create-company.dto';
 
 @Injectable()
 export class CreateCompanyUseCase {
-  constructor(private readonly companyRepository: CompanyRepositoryPort) { }
+  constructor(private readonly companyRepository: CompanyRepositoryPort) {}
 
   async execute(dto: CreateCompanyDto): Promise<Company> {
     // Verificar si el NIT ya existe

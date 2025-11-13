@@ -31,7 +31,9 @@ export class CompanyMapper {
     );
   }
 
-  static toDomainList(prismaCompanies: PrismaCompanyWithRelations[]): Company[] {
+  static toDomainList(
+    prismaCompanies: PrismaCompanyWithRelations[],
+  ): Company[] {
     return prismaCompanies.map((company) => this.toDomain(company));
   }
 }

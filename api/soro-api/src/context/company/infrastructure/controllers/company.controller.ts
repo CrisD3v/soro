@@ -32,7 +32,7 @@ export class CompanyController {
     private readonly deleteCompanyUseCase: DeleteCompanyUseCase,
     private readonly restoreCompanyUseCase: RestoreCompanyUseCase,
     private readonly getCompanyHierarchyUseCase: GetCompanyHierarchyUseCase,
-  ) { }
+  ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)

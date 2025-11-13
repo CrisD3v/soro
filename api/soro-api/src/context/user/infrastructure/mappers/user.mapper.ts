@@ -1,6 +1,14 @@
-import { Signature, User, UserRole } from '@context/user/domain/entities/user.entity';
+import {
+  Signature,
+  User,
+  UserRole,
+} from '@context/user/domain/entities/user.entity';
 import { DocumentType } from '@context/user/domain/value-objects/document.vo';
-import { Signature as PrismaSignature, User as PrismaUser, UserRole as PrismaUserRole } from '@prisma/client';
+import {
+  Signature as PrismaSignature,
+  User as PrismaUser,
+  UserRole as PrismaUserRole,
+} from '@prisma/client';
 
 type PrismaUserWithRelations = PrismaUser & {
   roles?: PrismaUserRole[];
@@ -18,11 +26,11 @@ export class UserMapper {
 
     const signature: Signature | undefined = prismaUser.signature
       ? {
-        id: prismaUser.signature.id,
-        signature: prismaUser.signature.signature,
-        createdAt: prismaUser.signature.createdAt,
-        updatedAt: prismaUser.signature.updatedAt,
-      }
+          id: prismaUser.signature.id,
+          signature: prismaUser.signature.signature,
+          createdAt: prismaUser.signature.createdAt,
+          updatedAt: prismaUser.signature.updatedAt,
+        }
       : undefined;
 
     return new User(

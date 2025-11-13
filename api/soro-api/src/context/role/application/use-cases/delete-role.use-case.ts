@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class DeleteRoleUseCase {
-  constructor(private readonly roleRepository: RoleRepositoryPort) { }
+  constructor(private readonly roleRepository: RoleRepositoryPort) {}
 
   async execute(roleId: string): Promise<void> {
     const role = await this.roleRepository.findById(roleId);

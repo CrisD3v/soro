@@ -30,4 +30,4 @@ import { PrismaCompanyRepository } from './infrastructure/persistence/prisma-com
   ],
   exports: [CompanyRepositoryPort],
 })
-export class CompanyModule { }
+export class CompanyModule {}

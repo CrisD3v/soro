@@ -11,7 +11,7 @@ import { CompanyMapper } from '../mappers/company.mapper';
 
 @Injectable()
 export class PrismaCompanyRepository implements CompanyRepositoryPort {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateCompanyData): Promise<Company> {
     const company = await this.prisma.company.create({
@@ -48,7 +48,10 @@ export class PrismaCompanyRepository implements CompanyRepositoryPort {
     return company ? CompanyMapper.toDomain(company) : null;
   }
 
-  async findByNit(nit: string, includeDeleted = false): Promise<Company | null> {
+  async findByNit(
+    nit: string,
+    includeDeleted = false,
+  ): Promise<Company | null> {
     const company = await this.prisma.company.findFirst({
       where: {
         nit,
@@ -119,7 +122,10 @@ export class PrismaCompanyRepository implements CompanyRepositoryPort {
     return CompanyMapper.toDomainList(companies);
   }
 
-  async findChildren(parentId: string, includeDeleted = false): Promise<Company[]> {
+  async findChildren(
+    parentId: string,
+    includeDeleted = false,
+  ): Promise<Company[]> {
     const companies = await this.prisma.company.findMany({
       where: {
         parentId,

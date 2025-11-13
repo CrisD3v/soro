@@ -6,7 +6,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 
 @Injectable()
 export class CreateUserUseCase {
-  constructor(private readonly userRepository: UserRepositoryPort) { }
+  constructor(private readonly userRepository: UserRepositoryPort) {}
 
   async execute(dto: CreateUserDto): Promise<User> {
     // Verificar si el email ya existe

@@ -29,16 +29,18 @@ export class User {
     public signature?: Signature,
     public readonly createdAt?: Date,
     public readonly updatedAt?: Date,
-  ) { }
+  ) {}
 
   get fullName(): string {
     return `${this.name} ${this.lastName}`;
   }
 
   hasRole(roleId: string, companyId: string): boolean {
-    return this.roles?.some(
-      (r) => r.roleId === roleId && r.companyId === companyId,
-    ) ?? false;
+    return (
+      this.roles?.some(
+        (r) => r.roleId === roleId && r.companyId === companyId,
+      ) ?? false
+    );
   }
 
   hasSignature(): boolean {

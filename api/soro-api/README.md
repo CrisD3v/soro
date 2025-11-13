@@ -1,6 +1,21 @@
 # SORO API
 
-API REST construida con NestJS, Prisma y PostgreSQL siguiendo arquitectura hexagonal y principios SOLID.
+Sistema SaaS multi-tenant construido con NestJS, Prisma y PostgreSQL siguiendo arquitectura hexagonal, DDD y principios SOLID.
+
+## ✨ Características Principales
+
+- 🏢 **Multi-tenant**: Aislamiento completo por empresa con configuración personalizada
+- 🔐 **Autenticación JWT**: Access tokens + refresh tokens con rotación
+- 👥 **RBAC Jerárquico**: Sistema de permisos con scopes (GLOBAL, COMPANY, PROJECT, RESOURCE)
+- 🔄 **Event-Driven**: Procesamiento asíncrono de eventos con handlers
+- 🎨 **Custom Fields**: Campos dinámicos sin modificar schema
+- 🤖 **Workflows**: Automatizaciones configurables
+- 📊 **CRM Integrado**: Gestión de contactos y oportunidades
+- 💰 **Facturación**: Sistema completo de invoicing y pagos
+- 📁 **Gestión Documental**: Upload y organización de archivos
+- 🔌 **API Pública**: REST API con API Keys
+- 📈 **Métricas**: Dashboard con KPIs por tenant
+- 🔍 **Auditoría**: Tracking completo de cambios
 
 ## 🏗️ Arquitectura
 

@@ -1,6 +1,9 @@
 import { AssignPermissionDto } from '@context/role/application/dto/assign-permission.dto';
 import { CreateRoleDto } from '@context/role/application/dto/create-role.dto';
-import { PermissionResponseDto, RoleResponseDto } from '@context/role/application/dto/role-response.dto';
+import {
+  PermissionResponseDto,
+  RoleResponseDto,
+} from '@context/role/application/dto/role-response.dto';
 import { UpdateRoleDto } from '@context/role/application/dto/update-role.dto';
 import { AssignPermissionUseCase } from '@context/role/application/use-cases/assign-permission.use-case';
 import { CreateRoleUseCase } from '@context/role/application/use-cases/create-role.use-case';
@@ -33,7 +36,7 @@ export class RoleController {
     private readonly assignPermissionUseCase: AssignPermissionUseCase,
     private readonly removePermissionUseCase: RemovePermissionUseCase,
     private readonly getRolePermissionsUseCase: GetRolePermissionsUseCase,
-  ) { }
+  ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -88,7 +91,9 @@ export class RoleController {
   }
 
   @Get(':id/permissions')
-  async getPermissions(@Param('id') id: string): Promise<PermissionResponseDto[]> {
+  async getPermissions(
+    @Param('id') id: string,
+  ): Promise<PermissionResponseDto[]> {
     const permissions = await this.getRolePermissionsUseCase.execute(id);
     return permissions.map((p) => PermissionResponseDto.fromEntity(p));
   }

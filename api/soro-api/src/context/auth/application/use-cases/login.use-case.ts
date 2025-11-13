@@ -4,7 +4,7 @@ import { LoginDto } from '../dto/login.dto';
 
 @Injectable()
 export class LoginUseCase {
-  constructor(private readonly authService: AuthServicePort) { }
+  constructor(private readonly authService: AuthServicePort) {}
 
   async execute(dto: LoginDto) {
     const user = await this.authService.validateUser(dto.email, dto.password);

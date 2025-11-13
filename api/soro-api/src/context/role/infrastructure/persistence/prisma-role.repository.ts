@@ -11,7 +11,7 @@ import { RoleMapper } from '../mappers/role.mapper';
 
 @Injectable()
 export class PrismaRoleRepository implements RoleRepositoryPort {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateRoleData): Promise<Role> {
     const role = await this.prisma.role.create({
@@ -123,7 +123,9 @@ export class PrismaRoleRepository implements RoleRepositoryPort {
       },
     });
 
-    return rolePermissions.map((rp) => RoleMapper.permissionToDomain(rp.permission));
+    return rolePermissions.map((rp) =>
+      RoleMapper.permissionToDomain(rp.permission),
+    );
   }
 
   async hasPermission(roleId: string, permissionId: string): Promise<boolean> {

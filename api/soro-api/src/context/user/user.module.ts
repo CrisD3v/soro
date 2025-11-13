@@ -28,4 +28,4 @@ import { PrismaUserRepository } from './infrastructure/persistence/prisma-user.r
   ],
   exports: [UserRepositoryPort],
 })
-export class UserModule { }
+export class UserModule {}
