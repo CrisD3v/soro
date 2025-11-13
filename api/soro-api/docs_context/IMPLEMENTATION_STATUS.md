@@ -413,8 +413,8 @@ pnpm prisma:seed
   - Deal ✅ (Completado)
 - **Módulos Facturación**: 100% (1/1) ✅
   - Invoice ✅ (Completado)
-- **Módulos Adicionales**: 0% (0/1)
-  - Notification ⏳ (Pendiente)
+- **Módulos Adicionales**: 100% (1/1) ✅
+  - Notification ✅ (Completado)
 - **Documentación**: 100% ✅
 - **Tests**: 0% (Pendiente)
 - **Rate Limiting**: 0% (Pendiente)
