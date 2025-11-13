@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import {
+import type {
   InvoiceRepositoryPort,
   InvoiceStatistics,
 } from '../../domain/ports/invoice.repository.port';
@@ -9,7 +9,7 @@ export class GetStatisticsUseCase {
   constructor(
     @Inject('InvoiceRepositoryPort')
     private readonly invoiceRepository: InvoiceRepositoryPort,
-  ) {}
+  ) { }
 
   async execute(
     companyId: string,

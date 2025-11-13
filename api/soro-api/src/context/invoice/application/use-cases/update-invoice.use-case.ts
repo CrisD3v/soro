@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InvoiceEntity } from '../../domain/entities/invoice.entity';
-import { InvoiceRepositoryPort } from '../../domain/ports/invoice.repository.port';
+import type { InvoiceRepositoryPort } from '../../domain/ports/invoice.repository.port';
 import { UpdateInvoiceDto } from '../dto/update-invoice.dto';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class UpdateInvoiceUseCase {
   constructor(
     @Inject('InvoiceRepositoryPort')
     private readonly invoiceRepository: InvoiceRepositoryPort,
-  ) {}
+  ) { }
 
   async execute(
     invoiceId: string,
@@ -34,6 +34,14 @@ export class UpdateInvoiceUseCase {
       throw new BadRequestException('Cannot update cancelled invoice');
     }
 
-    return this.invoiceRepository.update(invoiceId, companyId, dto);
+    const updateData: any = { ...dto };
+    if (dto.issueDate) {
+      updateData.issueDate = new Date(dto.issueDate);
+    }
+    if (dto.dueDate) {
+      updateData.dueDate = new Date(dto.dueDate);
+    }
+
+    return this.invoiceRepository.update(invoiceId, companyId, updateData);
   }
 }

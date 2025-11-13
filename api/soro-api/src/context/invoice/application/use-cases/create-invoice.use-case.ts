@@ -3,7 +3,7 @@ import {
   InvoiceEntity,
   InvoiceItemEntity,
 } from '../../domain/entities/invoice.entity';
-import { InvoiceRepositoryPort } from '../../domain/ports/invoice.repository.port';
+import type { InvoiceRepositoryPort } from '../../domain/ports/invoice.repository.port';
 import { CreateInvoiceDto } from '../dto/create-invoice.dto';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class CreateInvoiceUseCase {
   constructor(
     @Inject('InvoiceRepositoryPort')
     private readonly invoiceRepository: InvoiceRepositoryPort,
-  ) {}
+  ) { }
 
   async execute(
     dto: CreateInvoiceDto,

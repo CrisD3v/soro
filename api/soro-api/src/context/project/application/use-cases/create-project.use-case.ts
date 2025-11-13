@@ -5,11 +5,16 @@ import { CreateProjectDto } from '../dto/create-project.dto';
 
 @Injectable()
 export class CreateProjectUseCase {
-  constructor(private readonly projectRepository: ProjectRepositoryPort) {}
+  constructor(private readonly projectRepository: ProjectRepositoryPort) { }
 
   async execute(dto: CreateProjectDto, userId: string): Promise<Project> {
     return await this.projectRepository.create({
-      ...dto,
+      name: dto.name,
+      description: dto.description,
+      status: dto.status,
+      startDate: dto.startDate ? new Date(dto.startDate) : undefined,
+      endDate: dto.endDate ? new Date(dto.endDate) : undefined,
+      companyId: dto.companyId,
       createdBy: userId,
     });
   }

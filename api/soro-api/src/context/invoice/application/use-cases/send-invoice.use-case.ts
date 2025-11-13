@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InvoiceEntity } from '../../domain/entities/invoice.entity';
-import { InvoiceRepositoryPort } from '../../domain/ports/invoice.repository.port';
+import type { InvoiceRepositoryPort } from '../../domain/ports/invoice.repository.port';
 
 @Injectable()
 export class SendInvoiceUseCase {
@@ -25,3 +25,4 @@ export class SendInvoiceUseCase {
     });
   }
 }
+

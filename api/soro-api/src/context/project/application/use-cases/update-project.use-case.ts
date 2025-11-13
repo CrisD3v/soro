@@ -5,7 +5,7 @@ import { UpdateProjectDto } from '../dto/update-project.dto';
 
 @Injectable()
 export class UpdateProjectUseCase {
-  constructor(private readonly projectRepository: ProjectRepositoryPort) {}
+  constructor(private readonly projectRepository: ProjectRepositoryPort) { }
 
   async execute(projectId: string, dto: UpdateProjectDto): Promise<Project> {
     const project = await this.projectRepository.findById(projectId);
@@ -14,6 +14,14 @@ export class UpdateProjectUseCase {
       throw new NotFoundException('Project not found');
     }
 
-    return await this.projectRepository.update(projectId, dto);
+    const updateData: any = { ...dto };
+    if (dto.startDate) {
+      updateData.startDate = new Date(dto.startDate);
+    }
+    if (dto.endDate) {
+      updateData.endDate = new Date(dto.endDate);
+    }
+
+    return await this.projectRepository.update(projectId, updateData);
   }
 }
