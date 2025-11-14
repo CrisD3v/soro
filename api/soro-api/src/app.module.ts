@@ -9,6 +9,9 @@ import { TaskModule } from '@context/task/task.module';
 import { UserModule } from '@context/user/user.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { CustomRateLimitGuard } from './common/guards/rate-limit.guard';
 import { CustomFieldModule } from './context/custom-field/custom-field.module';
 import { DealModule } from './context/deal/deal.module';
 import { DocumentModule } from './context/document/document.module';
@@ -23,6 +26,12 @@ import { WorkflowModule } from './context/workflow/workflow.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000, // 60 segundos
+        limit: 100, // 100 requests por minuto (global)
+      },
+    ]),
     HealthModule,
     UserModule,
     AuthModule,
@@ -41,6 +50,11 @@ import { WorkflowModule } from './context/workflow/workflow.module';
     WorkflowModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: CustomRateLimitGuard,
+    },
+  ],
 })
 export class AppModule { }
