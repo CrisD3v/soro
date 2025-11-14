@@ -1,52 +1,76 @@
-import { apiClient } from './client';
-import { AssignRoleDto, CreateUserDto, UpdateUserDto, User } from './user.types';
+/**
+ * User API Client
+ * Cliente para interactuar con los endpoints de usuarios del backend
+ */
 
+import { apiClient } from './client';
+import type {
+  AssignRoleDto,
+  AssignSignatureDto,
+  CreateUserDto,
+  UpdateUserDto,
+  User,
+  UserFilters,
+} from './user.types';
+
+/**
+ * API de usuarios
+ */
 export const userApi = {
   /**
-   * Get all users
+   * Obtener todos los usuarios
+   * GET /users
    */
-  getUsers: async (): Promise<User[]> => {
-    const response = await apiClient.get<User[]>('/users');
-    return response.data;
+  getAll: async (filters?: UserFilters): Promise<User[]> => {
+    const params = new URLSearchParams();
+
+    if (filters?.companyId) params.append('companyId', filters.companyId);
+    if (filters?.email) params.append('email', filters.email);
+    if (filters?.documentNumber) params.append('documentNumber', filters.documentNumber);
+
+    const queryString = params.toString();
+    const url = queryString ? `/users?${queryString}` : '/users';
+
+    return apiClient.get<User[]>(url);
   },
 
   /**
-   * Get user by ID
+   * Obtener un usuario por ID
+   * GET /users/:id
    */
-  getUserById: async (id: string): Promise<User> => {
-    const response = await apiClient.get<User>(`/users/${id}`);
-    return response.data;
+  getById: async (id: string): Promise<User> => {
+    return apiClient.get<User>(`/users/${id}`);
   },
 
   /**
-   * Create new user
+   * Crear un nuevo usuario
+   * POST /users
    */
-  createUser: async (data: CreateUserDto): Promise<User> => {
-    const response = await apiClient.post<User>('/users', data);
-    return response.data;
+  create: async (data: CreateUserDto): Promise<User> => {
+    return apiClient.post<User>('/users', data);
   },
 
   /**
-   * Update user
+   * Actualizar un usuario
+   * PUT /users/:id
    */
-  updateUser: async (id: string, data: UpdateUserDto): Promise<User> => {
-    const response = await apiClient.patch<User>(`/users/${id}`, data);
-    return response.data;
+  update: async (id: string, data: UpdateUserDto): Promise<User> => {
+    return apiClient.put<User>(`/users/${id}`, data);
   },
 
   /**
-   * Assign role to user
+   * Asignar rol a un usuario
+   * POST /users/:id/roles
    */
-  assignRole: async (id: string, data: AssignRoleDto): Promise<User> => {
-    const response = await apiClient.post<User>(`/users/${id}/assign-role`, data);
-    return response.data;
+  assignRole: async (id: string, data: AssignRoleDto): Promise<void> => {
+    return apiClient.post<void>(`/users/${id}/roles`, data);
   },
 
   /**
-   * Get current user profile
+   * Asignar firma a un usuario
+   * POST /users/:id/signature
    */
-  getCurrentUser: async (): Promise<User> => {
-    const response = await apiClient.get<User>('/users/me');
-    return response.data;
+  assignSignature: async (id: string, data: AssignSignatureDto): Promise<void> => {
+    return apiClient.post<void>(`/users/${id}/signature`, data);
   },
 };

@@ -1,40 +1,97 @@
-export interface User {
+/**
+ * User API Types
+ * Tipos basados en la documentación del backend SORO API
+ */
+
+/**
+ * Tipos de documento válidos
+ */
+export type DocumentType = 'CC' | 'CE' | 'TI';
+
+/**
+ * Firma del usuario
+ */
+export interface Signature {
   id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  documentType: string;
-  documentNumber: string;
-  phone?: string;
-  companyId: string;
-  roleId?: string;
-  signatureId?: string;
-  isActive: boolean;
+  signature: string; // Base64 data URL
   createdAt: string;
   updatedAt: string;
 }
 
+/**
+ * Asignación de rol a usuario
+ */
+export interface RoleAssignment {
+  id: string;
+  roleId: string;
+  companyId: string;
+  createdAt: string;
+}
+
+/**
+ * Usuario completo
+ */
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  lastName: string;
+  fullName: string;
+  documentNumber: string;
+  documentType: DocumentType;
+  phone: string;
+  companyId: string;
+  roles: RoleAssignment[];
+  signature: Signature | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * DTO para crear usuario
+ */
 export interface CreateUserDto {
   email: string;
   password: string;
-  firstName: string;
+  name: string;
   lastName: string;
-  documentType: string;
   documentNumber: string;
-  phone?: string;
+  documentType: DocumentType;
+  phone: string;
   companyId: string;
-  roleId?: string;
 }
 
+/**
+ * DTO para actualizar usuario (todos los campos opcionales)
+ */
 export interface UpdateUserDto {
-  email?: string;
-  firstName?: string;
+  name?: string;
   lastName?: string;
+  email?: string;
   phone?: string;
-  isActive?: boolean;
+  password?: string;
 }
 
+/**
+ * Filtros para listar usuarios
+ */
+export interface UserFilters {
+  companyId?: string;
+  email?: string;
+  documentNumber?: string;
+}
+
+/**
+ * DTO para asignar rol a usuario
+ */
 export interface AssignRoleDto {
   roleId: string;
   companyId: string;
+}
+
+/**
+ * DTO para asignar firma a usuario
+ */
+export interface AssignSignatureDto {
+  signature: string; // Base64 data URL
 }
