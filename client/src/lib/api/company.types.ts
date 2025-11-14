@@ -1,14 +1,15 @@
+/**
+ * Company API Types
+ */
+
 export interface Company {
   id: string;
   name: string;
   nit: string;
-  address?: string;
-  phone?: string;
-  email?: string;
-  sector?: string;
-  parentCompanyId?: string;
-  isActive: boolean;
-  deletedAt?: string;
+  address: string;
+  phone: string;
+  parentId: string | null;
+  deletedAt: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -16,22 +17,20 @@ export interface Company {
 export interface CreateCompanyDto {
   name: string;
   nit: string;
-  address?: string;
-  phone?: string;
-  email?: string;
-  sector?: string;
-  parentCompanyId?: string;
+  address: string;
+  phone: string;
+  parentId?: string | null;
 }
 
 export interface UpdateCompanyDto {
   name?: string;
   address?: string;
   phone?: string;
-  email?: string;
-  sector?: string;
-  isActive?: boolean;
+  parentId?: string | null;
 }
 
-export interface CompanyHierarchy extends Company {
-  children?: CompanyHierarchy[];
+export interface CompanyFilters {
+  parentId?: string | null;
+  name?: string;
+  includeDeleted?: boolean;
 }

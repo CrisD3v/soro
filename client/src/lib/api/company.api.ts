@@ -1,59 +1,76 @@
+/**
+ * Company API Client
+ */
+
 import { apiClient } from './client';
-import { Company, CompanyHierarchy, CreateCompanyDto, UpdateCompanyDto } from './company.types';
+import type { Company, CompanyFilters, CreateCompanyDto, UpdateCompanyDto } from './company.types';
 
 export const companyApi = {
   /**
-   * Get all companies
+   * Obtener todas las empresas
+   * GET /companies
    */
-  getCompanies: async (): Promise<Company[]> => {
-    const response = await apiClient.get<Company[]>('/companies');
-    return response.data;
+  getAll: async (filters?: CompanyFilters): Promise<Company[]> => {
+    const params = new URLSearchParams();
+
+    if (filters?.parentId !== undefined) {
+      params.append('parentId', filters.parentId || '');
+    }
+    if (filters?.name) params.append('name', filters.name);
+    if (filters?.includeDeleted) params.append('includeDeleted', 'true');
+
+    const queryString = params.toString();
+    const url = queryString ? `/companies?${queryString}` : '/companies';
+
+    return apiClient.get<Company[]>(url);
   },
 
   /**
-   * Get company by ID
+   * Obtener una empresa por ID
+   * GET /companies/:id
    */
-  getCompanyById: async (id: string): Promise<Company> => {
-    const response = await apiClient.get<Company>(`/companies/${id}`);
-    return response.data;
+  getById: async (id: string, includeDeleted?: boolean): Promise<Company> => {
+    const params = includeDeleted ? '?includeDeleted=true' : '';
+    return apiClient.get<Company>(`/companies/${id}${params}`);
   },
 
   /**
-   * Create new company
+   * Crear una nueva empresa
+   * POST /companies
    */
-  createCompany: async (data: CreateCompanyDto): Promise<Company> => {
-    const response = await apiClient.post<Company>('/companies', data);
-    return response.data;
+  create: async (data: CreateCompanyDto): Promise<Company> => {
+    return apiClient.post<Company>('/companies', data);
   },
 
   /**
-   * Update company
+   * Actualizar una empresa
+   * PUT /companies/:id
    */
-  updateCompany: async (id: string, data: UpdateCompanyDto): Promise<Company> => {
-    const response = await apiClient.patch<Company>(`/companies/${id}`, data);
-    return response.data;
+  update: async (id: string, data: UpdateCompanyDto): Promise<Company> => {
+    return apiClient.put<Company>(`/companies/${id}`, data);
   },
 
   /**
-   * Delete company (soft delete)
+   * Eliminar una empresa (soft delete)
+   * DELETE /companies/:id
    */
-  deleteCompany: async (id: string): Promise<void> => {
-    await apiClient.delete(`/companies/${id}`);
+  delete: async (id: string): Promise<void> => {
+    return apiClient.delete<void>(`/companies/${id}`);
   },
 
   /**
-   * Restore deleted company
+   * Restaurar una empresa eliminada
+   * PATCH /companies/:id/restore
    */
-  restoreCompany: async (id: string): Promise<Company> => {
-    const response = await apiClient.post<Company>(`/companies/${id}/restore`);
-    return response.data;
+  restore: async (id: string): Promise<void> => {
+    return apiClient.patch<void>(`/companies/${id}/restore`);
   },
 
   /**
-   * Get company hierarchy
+   * Obtener jerarquía de una empresa
+   * GET /companies/:id/hierarchy
    */
-  getCompanyHierarchy: async (id: string): Promise<CompanyHierarchy> => {
-    const response = await apiClient.get<CompanyHierarchy>(`/companies/${id}/hierarchy`);
-    return response.data;
+  getHierarchy: async (id: string): Promise<Company> => {
+    return apiClient.get<Company>(`/companies/${id}/hierarchy`);
   },
 };
