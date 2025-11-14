@@ -34,3 +34,8 @@ export interface CompanyFilters {
   name?: string;
   includeDeleted?: boolean;
 }
+
+export interface CompanyHierarchy {
+  parent: Company | null;
+  children: Company[];
+}
