@@ -43,7 +43,7 @@ Desarrollar el frontend completo del sistema SORO para consumir la API backend q
 
 ## 📊 Estado Actual del Frontend
 
-### ✅ Completado (30%)
+### ✅ Completado (40%)
 - **Landing Page**: Hero, Features, Pricing, Testimonials, NavBar
 - **Dashboard Layout**: Sidebar, TopBar, Layout base
 - **Autenticación**: Login, Register, Reset Password con cookies HttpOnly
@@ -51,16 +51,22 @@ Desarrollar el frontend completo del sistema SORO para consumir la API backend q
 - **Arquitectura**: Atomic Design, TanStack Query, Repository Pattern
 - **Middleware**: Protección de rutas /dashboard
 - **Tema**: Purple theme con dark/light mode
+- **Módulo de Usuarios (100%)**: 7 páginas completas con CRUD
+- **Módulo de Empresas (100%)**: 4 páginas completas con CRUD y jerarquía
+- **DataTable Genérico**: ag-grid con tema purple personalizado
+- **Sistema de Notificaciones**: Sonner integrado
+- **Context Menu**: Click derecho funcional en tablas
+- **Selectores Dinámicos**: CompanySelect, RoleSelect
+- **ConfirmDialog**: Componente reutilizable para confirmaciones
 
-### ⏳ Pendiente (70%)
-- **Páginas del Dashboard**: Users, Companies, Projects, Tasks, etc.
-- **Integración API**: Conectar con los 16 módulos del backend
-- **CRUD Interfaces**: Para todas las entidades
+### ⏳ Pendiente (60%)
+- **14 Módulos Restantes**: Roles, Projects, Tasks, CRM, etc.
+- **Integración API**: Conectar módulos restantes del backend
 - **Gestión de Estados**: Context providers para cada módulo
-- **Formularios Avanzados**: Para creación/edición de entidades
-- **Tablas de Datos**: Con filtros, paginación, ordenamiento
-- **Notificaciones**: Sistema de alertas en tiempo real
+- **Formularios Avanzados**: Wizard multi-step, campos condicionales
+- **Exportación**: CSV, PDF para tablas
 - **Tests**: Unitarios e integración
+- **Performance**: Optimizaciones y lazy loading
 
 ## 🗺️ Roadmap de Desarrollo
 

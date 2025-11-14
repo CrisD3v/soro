@@ -894,3 +894,444 @@ const purpleTheme = themeQuartz.withParams({
 **Última actualización**: 2025-11-14
 **Versión**: 1.2.0
 **Estado**: 📚 ag-grid migrado a Theming API moderno
+
+
+### **Sesión 9: Módulo Completo de Usuarios y Empresas (2025-11-14)**
+
+#### **Contexto**
+- Implementación completa del módulo de Usuarios (7 páginas)
+- Implementación completa del módulo de Empresas (4 páginas)
+- Patrón CRUD establecido y replicable
+- Context menu funcional
+- Selectores dinámicos
+- Sistema de notificaciones con Sonner
+
+#### **Decisiones Técnicas**
+- **Context Menu**: Click derecho en filas de DataTable
+- **ConfirmDialog**: Componente reutilizable para confirmaciones
+- **Selectores Dinámicos**: CompanySelect y RoleSelect con datos del backend
+- **Sonner**: Librería de toast notifications moderna
+- **Commits Atómicos**: 28 commits organizados por funcionalidad
+
+#### **Módulo de Usuarios (100% Completo)**
+
+##### **Páginas Implementadas**
+1. `/dashboard/users` - Lista con DataTable
+2. `/dashboard/users/[id]` - Detalle completo
+3. `/dashboard/users/[id]/edit` - Edición
+4. `/dashboard/users/[id]/roles` - Asignación de roles
+5. `/dashboard/users/[id]/signature` - Gestión de firma digital
+
+##### **Componentes Creados**
+- `UserForm` (organism) - Formulario con validación Zod
+- `CompanySelect` (molecule) - Selector dinámico de empresas
+- `RoleSelect` (molecule) - Selector dinámico de roles
+- `ConfirmDialog` (molecule) - Dialog de confirmación reutilizable
+
+##### **APIs Implementadas**
+```typescript
+// src/lib/api/user.api.ts
+export const userApi = {
+  getAll: (filters?: UserFilters) => Promise<User[]>
+  getById: (id: string) => Promise<User>
+  create: (data: CreateUserDto) => Promise<User>
+  update: (id: string, data: UpdateUserDto) => Promise<User>
+  delete: (id: string) => Promise<void>  // ← NUEVO
+  assignRole: (id: string, data: AssignRoleDto) => Promise<void>
+  assignSignature: (id: string, data: AssignSignatureDto) => Promise<void>
+}
+
+// src/lib/queries/user.queries.ts
+- useUsers()
+- useUser(id)
+- useCreateUser()
+- useUpdateUser()
+- useDeleteUser()  // ← NUEVO
+- useAssignRole()
+- useAssignSignature()
+```
+
+##### **Context Menu**
+```typescript
+// Click derecho en fila de DataTable
+<ContextMenu>
+  <ContextMenuItem>Ver Detalles</ContextMenuItem>
+  <ContextMenuItem>Editar</ContextMenuItem>
+  <ContextMenuItem>Asignar Rol</ContextMenuItem>
+  <ContextMenuItem>Asignar Firma</ContextMenuItem>
+  <ContextMenuSeparator />
+  <ContextMenuItem variant="destructive">Eliminar</ContextMenuItem>
+</ContextMenu>
+```
+
+##### **Características**
+- ✅ CRUD completo funcional
+- ✅ Context menu con 5 opciones
+- ✅ Selectores dinámicos (Company, Role)
+- ✅ Dialog de confirmación para eliminar
+- ✅ Notificaciones con toast
+- ✅ Upload de firma con preview
+- ✅ Validación completa con Zod
+- ✅ Loading states en todas las acciones
+- ✅ Error handling robusto
+
+#### **Módulo de Empresas (100% Completo)**
+
+##### **Páginas Implementadas**
+1. `/dashboard/companies` - Lista con DataTable
+2. `/dashboard/companies/[id]` - Detalle completo
+3. `/dashboard/companies/[id]/edit` - Edición
+4. `/dashboard/companies/[id]/hierarchy` - Jerarquía empresarial
+
+##### **Componentes Creados**
+- `CompanyForm` (organism) - Formulario con validación Zod
+- Reutiliza `CompanySelect` para empresa padre
+- Reutiliza `ConfirmDialog` para eliminar
+- Reutiliza `DataTable` para lista
+
+##### **APIs Implementadas**
+```typescript
+// src/lib/api/company.api.ts
+export const companyApi = {
+  getAll: (filters?: CompanyFilters) => Promise<Company[]>
+  getById: (id: string) => Promise<Company>
+  create: (data: CreateCompanyDto) => Promise<Company>
+  update: (id: string, data: UpdateCompanyDto) => Promise<Company>
+  delete: (id: string) => Promise<void>
+  getHierarchy: (id: string) => Promise<CompanyHierarchy>  // ← NUEVO
+  getChildren: (id: string) => Promise<Company[]>
+}
+
+// src/lib/queries/company.queries.ts
+- useCompanies()
+- useCompany(id)
+- useCreateCompany()
+- useUpdateCompany()
+- useDeleteCompany()
+- useCompanyHierarchy(id)  // ← NUEVO
+```
+
+##### **Tipos Nuevos**
+```typescript
+// src/lib/api/company.types.ts
+export interface CompanyHierarchy {
+  parent: Company | null;
+  children: Company[];
+}
+```
+
+##### **Context Menu**
+```typescript
+// Click derecho en fila de DataTable
+<ContextMenu>
+  <ContextMenuItem>Ver Detalles</ContextMenuItem>
+  <ContextMenuItem>Editar</ContextMenuItem>
+  <ContextMenuSeparator />
+  <ContextMenuItem>Ver Jerarquía</ContextMenuItem>
+  <ContextMenuSeparator />
+  <ContextMenuItem variant="destructive">Eliminar</ContextMenuItem>
+</ContextMenu>
+```
+
+##### **Página de Jerarquía**
+- Visualización de árbol empresarial
+- Empresa padre (si existe)
+- Empresa actual destacada con badge
+- Empresas subsidiarias
+- Stats cards (nivel, subsidiarias, total en grupo)
+- Navegación entre empresas del árbol
+
+##### **Características**
+- ✅ CRUD completo funcional
+- ✅ Context menu con 4 opciones
+- ✅ Jerarquía empresarial visual
+- ✅ Soporte para empresa padre
+- ✅ Dialog de confirmación para eliminar
+- ✅ Notificaciones con toast
+- ✅ Validación completa con Zod
+- ✅ Stats cards informativos
+- ✅ Navegación fluida entre empresas
+
+#### **Sistema de Notificaciones**
+
+##### **Sonner Integration**
+```typescript
+// src/hooks/use-toast.ts
+import { toast as sonnerToast } from 'sonner';
+
+export const useToast = () => {
+  return {
+    toast: ({ title, description, variant }: ToastProps) => {
+      if (variant === 'destructive') {
+        sonnerToast.error(title, { description });
+      } else {
+        sonnerToast.success(title, { description });
+      }
+    },
+  };
+};
+
+// src/app/layout.tsx
+import { Toaster } from '@/components/ui/sonner';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        {children}
+        <Toaster />
+      </body>
+    </html>
+  );
+}
+```
+
+##### **Uso en Componentes**
+```typescript
+const { toast } = useToast();
+
+// Success
+toast({
+  title: 'Usuario creado',
+  description: 'El usuario ha sido creado exitosamente.',
+});
+
+// Error
+toast({
+  title: 'Error al crear usuario',
+  description: error.message,
+  variant: 'destructive',
+});
+```
+
+#### **Patrón CRUD Establecido**
+
+##### **Estructura de Archivos**
+```
+src/app/dashboard/[module]/
+├── page.tsx                    # Lista con DataTable
+├── [id]/
+│   ├── page.tsx               # Detalle
+│   ├── edit/
+│   │   └── page.tsx           # Edición
+│   └── [feature]/
+│       └── page.tsx           # Funcionalidad específica
+
+src/components/organisms/[Module]Form/
+├── [Module]Form.tsx           # Formulario
+├── [Module]Form.types.ts      # Props
+└── index.ts                   # Exports
+
+src/lib/api/
+├── [module].types.ts          # Interfaces
+└── [module].api.ts            # API client
+
+src/lib/queries/
+└── [module].queries.ts        # TanStack Query hooks
+```
+
+##### **Pasos para Nuevo Módulo**
+1. **Crear tipos** en `[module].types.ts`
+2. **Crear API client** en `[module].api.ts`
+3. **Crear queries** en `[module].queries.ts`
+4. **Crear Form** en `organisms/[Module]Form/`
+5. **Crear página lista** en `dashboard/[module]/page.tsx`
+6. **Crear página detalle** en `dashboard/[module]/[id]/page.tsx`
+7. **Crear página edición** en `dashboard/[module]/[id]/edit/page.tsx`
+8. **Agregar link** en `DashboardLayout` sidebar
+9. **Hacer commits atómicos** por funcionalidad
+
+#### **Componentes Reutilizables**
+
+##### **DataTable**
+- Genérico para cualquier tipo de datos
+- ag-grid con tema purple personalizado
+- Context menu support
+- Filtros, ordenamiento, paginación
+- Loading y empty states
+
+##### **ConfirmDialog**
+- Dialog de confirmación genérico
+- Variantes: default, destructive
+- Loading state durante acción
+- Textos personalizables
+
+##### **Selectores Dinámicos**
+- `CompanySelect`: Carga empresas desde API
+- `RoleSelect`: Carga roles desde API
+- Loading states
+- Integrados con shadcn/ui Select
+
+#### **Commits Atómicos (28 total)**
+
+##### **Estructura de Commits**
+```bash
+# Dependencies
+chore: instalar sonner para notificaciones toast
+
+# UI Components
+feat(🎨 ui): agregar componentes UI de shadcn y hook de toast
+feat(📐 layout): integrar Toaster de sonner en layout principal
+
+# APIs
+feat(🏢 companies): implementar API y queries de empresas
+feat(🎭 roles): implementar API y queries de roles
+feat(👥 users): implementar API completa con 7 endpoints
+
+# Molecules
+feat(🎴 molecules): crear CompanySelect con carga dinámica
+feat(🎴 molecules): crear RoleSelect con carga dinámica
+feat(🎴 molecules): crear ConfirmDialog reutilizable
+
+# Organisms
+feat(🧩 organisms): crear DataTable genérico con ag-grid
+feat(🧩 organisms): crear UserForm con validación completa
+feat(🧩 organisms): crear CompanyForm con validación completa
+
+# Pages - Users
+feat(📐 layout): crear layout específico para dashboard
+feat(👥 users): crear página principal de usuarios con CRUD
+feat(👥 users): crear página de detalle de usuario
+feat(👥 users): crear página de edición de usuario
+feat(👥 users): crear página de asignación de roles
+feat(👥 users): crear página de gestión de firma digital
+
+# Pages - Companies
+feat(🏢 companies): crear página principal de empresas con CRUD
+feat(🏢 companies): agregar tipo CompanyHierarchy
+feat(🏢 companies): crear página de detalle de empresa
+feat(🏢 companies): crear página de edición de empresa
+feat(🏢 companies): crear página de jerarquía empresarial
+
+# Navigation
+feat(📐 layout): agregar link de Usuarios al sidebar
+feat(📐 layout): agregar link de Empresas al sidebar
+
+# Fixes
+fix(🔐 auth): corregir useAuth para usar cookies HttpOnly
+fix(📄 pages): corregir imports en dashboard page
+
+# Docs
+docs: actualizar documentación del proyecto
+docs: agregar contexto completo de sesiones frontend
+```
+
+#### **Archivos Creados/Modificados (50+ archivos)**
+
+##### **APIs y Queries**
+- `src/lib/api/company.types.ts` (modificado)
+- `src/lib/api/company.api.ts` (modificado)
+- `src/lib/queries/company.queries.ts` (nuevo)
+- `src/lib/api/role.types.ts` (nuevo)
+- `src/lib/api/role.api.ts` (nuevo)
+- `src/lib/queries/role.queries.ts` (nuevo)
+- `src/lib/api/user.api.ts` (modificado)
+- `src/lib/queries/user.queries.ts` (nuevo)
+
+##### **Componentes**
+- `src/components/molecules/CompanySelect/` (nuevo)
+- `src/components/molecules/RoleSelect/` (nuevo)
+- `src/components/molecules/ConfirmDialog/` (nuevo)
+- `src/components/organisms/DataTable/` (nuevo)
+- `src/components/organisms/UserForm/` (nuevo)
+- `src/components/organisms/CompanyForm/` (nuevo)
+
+##### **Páginas - Users**
+- `src/app/dashboard/users/page.tsx` (nuevo)
+- `src/app/dashboard/users/[id]/page.tsx` (nuevo)
+- `src/app/dashboard/users/[id]/edit/page.tsx` (nuevo)
+- `src/app/dashboard/users/[id]/roles/page.tsx` (nuevo)
+- `src/app/dashboard/users/[id]/signature/page.tsx` (nuevo)
+
+##### **Páginas - Companies**
+- `src/app/dashboard/companies/page.tsx` (nuevo)
+- `src/app/dashboard/companies/[id]/page.tsx` (nuevo)
+- `src/app/dashboard/companies/[id]/edit/page.tsx` (nuevo)
+- `src/app/dashboard/companies/[id]/hierarchy/page.tsx` (nuevo)
+
+##### **Layout y Config**
+- `src/app/dashboard/layout.tsx` (nuevo)
+- `src/components/templates/DashboardLayout/DashboardLayout.tsx` (modificado)
+- `src/app/layout.tsx` (modificado)
+- `src/hooks/use-toast.ts` (modificado)
+- `src/hooks/useAuth/useAuth.ts` (modificado)
+
+#### **Build y Rutas**
+
+##### **Rutas Generadas (12 total)**
+```
+○ / (Landing)
+○ /auth (Auth pages)
+○ /dashboard (Dashboard home)
+○ /dashboard/companies (Lista)
+ƒ /dashboard/companies/[id] (Detalle)
+ƒ /dashboard/companies/[id]/edit (Edición)
+ƒ /dashboard/companies/[id]/hierarchy (Jerarquía)
+○ /dashboard/users (Lista)
+ƒ /dashboard/users/[id] (Detalle)
+ƒ /dashboard/users/[id]/edit (Edición)
+ƒ /dashboard/users/[id]/roles (Roles)
+ƒ /dashboard/users/[id]/signature (Firma)
+```
+
+##### **Build Status**
+- ✅ 0 errores TypeScript
+- ✅ 12 rutas generadas correctamente
+- ✅ Todas las páginas compilando
+- ✅ Middleware funcionando
+
+#### **Progreso del Proyecto**
+
+##### **Completado (40%)**
+- ✅ Landing Page
+- ✅ Sistema de autenticación
+- ✅ Dashboard layout
+- ✅ Componentes base
+- ✅ DataTable genérico
+- ✅ Sistema de notificaciones
+- ✅ **Módulo de Usuarios (100%)**
+- ✅ **Módulo de Empresas (100%)**
+
+##### **Pendiente (60%)**
+- 📋 14 módulos restantes
+- 📋 Roles y Permisos
+- 📋 Projects y Tasks
+- 📋 CRM (Contacts, Deals)
+- 📋 Invoices
+- 📋 Documents
+- 📋 Notifications
+- 📋 Settings
+- 📋 Custom Fields
+- 📋 Workflows
+
+#### **Lecciones Aprendidas**
+
+##### **Patrón Exitoso**
+1. Crear tipos primero
+2. Implementar API client
+3. Crear queries con TanStack Query
+4. Crear Form component
+5. Crear página lista con DataTable
+6. Crear páginas de detalle y edición
+7. Agregar funcionalidades específicas
+8. Commits atómicos por funcionalidad
+
+##### **Componentes Clave**
+- DataTable es reutilizable para todos los módulos
+- ConfirmDialog es reutilizable para todas las confirmaciones
+- Selectores dinámicos mejoran UX significativamente
+- Context menu mejora navegación y descubrimiento
+
+##### **Best Practices**
+- Commits atómicos facilitan debugging
+- Query key factory mejora organización
+- Co-located types mejoran mantenibilidad
+- Validación con Zod previene errores
+- Loading states mejoran UX
+- Error handling robusto es crítico
+
+---
+
+**Última actualización**: 2025-11-14
+**Versión**: 1.3.0
+**Estado**: 📚 Dos módulos completos - Patrón CRUD establecido
