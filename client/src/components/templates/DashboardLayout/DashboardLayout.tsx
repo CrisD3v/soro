@@ -55,6 +55,12 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
           href: '/dashboard/users',
         },
         {
+          id: 'companies',
+          label: 'Empresas',
+          icon: <Building className="w-5 h-5" />,
+          href: '/dashboard/companies',
+        },
+        {
           id: 'projects',
           label: 'Proyectos',
           icon: <FolderKanban className="w-5 h-5" />,
