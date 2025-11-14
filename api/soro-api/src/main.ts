@@ -3,6 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { PerformanceInterceptor } from './common/interceptors/performance.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,27 +28,66 @@ async function bootstrap() {
     }),
   );
 
+  // Interceptors globales
+  app.useGlobalInterceptors(
+    new LoggingInterceptor(),
+    new PerformanceInterceptor(),
+  );
+
   // Configuración de Swagger
   const config = new DocumentBuilder()
     .setTitle('SORO API')
-    .setDescription('Sistema SaaS Multi-tenant para gestión empresarial')
+    .setDescription(
+      'Sistema SaaS Multi-tenant para gestión empresarial\n\n' +
+      '## Características\n' +
+      '- 🔐 Autenticación JWT con refresh tokens\n' +
+      '- 🏢 Multi-tenant con aislamiento por companyId\n' +
+      '- 👥 RBAC jerárquico con permisos granulares\n' +
+      '- 📊 CRM completo con pipeline de ventas\n' +
+      '- 💰 Sistema de facturación\n' +
+      '- 📄 Gestión documental\n' +
+      '- 🔔 Notificaciones en tiempo real\n' +
+      '- 📅 Sistema de eventos\n' +
+      '- 🎨 Campos personalizados dinámicos\n' +
+      '- ⚙️ Automatización con workflows\n\n' +
+      '## Rate Limiting\n' +
+      '- Global: 100 requests/minuto\n' +
+      '- Por tenant: Configurable en TenantConfig\n\n' +
+      '## Autenticación\n' +
+      'Todos los endpoints (excepto /auth/login) requieren Bearer token en el header Authorization'
+    )
     .setVersion('2.0.0')
-    .addTag('Auth', 'Autenticación y autorización')
-    .addTag('Users', 'Gestión de usuarios')
-    .addTag('Companies', 'Gestión de empresas')
-    .addTag('Roles', 'Gestión de roles y permisos')
-    .addTag('Permissions', 'Permisos del sistema')
+    .setContact('SORO Team', 'https://soro.com', 'support@soro.com')
+    .setLicense('MIT', 'https://opensource.org/licenses/MIT')
+    .addTag('Auth', 'Autenticación y autorización JWT')
+    .addTag('Users', 'Gestión de usuarios y roles')
+    .addTag('Companies', 'Gestión de empresas multi-tenant')
+    .addTag('Roles', 'Gestión de roles jerárquicos')
+    .addTag('Permissions', 'Permisos granulares del sistema')
     .addTag('Projects', 'Gestión de proyectos')
-    .addTag('Tasks', 'Gestión de tareas')
-    .addTag('Contacts', 'CRM - Gestión de contactos')
-    .addTag('Deals', 'CRM - Pipeline de ventas')
-    .addTag('Invoices', 'Facturación')
+    .addTag('Tasks', 'Gestión de tareas con asignación')
+    .addTag('Contacts', 'CRM - Gestión de contactos y leads')
+    .addTag('Deals', 'CRM - Pipeline de ventas y oportunidades')
+    .addTag('Invoices', 'Facturación y pagos')
     .addTag('Notifications', 'Sistema de notificaciones')
-    .addTag('Documents', 'Gestión de documentos')
-    .addTag('Health', 'Health checks del sistema')
-    .addBearerAuth()
-    .addServer('http://localhost:3000', 'Desarrollo')
-    .addServer('https://api.yourdomain.com', 'Producción')
+    .addTag('Documents', 'Gestión documental')
+    .addTag('Events', 'Sistema de eventos asíncronos')
+    .addTag('Custom Fields', 'Campos personalizados dinámicos')
+    .addTag('Workflows', 'Automatización de procesos')
+    .addTag('Health & Metrics', 'Health checks y métricas de performance')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
+    .addServer('http://localhost:3000/api', 'Desarrollo')
+    .addServer('https://api.yourdomain.com/api', 'Producción')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
