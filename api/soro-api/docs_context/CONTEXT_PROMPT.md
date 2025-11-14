@@ -1482,3 +1482,107 @@ Para dudas sobre la API:
 - Verificar ejemplos en este documento
 - Consultar códigos de error
 - Revisar logs del servidor para debugging
+`
+ntento Co* `204 Ne:*Respons-all`
+
+**ions/readicatifCH /nott:** `PAT*Endpoindas
+
+*omo Leír Todas c# Marca
+
+##dalizacación actua* Notifi:*onse (200)
+
+**Respread`id/fications/:`PATCH /notiEndpoint:** ída
+
+**Ler como  Marca
+###
+}
+```
+": 5nt"coujson
+{
+
+```0):** (20*Response
+*unt`
+unread/cofications/notiET /t:** `GEndpoin
+**o Leídas
+de Nontador
+### C`
+
+  }
+]
+``00:00.000Z"13T10:11-t": "2024-dA    "createt": null,
+adA,
+    "refalse"read":     sk-uuid",
+d": "ta"entityI,
+    "task"yType": entit,
+    "task"type": "  "  '",
+re Xr featuplementarea 'Ima tanado le te ha asig"S:  "message"   gnada",
+a asi tare"Nuevale":
+    "tit-uuid",": "userserId",
+    "u-uuidionnotificat"id": "
+json
+[
+  {0):**
+```20sponse (**Retem)
+
+ysdeal, s, voiceinct, k, projetipo (tasr por : Filtra (opcional)as
+- `type`o leíddas/ntrar por leíFilopcional): ` (adre*
+- `y Params:***Quersk`
+
+alse&type=tas?read=ftionET /notificapoint:** `G
+
+**Endonesicaciotif NListar###
+
+cionestificaMódulo de No
+## 🔔 `
+4 No Contente:** `20ns
+
+**Respo`ents/:idocum`DELETE /dt:**
+**Endpointo
+ar Documenin### Elimntos
+
+ume de docrray(200):** A
+**Response to
+royec prar por Filtional):pcId` (o- `projectms:**
+*Query Parauuid`
+
+*rojectId=?pents/documt:** `GET dpoin
+**Enmentos
+ Docu### Listar
+```
+
+0.000Z"
+}-13T10:00:0 "2024-11t":atedA
+  "upd00Z",T10:00:00.04-11-13"202tedAt": 1,
+  "creaversion": ,
+  "ny-uuid""compad": "companyI uid",
+ user-uBy": "loaded
+  "uproject-id",uuid-p: "Id"ject "prof",
+ on/pdatilicype": "app
+  "mimeT24000,leSize": 10fi  "f",
+nts/uuid.pdcumeads/do/uplolePath": "fif",
+  "-2024.pdatontrme": "coeNa",
+  "filciosto de servira": "Cont  "nameid",
+uuocument- "id": "dson
+{
+ :**
+```j (201)esponse
+**R``
+}
+`ect-id"
+ojid-prd": "uuojectI",
+  "prn/pdfplicatio"apmeType":
+  "mi: 1024000,Size""filepdf",
+  uments/uuid.uploads/doc"/: ePath""fil",
+  o-2024.pdfat "contreName":"filios",
+  de servicntrato Coname": "n
+{
+  "``jso
+`est:**
+
+**Requnts`docume:** `POST /dpoint*Enumento
+
+*## Subir Doc
+#ntos
+cumeulo de Do# 📄 Mód
+
+#
