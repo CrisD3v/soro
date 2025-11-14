@@ -10,6 +10,7 @@ import { UserModule } from '@context/user/user.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DealModule } from './context/deal/deal.module';
+import { DocumentModule } from './context/document/document.module';
 import { InvoiceModule } from './context/invoice/invoice.module';
 import { NotificationModule } from './context/notification/notification.module';
 
@@ -31,6 +32,7 @@ import { NotificationModule } from './context/notification/notification.module';
     DealModule,
     InvoiceModule,
     NotificationModule,
+    DocumentModule,
   ],
   controllers: [],
   providers: [],

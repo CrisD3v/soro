@@ -42,6 +42,7 @@ async function bootstrap() {
     .addTag('Deals', 'CRM - Pipeline de ventas')
     .addTag('Invoices', 'Facturación')
     .addTag('Notifications', 'Sistema de notificaciones')
+    .addTag('Documents', 'Gestión de documentos')
     .addTag('Health', 'Health checks del sistema')
     .addBearerAuth()
     .addServer('http://localhost:3000', 'Desarrollo')
