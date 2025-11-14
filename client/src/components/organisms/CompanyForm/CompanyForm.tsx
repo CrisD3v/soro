@@ -168,10 +168,10 @@ export const CompanyForm = ({
           {isSubmitting ? (
             <>
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-              Creando...
+              {initialData ? 'Actualizando...' : 'Creando...'}
             </>
           ) : (
-            'Crear Empresa'
+            initialData ? 'Actualizar Empresa' : 'Crear Empresa'
           )}
         </Button>
       </div>
