@@ -9,10 +9,13 @@ import { TaskModule } from '@context/task/task.module';
 import { UserModule } from '@context/user/user.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { CustomFieldModule } from './context/custom-field/custom-field.module';
 import { DealModule } from './context/deal/deal.module';
 import { DocumentModule } from './context/document/document.module';
+import { EventModule } from './context/event/event.module';
 import { InvoiceModule } from './context/invoice/invoice.module';
 import { NotificationModule } from './context/notification/notification.module';
+import { WorkflowModule } from './context/workflow/workflow.module';
 
 @Module({
   imports: [
@@ -33,6 +36,9 @@ import { NotificationModule } from './context/notification/notification.module';
     InvoiceModule,
     NotificationModule,
     DocumentModule,
+    EventModule,
+    CustomFieldModule,
+    WorkflowModule,
   ],
   controllers: [],
   providers: [],
