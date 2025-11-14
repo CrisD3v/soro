@@ -1,225 +1,179 @@
-# Changelog
+# Changelog - SORO Frontend
 
-Todos los cambios notables del proyecto serán documentados en este archivo.
+Todos los cambios notables en el frontend de SORO serán documentados en este archivo.
 
-## [2.0.0] - 2025-11-11
+El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
+y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
-### ✅ Completado - Dashboard SORO
+## [Unreleased]
 
-#### Dashboard Layout
-- DashboardLayout template con sidebar y topbar
-- Sidebar colapsable con tooltips
-- TopBar con nombre de empresa y user menu
-- Background con degradado sutil en esquina
-- Responsive completo (mobile, tablet, desktop)
-- Dark/light mode integrado
+### Added
+- **Páginas de Gestión de Usuarios Completas**:
+  - `/dashboard/users/[id]` - Página de detalle con toda la información del usuario
+  - `/dashboard/users/[id]/edit` - Página de edición con formulario pre-llenado
+  - `/dashboard/users/[id]/roles` - Gestión de roles (asignar/remover)
+  - `/dashboard/users/[id]/signature` - Gestión de firma digital (subir/actualizar)
+- **UserForm Component** - Formulario completo para crear/editar usuarios
+  - Validación con Zod y React Hook Form
+  - Campos: email, password, name, lastName, documentNumber, documentType, phone, companyId
+  - Validaciones completas (email, password strength, phone format, UUID)
+  - Estados de loading y disabled
+- **Dialog para crear usuario** - Modal con formulario integrado
+- **Context Menu en tabla de usuarios** - Click derecho con opciones:
+  - Ver Detalles, Editar, Asignar Rol, Asignar Firma, Eliminar
+- **Hook useToast** - Sistema simple de notificaciones (temporal)
+- **Label Component** - Componente UI para labels de formularios
+- **Soporte Light Mode en DataTable** - Temas separados para dark y light mode
+- Sistema de diseño completo documentado en DESIGN_SYSTEM.md
+- Paleta de colores purple con escala completa
+- Guía de uso de componentes con ejemplos
+- Documentación de estados (hover, focus, disabled)
+- Guía de animaciones y transiciones
+- Layout del dashboard (`/dashboard/layout.tsx`) con DashboardLayout template
+- Enlace de "Usuarios" en el sidebar del dashboard
+- Página de usuarios completamente integrada en el dashboard
 
-#### Componentes Dashboard
-- **StatCard**: KPI cards con animaciones spring (scale 1.02)
-- **InventorySummaryCard**: Resumen de inventario con progress bar
-- **RecentAssignmentsCard**: Lista de asignaciones recientes
-- **NotificationsCard**: Alertas automáticas del sistema
-- **MovementHistoryCard**: Historial con tabla filtrable
-- Diseño inspirado en FeatureCard con gradientessutiles
+### Changed
+- **DataTable** - Mejorado soporte para light/dark mode
+  - Tema `purpleThemeDark` para dark mode
+  - Tema `purpleThemeLight` para light mode
+  - Prop `darkMode` para cambiar entre temas
+  - Filtros más visibles con backgrounds sólidos
+- **Filtros de ag-grid** - Cambiados de `agSetColumnFilter` a `agTextColumnFilter`
+  - Evita error #200 de módulos enterprise no registrados
+  - Usa solo módulos community
+- Dashboard page ahora usa el layout de Next.js en lugar del componente DashboardLayout directamente
+- Sidebar actualizado con enlace de "Usuarios" en la sección "Gestión"
 
-#### Navegación
-- Sidebar con 3 grupos: Principal, Gestión, Sistema
-- Tooltips en sidebar colapsado (shadcn/ui)
-- Iconos con lucide-react
-- Badges para notificaciones
-- Animaciones smooth en navegación
-
-#### APIs Integradas
-- **User API**: CRUD completo de usuarios
-- **Company API**: CRUD de empresas con jerarquía
-- Refresh token automático en interceptor
-- Repository pattern implementado
-
-#### Middleware y Seguridad
-- Middleware de autenticación en rutas /dashboard
-- Refresh token automático
-- Protected routes
-- Redirección con preservación de URL
-
-#### Hooks y Context
-- **useDashboard**: Estado global del dashboard
-- **DashboardContext**: Provider para empresa activa
-- **useScrollPosition**: Detección de scroll
-- **useScrollReveal**: Animaciones en scroll
-
-#### Estilos y Animaciones
-- Scrollbar personalizado (.scrollbar-thin)
-- Gradiente radial utility
-- Animaciones optimizadas (150-300ms)
-- Hover effects profesionales
-- Spring animations en StatCards
-
-## [1.5.0] - 2025-11-11
-
-### ✅ Completado - Landing Page
-
-#### Landing Page Completa
-- HeroSection con animaciones y scroll indicator
-- FeaturesSection con grid 2x3
-- PricingSection con 3 planes
-- TestimonialsSection con carrusel
-- NavBar con navegación smooth
-- Footer completo
-
-#### Componentes Landing
-- **FeatureCard**: Cards con iconos y animaciones
-- **NavLink**: Links de navegación con active state
-- **NavBar**: Navegación con scroll detection
-- Animaciones con motion en todas las secciones
-
-#### Mejoras UX Landing
-- Animaciones de hover optimizadas (200ms)
-- Scroll indicator funcional
-- Botón demo con estilo outline
-- Cards de pricing alineadas
-- Cursor pointer en todos los botones
-
-## [1.4.0] - 2025-11-11
-
-### ✅ Completado
-
-#### Tests Implementados
-- Tests para componentes atoms (Logo)
-- Tests para componentes molecules (FormField, PasswordInput)
-- Tests para hooks (useTheme)
-- Configuración de Vitest con jsdom
-- Mock de window.matchMedia para tests
-- Coverage configurado
-
-#### Storybook
-- Stories para atoms (Logo, ThemeToggle)
-- Stories para molecules (FormField, PasswordInput)
-- Configuración de Storybook con Next.js
-- Preview con estilos globales
-
-## [1.3.0] - 2025-11-11
-
-### ✅ Completado
-
-#### Documentación
-- ARCHITECTURE.md - Arquitectura y patrones
-- COMPONENTS.md - Guía de componentes
-- API_INTEGRATION.md - Integración con backend
-- README.md completo con instrucciones
-
-## [1.2.0] - 2025-11-11
-
-### ✅ Completado
-
-#### API Integration
-- Cliente HTTP base con interceptors
-- Endpoints de autenticación (login, register, refresh, logout, reset)
-- TanStack Query hooks (useLogin, useRegister, useRefreshToken, useLogout, useResetPassword)
-- Repository Pattern para localStorage
-- Factory Pattern para API clients
-- Manejo de errores tipado
-
-#### Types
-- Types co-localizados por componente/módulo
-- Types globales en lib/types/common.types.ts
-- Types para API en lib/api/auth.types.ts
-- Types para queries en lib/queries/auth.queries.types.ts
-
-## [1.1.0] - 2025-11-11
-
-### ✅ Completado
-
-#### Componentes Atoms
-- Logo con animación de entrada
-- ThemeToggle con transiciones suaves
-
-#### Componentes Molecules
-- FormField con animación de errores
-- PasswordInput con toggle de visibilidad
-
-#### Componentes Organisms
-- LoginForm con validación completa
-- RegisterForm con todos los campos
-- ResetPasswordForm con manejo de éxito
-
-#### Componentes Templates
-- AuthTemplate con Compound Component Pattern
-- Transiciones animadas entre vistas
-- Diseño responsive
-
-#### Hooks
-- useTheme para dark/light mode
-- useAuth para estado de autenticación
-
-## [1.0.0] - 2025-11-11
-
-### ✅ Completado
-
-#### Configuración Inicial
-- Next.js 16 con App Router
-- React 19
-- Tailwind CSS 4
-- TypeScript 5
-- motion v12.23.24
-- TanStack Query 5
-- React Hook Form + Zod
-- Vitest + Testing Library
-- Storybook 10
-
-#### Estructura
-- Atomic Design implementado
-- Carpetas organizadas por patrón
-- Types co-localizados
-- Configuración de tests
-- Configuración de Storybook
-
-#### Tema
-- Colores morados oklch(62.7% 0.265 303.9)
-- Dark mode completo
-- CSS variables configuradas
-- Transiciones suaves
+### Fixed
+- **Next.js 15+ params Promise** - Todas las páginas dinámicas ahora usan `React.use()` para unwrap params
+  - `/dashboard/users/[id]/page.tsx`
+  - `/dashboard/users/[id]/edit/page.tsx`
+  - `/dashboard/users/[id]/roles/page.tsx`
+  - `/dashboard/users/[id]/signature/page.tsx`
+- Error de ag-grid #200 "SetFilterModule is not registered" - Cambiados filtros a community modules
+- Error de ag-grid "No AG Grid modules are registered" - Agregado ModuleRegistry.registerModules([AllCommunityModule])
+- Error de ag-grid #239 "Theming API and CSS File Themes are both used" - Migrado a Theming API moderno con themeQuartz
+- Removidos archivos CSS legacy de ag-grid (ag-grid.css, ag-theme-alpine.css)
+- Implementado tema personalizado purple con themeQuartz.withParams()
+- Filtros de ag-grid ahora son visibles en light mode con backgrounds sólidos
+- Implementado tema personalizado purple con themeQuartz.withParams()
 
 ---
 
-## Request IDs
+## [0.3.0] - 2025-11-14
 
-```
-REQUEST-ID: DASHBOARD-v2.0.0-20251111
-Context: Dashboard completo con UX mejorada
-Scope: Layout + Components + APIs + Middleware + Animations
-Library: motion v12.23.24 + shadcn/ui
-Status: ✅ COMPLETED
+### Added
+- **Módulo de Usuarios**
+  - `src/lib/api/user.types.ts` - 8 interfaces TypeScript
+  - `src/lib/api/user.api.ts` - 6 endpoints (getAll, getById, create, update, assignRole, assignSignature)
+  - `src/lib/queries/user.queries.ts` - 6 hooks TanStack Query
+  - `src/app/dashboard/users/page.tsx` - Página de lista de usuarios
 
-REQUEST-ID: LANDING-v1.5.0-20251111
-Context: Landing page completa
-Scope: Hero + Features + Pricing + Testimonials
-Library: motion v12.23.24
-Status: ✅ COMPLETED
+- **Componente DataTable**
+  - `src/components/organisms/DataTable/` - Tabla genérica con ag-grid
+  - Soporte para filtros por columna (texto, número, fecha, set)
+  - Ordenamiento multi-columna
+  - Paginación configurable
+  - Selección simple/múltiple
+  - Loading y empty states
+  - Tema oscuro (alpine-dark)
+  - Click en fila para navegación
 
-REQUEST-ID: AUTH-FORMS-v1.4.0-20241111
-Context: API_DOCUMENTATION.md + package.json
-Scope: Authentication Forms + API Integration + Tests + Storybook
-Library: motion v12.23.24
-Types: Co-located with components/modules
-Status: ✅ COMPLETED
-```
+- **Patrones Establecidos**
+  - Query Key Factory para organización de TanStack Query
+  - Estructura de archivos para módulos (api, types, queries)
+  - Patrón de integración con backend
 
-## Próximas Versiones
+### Technical Details
+- ag-grid-react: Librería profesional para tablas
+- ag-grid-community: Core de ag-grid
+- Query invalidation granular con key factories
+- Type safety completo en toda la integración
 
-### [2.1.0] - Pendiente
-- Implementar páginas de inventario
-- Implementar páginas de empleados
-- Implementar páginas de proyectos
-- Agregar más tests de integración
+---
 
-### [2.2.0] - Pendiente
-- Implementar reportes y analytics
-- Gráficos interactivos
-- Exportación de datos
-- Filtros avanzados
+## [0.2.0] - 2025-11-11
 
-### [2.3.0] - Pendiente
-- Internacionalización (i18n)
-- Notificaciones en tiempo real
-- Optimizaciones de rendimiento
-- SEO improvements
+### Added
+- **Dashboard Layout**
+  - Sidebar colapsable con tooltips
+  - TopBar con empresa activa y user menu
+  - Background con degradado sutil
+  - Responsive design (mobile overlay, desktop fixed)
+
+- **Dashboard Cards**
+  - StatCards con animaciones spring
+  - Cards grandes con scroll reveal
+  - Gradientes sutiles
+  - Scrollbars personalizados
+
+- **Migración a Cookies HttpOnly**
+  - Backend maneja tokens automáticamente
+  - `credentials: 'include'` en todas las peticiones
+  - Repository simplificado (solo userData)
+  - Refresh automático de tokens
+
+### Changed
+- Migración de localStorage a cookies HttpOnly para tokens
+- Simplificación del auth repository
+- Actualización del API client con credentials
+
+---
+
+## [0.1.0] - 2024-11-11
+
+### Added
+- **Configuración Inicial**
+  - Next.js 16 + React 19 + TypeScript 5
+  - Tailwind CSS 4 con tema purple
+  - motion v12 para animaciones
+  - Atomic Design structure
+
+- **Sistema de Autenticación**
+  - Login, Register, Reset Password
+  - TanStack Query para state management
+  - Repository Pattern para abstracción
+  - JWT con cookies HttpOnly
+
+- **Landing Page**
+  - Hero Section
+  - Features Section
+  - Pricing Section
+  - Testimonials Section
+  - NavBar con navegación suave
+  - Scroll reveal animations
+
+- **Componentes Base**
+  - Logo (atom)
+  - ThemeToggle (atom)
+  - FormField (molecule)
+  - PasswordInput (molecule)
+  - FeatureCard (molecule)
+  - AuthTemplate (template)
+  - LoginForm (organism)
+  - RegisterForm (organism)
+
+### Technical Details
+- Atomic Design: atoms/ → molecules/ → organisms/ → templates/
+- Co-located Types: Cada componente tiene su `.types.ts`
+- Purple Theme: `oklch(62.7% 0.265 303.9)` como color base
+- Motion: Animaciones suaves con durations 200-300ms
+- TanStack Query 5 para server state
+- React Hook Form + Zod para formularios
+
+---
+
+## Tipos de Cambios
+
+- `Added` - Para nuevas funcionalidades
+- `Changed` - Para cambios en funcionalidades existentes
+- `Deprecated` - Para funcionalidades que serán removidas
+- `Removed` - Para funcionalidades removidas
+- `Fixed` - Para corrección de bugs
+- `Security` - Para vulnerabilidades de seguridad
+
+---
+
+**Mantenido por**: Equipo Frontend SORO
+**Última actualización**: 2025-11-14

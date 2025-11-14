@@ -35,24 +35,29 @@ Sistema de gestión empresarial completo con autenticación, dashboard interacti
 - **Scrollbar Personalizado** - Estilo elegante y sutil
 
 ### 🏗️ Arquitectura
-- **Patrones de Diseño** - Factory, Repository, Compound Components
+- **Patrones de Diseño** - Factory, Repository, Compound Components, Query Key Factory
 - **TypeScript** - Tipado estricto
 - **TanStack Query** - Gestión de estado del servidor
-- **API Integration** - User, Company, Auth endpoints
+- **API Integration** - User, Company, Auth endpoints (6 endpoints de usuarios)
 - **Context API** - DashboardContext para estado global
+- **ag-grid** - Tablas profesionales con filtros, ordenamiento y paginación
 
 ### 🧪 Testing y Documentación
 - **Vitest** - Tests unitarios y de integración
 - **Testing Library** - Tests de componentes
 - **Storybook** - Documentación interactiva
-- **Docs** - ARCHITECTURE.md, COMPONENTS.md, API_INTEGRATION.md
+- **Docs** - FRONT_TASK.md, FRONT_CONTEXT.md, CHANGELOG.md
 
 ## 🎨 Tema
 
 Paleta de colores morados basada en `oklch(62.7% 0.265 303.9)` con:
+- **Purple 500**: Color base principal
+- **Purple 600**: Hover states y botones
+- **Purple 400**: Texto y acentos
 - Degradado sutil en esquina inferior derecha
 - Soporte completo para modo claro y oscuro
 - Gradientes personalizados por componente
+- Sistema de diseño completo documentado en [DESIGN_SYSTEM.md](./docs_context/DESIGN_SYSTEM.md)
 
 ## 📦 Instalación
 
@@ -158,12 +163,22 @@ client/
 
 - `/` - Landing page
 - `/auth` - Autenticación (login/register/reset)
-- `/dashboard` - Dashboard principal (protegido)
-- `/dashboard/inventory` - Gestión de inventario
-- `/dashboard/employees` - Gestión de empleados
-- `/dashboard/projects` - Gestión de proyectos
-- `/dashboard/reports` - Reportes
-- `/dashboard/settings` - Configuración
+- `/dashboard` - Dashboard principal (protegido) ✅
+- `/dashboard/users` - Gestión de usuarios ✅
+  - Lista de usuarios con ag-grid
+  - Estadísticas (Total, Con Firma, Con/Sin Roles)
+  - Filtros, ordenamiento y paginación
+  - Click en fila para ver detalle
+- `/dashboard/users/create` - Crear usuario (próximamente)
+- `/dashboard/users/[id]` - Ver/editar usuario (próximamente)
+- `/dashboard/companies` - Gestión de empresas (próximamente)
+- `/dashboard/roles` - Gestión de roles (próximamente)
+- `/dashboard/projects` - Gestión de proyectos (próximamente)
+- `/dashboard/tasks` - Gestión de tareas (próximamente)
+- `/dashboard/contacts` - CRM - Contactos (próximamente)
+- `/dashboard/deals` - CRM - Deals (próximamente)
+- `/dashboard/invoices` - Facturación (próximamente)
+- `/dashboard/settings` - Configuración (próximamente)
 
 ## 🔧 Tecnologías
 
@@ -173,6 +188,7 @@ client/
 - **Animaciones**: motion v12.23.24
 - **Forms**: React Hook Form + Zod
 - **State**: TanStack Query 5
+- **Tables**: ag-grid-react + ag-grid-community
 - **Testing**: Vitest + Testing Library
 - **Docs**: Storybook 10
 - **UI Components**: shadcn/ui (Radix UI)
@@ -181,10 +197,18 @@ client/
 
 ## 📚 Documentación
 
-- [Arquitectura](./src/docs/ARCHITECTURE.md) - Patrones y estructura
-- [Componentes](./src/docs/COMPONENTS.md) - Guía de componentes
-- [API Integration](./src/docs/API_INTEGRATION.md) - Integración con backend
-- [Changelog](./CHANGELOG.md) - Historial de cambios
+### Frontend
+- [FRONT_TASK.md](./docs_context/FRONT_TASK.md) - Plan de desarrollo y roadmap
+- [FRONT_CONTEXT.md](./docs_context/FRONT_CONTEXT.md) - Contexto de sesiones y decisiones técnicas
+- [DESIGN_SYSTEM.md](./docs_context/DESIGN_SYSTEM.md) - Sistema de diseño y paleta de colores
+- [CHANGELOG.md](./CHANGELOG.md) - Historial de cambios
+
+### Backend
+- [API_DOCUMENTATION.md](./docs_context/docs/API_DOCUMENTATION.md) - Documentación completa de la API
+- [API_GUIDE.md](./docs_context/docs/API_GUIDE.md) - Guía rápida de endpoints
+- [ARCHITECTURE.md](./docs_context/docs/ARCHITECTURE.md) - Arquitectura hexagonal del backend
+- [MULTI_TENANT.md](./docs_context/docs/MULTI_TENANT.md) - Estrategia multi-tenant
+- [PERMISSIONS.md](./docs_context/docs/PERMISSIONS.md) - Sistema RBAC
 
 ## 🎨 Componentes Destacados
 
@@ -193,8 +217,8 @@ client/
 - **Sidebar** - Navegación colapsable con tooltips
 - **TopBar** - Header con empresa activa y user menu
 - **StatCard** - KPI cards con animaciones spring
-- **InventorySummaryCard** - Resumen de inventario
-- **MovementHistoryCard** - Historial con filtros
+- **DataTable** - Tabla genérica con ag-grid (filtros, ordenamiento, paginación) ✅
+- **UsersPage** - Página de gestión de usuarios con estadísticas ✅
 
 ### Landing
 - **HeroSection** - Hero con animaciones
@@ -258,6 +282,6 @@ Desarrollado por el equipo de SORO.
 
 ---
 
-**Versión**: 2.0.0
-**Última actualización**: 2025-11-11
-**Estado**: ✅ En producción
+**Versión**: 0.3.0
+**Última actualización**: 2025-11-14
+**Estado**: 🚧 En desarrollo activo - Módulo Users completado
