@@ -17,7 +17,7 @@ import { DashboardLayoutProps } from './DashboardLayout.types';
 export const DashboardLayout = ({ children, className = '' }: DashboardLayoutProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Mock data - esto vendrá del context/API
+  // Configuración del sidebar
   const sidebarGroups = [
     {
       id: 'main',
@@ -49,10 +49,10 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
       label: 'Gestión',
       items: [
         {
-          id: 'employees',
-          label: 'Empleados',
+          id: 'users',
+          label: 'Usuarios',
           icon: <Users className="w-5 h-5" />,
-          href: '/dashboard/employees',
+          href: '/dashboard/users',
         },
         {
           id: 'projects',
