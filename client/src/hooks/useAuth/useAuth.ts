@@ -5,7 +5,6 @@
 'use client';
 
 import type { UserData } from '@/lib/api/auth.types';
-import { ApiClientFactory } from '@/lib/patterns/factory/api-client.factory';
 import { authRepository } from '@/lib/patterns/repository/auth.repository';
 import { useEffect, useState } from 'react';
 import type { UseAuthReturn } from './useAuth.types';
@@ -20,19 +19,16 @@ export const useAuth = (): UseAuthReturn => {
   useEffect(() => {
     // Cargar usuario desde localStorage
     const userData = authRepository.getUserData();
-    const accessToken = authRepository.getAccessToken();
 
-    if (userData && accessToken) {
+    if (userData) {
       setUser(userData);
-      ApiClientFactory.setAuthToken(accessToken);
     }
 
     setIsLoading(false);
   }, []);
 
   const logout = () => {
-    authRepository.clearSession();
-    ApiClientFactory.setAuthToken(null);
+    authRepository.clearUserData();
     setUser(null);
   };
 

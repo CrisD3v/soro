@@ -3,6 +3,7 @@
 import {
   BarChart3,
   Bell,
+  Building,
   FolderKanban,
   LayoutDashboard,
   Package,
