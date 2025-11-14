@@ -101,33 +101,55 @@ Seeds actualizados con:
 
 ### 📦 Dependencias
 
-No se agregaron nuevas dependencias. El sistema sigue usando:
+Dependencias principales:
 - NestJS 11.x
 - Prisma 6.19.x
 - PostgreSQL 14+
 - bcrypt para passwords
 - JWT para autenticación
 
+Nuevas dependencias (V2.1):
+- @nestjs/throttler 6.4.0 - Rate limiting
+- winston 3.18.3 - Logging estructurado
+- nest-winston 1.10.2 - Integración Winston con NestJS
+
 ### 🧪 Testing
 
+Implementado:
+- [x] Tests E2E para Auth (login, refresh, logout)
+- [x] Tests unitarios para CreateUserUseCase
+- [x] Configuración de jest-e2e.json
+
 Pendiente:
-- [ ] Tests unitarios para nuevos módulos
-- [ ] Tests de integración para eventos
+- [ ] Tests unitarios para todos los módulos
+- [ ] Tests de integración para repositories
 - [ ] Tests E2E para flujos completos
 - [ ] Tests de performance para multi-tenant
+- [ ] Coverage mínimo del 80%
+
+### 🚀 Mejoras Implementadas (V2.1)
+
+**Fecha**: 2024-11-14
+
+Nuevas características agregadas:
+- [x] **Rate Limiting**: Sistema de rate limiting por tenant con @nestjs/throttler
+- [x] **Monitoring**: Logs estructurados con Winston y métricas de performance
+- [x] **Tests**: Tests E2E y unitarios iniciados
+- [x] **Variables de Entorno**: Configuración completa con .env.example
+- [x] **Swagger Mejorado**: Documentación completa con 16 tags
 
 ### 🚀 Próximos Pasos (V3)
 
 Planeado para la siguiente versión:
-- [ ] Implementación de módulos sectoriales (salud, educación, etc.)
-- [ ] Sistema de webhooks para integraciones
+- [ ] Expandir cobertura de tests (80%+)
+- [ ] CI/CD con GitHub Actions
 - [ ] Cache layer con Redis
-- [ ] Rate limiting por tenant
+- [ ] File upload real (S3/R2)
+- [ ] Sistema de webhooks para integraciones
 - [ ] Reportes y analytics avanzados
 - [ ] GraphQL API
 - [ ] WebSockets para notificaciones en tiempo real
 - [ ] Sistema de templates para documentos
-- [ ] Firma electrónica avanzada
 - [ ] Integración con servicios de pago (Stripe, MercadoPago)
 
 ### 📊 Estadísticas

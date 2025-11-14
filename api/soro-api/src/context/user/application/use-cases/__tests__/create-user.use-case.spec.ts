@@ -44,7 +44,7 @@ describe('CreateUserUseCase', () => {
       name: 'Test',
       lastName: 'User',
       documentNumber: '1234567890',
-      documentType: 'CC',
+      documentType: 'CC' as any,
       phone: '+573001234567',
       companyId: 'company-uuid',
     };
