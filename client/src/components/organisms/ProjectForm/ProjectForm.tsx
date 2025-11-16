@@ -113,7 +113,7 @@ export const ProjectForm = ({
         </div>
       </div>
 
-      {/* Descripción */}
+      {/* Descripción - Ancho completo */}
       <div className="space-y-2">
         <Label htmlFor="description">Descripción</Label>
         <Input
@@ -127,16 +127,16 @@ export const ProjectForm = ({
         )}
       </div>
 
-      {/* Estado y Fechas */}
+      {/* Estado, Fecha Inicio y Fecha Fin - Misma fila con anchos iguales */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="space-y-2">
+        <div className="space-y-2 min-w-0">
           <Label htmlFor="status">Estado</Label>
           <Select
             value={status}
             onValueChange={(value) => setValue('status', value as ProjectStatus)}
             disabled={isSubmitting}
           >
-            <SelectTrigger>
+            <SelectTrigger className="w-full min-w-0">
               <SelectValue placeholder="Selecciona estado" />
             </SelectTrigger>
             <SelectContent>
@@ -152,26 +152,30 @@ export const ProjectForm = ({
           )}
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 min-w-0">
           <Label htmlFor="startDate">Fecha de Inicio</Label>
           <Input
             id="startDate"
             type="date"
             {...register('startDate')}
             disabled={isSubmitting}
+            className="w-full min-w-0"
           />
           {errors.startDate && (
             <p className="text-sm text-red-500">{errors.startDate.message}</p>
           )}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="endDate">Fecha de Fin (Opcional)</Label>
+        <div className="space-y-2 min-w-0">
+          <Label htmlFor="endDate">
+            Fecha de Fin <span className="text-gray-500 text-xs">(Opcional)</span>
+          </Label>
           <Input
             id="endDate"
             type="date"
             {...register('endDate')}
             disabled={isSubmitting}
+            className="w-full min-w-0"
           />
           {errors.endDate && (
             <p className="text-sm text-red-500">{errors.endDate.message}</p>
