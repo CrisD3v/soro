@@ -125,3 +125,7 @@ export const useRolePermissions = (id: string) => {
     enabled: !!id,
   });
 };
+
+// Aliases para compatibilidad
+export const useAssignPermission = useAssignPermissionToRole;
+export const useRemovePermission = useRemovePermissionFromRole;
