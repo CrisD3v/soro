@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   Package,
   Settings,
+  Shield,
   Users
 } from 'lucide-react';
 import { useState } from 'react';
@@ -60,6 +61,12 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
           label: 'Empresas',
           icon: <Building className="w-5 h-5" />,
           href: '/dashboard/companies',
+        },
+        {
+          id: 'roles',
+          label: 'Roles',
+          icon: <Shield className="w-5 h-5" />,
+          href: '/dashboard/roles',
         },
         {
           id: 'projects',
