@@ -4,6 +4,7 @@ import {
   BarChart3,
   Bell,
   Building,
+  CheckSquare,
   FolderKanban,
   LayoutDashboard,
   Package,
@@ -73,6 +74,12 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
           label: 'Proyectos',
           icon: <FolderKanban className="w-5 h-5" />,
           href: '/dashboard/projects',
+        },
+        {
+          id: 'tasks',
+          label: 'Tareas',
+          icon: <CheckSquare className="w-5 h-5" />,
+          href: '/dashboard/tasks',
         },
         {
           id: 'reports',
