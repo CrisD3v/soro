@@ -1,7 +1,7 @@
 'use client';
 
 import { useTheme } from '@/hooks/useTheme/useTheme';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { Bell, ChevronDown, Globe, LogOut, Moon, Settings, Sun, User } from 'lucide-react';
 import { useState } from 'react';
 import { TopBarProps } from './TopBar.types';

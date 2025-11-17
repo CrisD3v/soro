@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Calendar, Package, UserCheck } from 'lucide-react';
 import { RecentAssignmentsCardProps } from './RecentAssignmentsCard.types';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { AlertTriangle, Bell, CheckCircle, Clock, Info } from 'lucide-react';
 import { NotificationsCardProps } from './NotificationsCard.types';
 

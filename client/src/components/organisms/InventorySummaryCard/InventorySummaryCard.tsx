@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { AlertTriangle, Package, TrendingUp } from 'lucide-react';
 import { InventorySummaryCardProps } from './InventorySummaryCard.types';
 
