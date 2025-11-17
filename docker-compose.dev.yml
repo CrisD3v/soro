@@ -1,0 +1,58 @@
+# Docker Compose para Desarrollo - Con hot reload
+
+services:
+  # Frontend con hot reload
+  frontend-dev:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3001:3001"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3000/api
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - app-network
+    command: pnpm dev -p 3001
+
+  # Backend con hot reload - DB en la nube
+  backend-dev:
+    build:
+      context: ./api/soro-api
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+        - NODE_ENV=${NODE_ENV:-development}
+        - DATABASE_URL=${DATABASE_URL:-postgresql://user:password@localhost:5432/mydatabase}
+        - USE_LOCAL_DB=${USE_LOCAL_DB:-false}
+        - PORT=${PORT}
+        - FRONTEND_URL=${FRONTEND_URL}
+        - RATE_LIMIT_MAX=${RATE_LIMIT_MAX}
+        - RATE_LIMIT_TTL=${RATE_LIMIT_TTL}
+        - LOG_LEVEL=${LOG_LEVEL}
+        - ENABLE_REQUEST_LOGGING=${ENABLE_REQUEST_LOGGING}
+        - ENABLE_PERFORMANCE_MONITORING=${ENABLE_PERFORMANCE_MONITORING}
+        - ENABLE_SWAGGER=${ENABLE_SWAGGER}
+        - CORS_ORIGINS=${CORS_ORIGINS}
+        - DEBUG=${DEBUG}
+        - PRISMA_LOG_QUERIES=${PRISMA_LOG_QUERIES}
+        - AUTO_SEED=${AUTO_SEED}
+        - JWT_SECRET=${JWT_SECRET}
+        - JWT_ACCESS_TOKEN_EXPIRATION=${JWT_ACCESS_TOKEN_EXPIRATION}
+        - JWT_REFRESH_TOKEN_EXPIRATION=${JWT_REFRESH_TOKEN_EXPIRATION}
+    volumes:
+      - ./api/soro-api/src:/app/src
+      - ./api/soro-api/prisma:/app/prisma
+      - ./api/soro-api/package.json:/app/package.json
+      - ./api/soro-api/tsconfig.json:/app/tsconfig.json
+      - ./api/soro-api/tsconfig.build.json:/app/tsconfig.build.json
+      - api-uploads:/app/uploads
+      - /app/node_modules
+    networks:
+      - app-network
+    depends_on: []
+    command: pnpm start:dev
