@@ -42,3 +42,4 @@ next-env.d.ts
 
 #context
 /docs_context
+docs_context/
