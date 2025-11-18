@@ -58,4 +58,23 @@ jobs:
         run: pnpm --filter client test
 
       - name: Frontend | Check for vulnerabilities
-        run: pnpm --filter client audit --prod --audit
+        run: pnpm --filter client audit --prod --audit-level=high
+
+      - name: Frontend | Build
+        run: pnpm --filter client build
+
+      # Backend steps
+      - name: Backend | Linting
+        run: pnpm --filter soro-api lint
+
+      - name: Backend | Type Checking
+        run: pnpm --filter soro-api type-check
+
+      - name: Backend | Tests
+        run: pnpm --filter soro-api test
+
+      - name: Backend | Check for vulnerabilities
+        run: pnpm --filter soro-api audit --prod --audit-level=high
+
+      - name: Backend | Build
+        run: pnpm --filter soro-api build
