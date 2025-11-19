@@ -1,5 +1,7 @@
 'use client';
 
+import { useAuth } from '@/hooks/useAuth';
+import { useCurrentCompany } from '@/hooks/useCurrentCompany';
 import {
   Activity,
   BarChart3,
@@ -25,6 +27,10 @@ import { DashboardLayoutProps } from './DashboardLayout.types';
 
 export const DashboardLayout = ({ children, className = '' }: DashboardLayoutProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { user, logout } = useAuth();
+  const { companyName } = useCurrentCompany();
+
+  console.log(user)
 
   // Configuración del sidebar
   const sidebarGroups = [
@@ -185,14 +191,14 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
       >
         {/* TopBar */}
         <TopBar
-          companyName="GRUPO MATEX"
-          userName="Admin User"
+          companyName={companyName}
+          userName={user?.fullName || `${user?.name} ${user?.lastName}` || 'Usuario'}
           notificationCount={5}
           breadcrumbs={[
             { id: '1', label: 'Dashboard' },
             { id: '2', label: 'Inventario' },
           ]}
-          onLogout={handleLogout}
+          onLogout={logout}
         />
 
         {/* Page Content */}
