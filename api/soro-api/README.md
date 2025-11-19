@@ -5,8 +5,9 @@ Sistema SaaS multi-tenant construido con NestJS, Prisma y PostgreSQL siguiendo a
 ## ✨ Características Principales
 
 - 🏢 **Multi-tenant**: Aislamiento completo por empresa con configuración personalizada
-- 🔐 **Autenticación JWT**: Access tokens + refresh tokens con rotación
+- 🔐 **Autenticación JWT**: Access tokens + refresh tokens con rotación + endpoint /me
 - 👥 **RBAC Jerárquico**: Sistema de permisos con scopes (GLOBAL, COMPANY, PROJECT, RESOURCE)
+- ⚙️ **Settings Module**: Sistema de configuraciones multi-tenant con categorías
 - 🔄 **Event-Driven**: Procesamiento asíncrono de eventos con handlers
 - 🎨 **Custom Fields**: Campos dinámicos sin modificar schema
 - 🤖 **Workflows**: Automatizaciones configurables
@@ -14,7 +15,7 @@ Sistema SaaS multi-tenant construido con NestJS, Prisma y PostgreSQL siguiendo a
 - 💰 **Facturación**: Sistema completo de invoicing y pagos
 - 📁 **Gestión Documental**: Upload y organización de archivos
 - 🔌 **API Pública**: REST API con API Keys
-- 📈 **Métricas**: Dashboard con KPIs por tenant
+- 📈 **Health & Metrics**: Monitoreo completo del sistema con métricas de CPU, memoria y disco
 - 🔍 **Auditoría**: Tracking completo de cambios
 
 ## 🏗️ Arquitectura
@@ -23,10 +24,22 @@ El proyecto sigue **Arquitectura Hexagonal (Ports & Adapters)** con la siguiente
 
 ```
 src/context/
-├── auth/           # Módulo de autenticación JWT
+├── auth/           # Módulo de autenticación JWT + /me endpoint
 ├── user/           # Módulo de usuarios
 ├── company/        # Módulo de empresas
-└── health/         # Health check
+├── role/           # Módulo de roles y permisos
+├── project/        # Módulo de proyectos
+├── task/           # Módulo de tareas
+├── contact/        # Módulo de contactos (CRM)
+├── deal/           # Módulo de oportunidades
+├── invoice/        # Módulo de facturación
+├── notification/   # Módulo de notificaciones
+├── document/       # Módulo de documentos
+├── event/          # Módulo de eventos
+├── workflow/       # Módulo de workflows
+├── custom-field/   # Módulo de campos personalizados
+├── setting/        # Módulo de configuraciones (NUEVO v2.1.0)
+└── health/         # Health check mejorado con métricas del sistema
 ```
 
 Cada módulo contiene:

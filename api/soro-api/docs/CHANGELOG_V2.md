@@ -1,5 +1,51 @@
 # Changelog - Phase V2
 
+## 🚀 Version 2.1.0 - Settings & Health Improvements
+
+**Fecha**: 2025-11-19
+
+### 🆕 Nuevas Funcionalidades
+
+#### Settings Module
+- ✅ **Settings Module**: Sistema completo de configuraciones multi-tenant
+  - Categorías: GENERAL, SECURITY, NOTIFICATIONS, BILLING, INTEGRATIONS, APPEARANCE
+  - Visibilidad pública/privada por configuración
+  - Clave única por empresa
+  - 6 endpoints REST completos (CRUD + list + get by key)
+  - Documentación Swagger completa
+
+#### Auth Improvements
+- ✅ **Endpoint /auth/me**: Obtener usuario autenticado desde JWT
+  - Soporta Bearer Token y Cookies
+  - Retorna datos completos del usuario sin password
+  - Documentado en Swagger
+
+#### Health Module Improvements
+- ✅ **Health Check Mejorado**: Información detallada del sistema
+  - Métricas de CPU (uso, cores, modelo)
+  - Métricas de memoria (total, usado, libre, porcentaje)
+  - Métricas de disco (total, usado, libre, porcentaje)
+  - Estado de servicios (Database, API Server)
+  - Uptime del servidor
+  - Versión de la aplicación
+  - 4 endpoints: `/health`, `/health/ping`, `/health/basic`, `/health/metrics`
+
+### 🔧 Mejoras
+
+#### Base de Datos
+- Migración `20251119142955_add_setting_module`
+- Modelo `Setting` actualizado con campos: key, value, description, category, isPublic
+- Enum `SettingCategory` agregado
+- Índices optimizados en companyId, category, isPublic
+- Constraint único en [key, companyId]
+
+#### Documentación
+- Todos los nuevos endpoints documentados en Swagger
+- DTOs con validaciones y decoradores ApiProperty
+- Responses documentadas con ejemplos
+
+---
+
 ## 🎉 Version 2.0.0 - Phase V2 Release
 
 **Fecha**: 2024-11-13
