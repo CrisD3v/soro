@@ -123,6 +123,12 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
       label: 'Sistema',
       items: [
         {
+          id: 'events',
+          label: 'Eventos',
+          icon: <Activity className="w-5 h-5" />,
+          href: '/dashboard/events',
+        },
+        {
           id: 'health',
           label: 'Health Check',
           icon: <Activity className="w-5 h-5" />,
