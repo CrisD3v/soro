@@ -5,6 +5,7 @@ import { HealthModule } from '@context/health/health.module';
 import { PermissionModule } from '@context/permission/permission.module';
 import { ProjectModule } from '@context/project/project.module';
 import { RoleModule } from '@context/role/role.module';
+import { SettingModule } from '@context/setting/setting.module';
 import { TaskModule } from '@context/task/task.module';
 import { UserModule } from '@context/user/user.module';
 import { Module } from '@nestjs/common';
@@ -48,6 +49,7 @@ import { WorkflowModule } from './context/workflow/workflow.module';
     EventModule,
     CustomFieldModule,
     WorkflowModule,
+    SettingModule,
   ],
   controllers: [],
   providers: [
