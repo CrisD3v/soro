@@ -1,10 +1,15 @@
 'use client';
 
+import { CompanySwitcher } from '@/components/molecules/CompanySwitcher';
+import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme/useTheme';
-import { AnimatePresence, motion } from 'motion/react';
+import { useUserRole } from '@/hooks/useUserRole';
 import { Bell, ChevronDown, Globe, LogOut, Moon, Settings, Sun, User } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { TopBarProps } from './TopBar.types';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export const TopBar = ({
   companyName,
@@ -16,8 +21,38 @@ export const TopBar = ({
   className = '',
 }: TopBarProps) => {
   const { theme, toggleTheme } = useTheme();
+  const { user, isLoading: isLoadingUser } = useAuth();
+  const { roleName, isLoading: isLoadingRole } = useUserRole();
+  const router = useRouter();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  // Obtener nombre real del usuario
+  const displayName = user?.fullName ||
+    (user?.name && user?.lastName ? `${user.name} ${user.lastName}` : user?.name) ||
+    userName ||
+    'Usuario';
+
+  // Estado de carga general
+  const isLoading = isLoadingUser || isLoadingRole;
+
+  // Handlers para navegación
+  const handleProfileClick = () => {
+    if (user?.id) {
+      router.push(`/dashboard/users/${user.id}`);
+      setShowUserMenu(false);
+    }
+  };
+
+  const handleSettingsClick = () => {
+    router.push('/dashboard/settings');
+    setShowUserMenu(false);
+  };
+
+  const handleNotificationsClick = () => {
+    router.push('/dashboard/notifications');
+    setShowNotifications(false);
+  };
 
   return (
     <header className={`sticky top-0 z-30 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 ${className}`}>
@@ -46,6 +81,9 @@ export const TopBar = ({
 
         {/* Right: Actions */}
         <div className="flex items-center gap-3">
+          {/* Company Switcher (solo para OWNER) */}
+          <CompanySwitcher />
+
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
@@ -90,6 +128,14 @@ export const TopBar = ({
                       No hay notificaciones nuevas
                     </p>
                   </div>
+                  <div className="p-2 border-t border-gray-200 dark:border-gray-700">
+                    <button
+                      onClick={handleNotificationsClick}
+                      className="w-full px-3 py-2 text-sm text-purple-600 dark:text-purple-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                    >
+                      Ver todas las notificaciones
+                    </button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -102,22 +148,31 @@ export const TopBar = ({
 
           {/* User Menu */}
           <div className="relative">
-            <button
-              onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-150"
-            >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center text-white font-semibold">
-                {userAvatar ? (
-                  <img src={userAvatar} alt={userName} className="w-full h-full rounded-full object-cover" />
-                ) : (
-                  userName.charAt(0).toUpperCase()
-                )}
+            {isLoading ? (
+              // Skeleton loader mientras carga
+              <div className="flex items-center gap-3 px-3 py-2">
+                <Skeleton className="w-8 h-8 rounded-full" />
+                <Skeleton className="hidden md:block w-24 h-4" />
+                <Skeleton className="w-4 h-4" />
               </div>
-              <span className="hidden md:block text-sm font-medium text-gray-700 dark:text-gray-300">
-                {userName}
-              </span>
-              <ChevronDown className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-            </button>
+            ) : (
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-150"
+              >
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center text-white font-semibold">
+                  {userAvatar ? (
+                    <img src={userAvatar} alt={displayName} className="w-full h-full rounded-full object-cover" />
+                  ) : (
+                    displayName.charAt(0).toUpperCase()
+                  )}
+                </div>
+                <span className="hidden md:block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {displayName}
+                </span>
+                <ChevronDown className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+              </button>
+            )}
 
             {/* User Dropdown */}
             <AnimatePresence>
@@ -130,15 +185,21 @@ export const TopBar = ({
                   className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
                 >
                   <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                    <p className="font-semibold text-gray-900 dark:text-white">{userName}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Administrador</p>
+                    <p className="font-semibold text-gray-900 dark:text-white">{displayName}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 capitalize">{roleName}</p>
                   </div>
                   <div className="p-2">
-                    <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left">
+                    <button
+                      onClick={handleProfileClick}
+                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+                    >
                       <User className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                       <span className="text-sm text-gray-700 dark:text-gray-300">Mi Perfil</span>
                     </button>
-                    <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left">
+                    <button
+                      onClick={handleSettingsClick}
+                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+                    >
                       <Settings className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                       <span className="text-sm text-gray-700 dark:text-gray-300">Configuración</span>
                     </button>
