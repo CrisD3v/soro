@@ -110,10 +110,10 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
           href: '/dashboard/invoices',
         },
         {
-          id: 'reports',
-          label: 'Reportes',
+          id: 'metrics',
+          label: 'Métricas',
           icon: <BarChart3 className="w-5 h-5" />,
-          href: '/dashboard/reports',
+          href: '/dashboard/metrics',
         },
       ],
     },
