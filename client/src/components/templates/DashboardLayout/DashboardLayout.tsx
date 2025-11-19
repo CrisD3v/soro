@@ -10,6 +10,7 @@ import {
   Package,
   Settings,
   Shield,
+  UserCircle,
   Users
 } from 'lucide-react';
 import { useState } from 'react';
@@ -80,6 +81,12 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
           label: 'Tareas',
           icon: <CheckSquare className="w-5 h-5" />,
           href: '/dashboard/tasks',
+        },
+        {
+          id: 'contacts',
+          label: 'Contactos',
+          icon: <UserCircle className="w-5 h-5" />,
+          href: '/dashboard/contacts',
         },
         {
           id: 'reports',
