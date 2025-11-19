@@ -6,9 +6,11 @@ import { LoginDto } from '@context/auth/application/dto/login.dto';
 import { LoginUseCase } from '@context/auth/application/use-cases/login.use-case';
 import { LogoutUseCase } from '@context/auth/application/use-cases/logout.use-case';
 import { RefreshTokenUseCase } from '@context/auth/application/use-cases/refresh-token.use-case';
+import { UserRepositoryPort } from '@context/user/domain/ports/user.repository.port';
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -17,9 +19,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -27,7 +31,8 @@ export class AuthController {
     private readonly refreshTokenUseCase: RefreshTokenUseCase,
     private readonly logoutUseCase: LogoutUseCase,
     private readonly configService: ConfigService,
-  ) {}
+    private readonly userRepository: UserRepositoryPort,
+  ) { }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
@@ -118,5 +123,56 @@ export class AuthController {
     // Limpiar cookies
     res.clearCookie('accessToken', { path: '/' });
     res.clearCookie('refreshToken', { path: '/' });
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Obtener usuario autenticado',
+    description: 'Retorna la información del usuario autenticado usando el JWT del accessToken',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Usuario autenticado obtenido exitosamente',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', format: 'uuid' },
+        email: { type: 'string', format: 'email' },
+        name: { type: 'string' },
+        lastName: { type: 'string' },
+        fullName: { type: 'string' },
+        documentNumber: { type: 'string' },
+        documentType: { type: 'string', enum: ['CC', 'CE', 'TI', 'NIT', 'PASSPORT'] },
+        phone: { type: 'string' },
+        companyId: { type: 'string', format: 'uuid' },
+      },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'No autorizado - Token inválido' })
+  async getMe(@Req() req: Request) {
+    const user = (req as any).user;
+    const userId = user.sub;
+
+    // Obtener datos completos del usuario
+    const fullUser = await this.userRepository.findById(userId);
+
+    if (!fullUser) {
+      throw new Error('User not found');
+    }
+
+    // Retornar solo los datos necesarios (sin password)
+    return {
+      id: fullUser.id,
+      email: fullUser.email,
+      name: fullUser.name,
+      lastName: fullUser.lastName,
+      fullName: `${fullUser.name} ${fullUser.lastName}`,
+      documentNumber: fullUser.documentNumber,
+      documentType: fullUser.documentType,
+      phone: fullUser.phone,
+      companyId: fullUser.companyId,
+    };
   }
 }
