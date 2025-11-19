@@ -15,7 +15,8 @@ import {
   Settings,
   Shield,
   UserCircle,
-  Users
+  Users,
+  Workflow,
 } from 'lucide-react';
 import { useState } from 'react';
 import { Sidebar } from '../../organisms/Sidebar/Sidebar';
@@ -122,6 +123,12 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
       id: 'system',
       label: 'Sistema',
       items: [
+        {
+          id: 'workflows',
+          label: 'Workflows',
+          icon: <Workflow className="w-5 h-5" />,
+          href: '/dashboard/workflows',
+        },
         {
           id: 'events',
           label: 'Eventos',
