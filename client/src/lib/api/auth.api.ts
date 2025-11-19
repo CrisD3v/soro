@@ -22,6 +22,16 @@ export const authApi = {
   },
 
   /**
+   * Get Current User - Obtener usuario autenticado actual
+   * Usa el accessToken de la cookie para obtener el usuario
+   */
+  me: async (): Promise<UserData> => {
+    return apiClient.get<UserData>('/auth/me', {
+      requiresAuth: true,
+    });
+  },
+
+  /**
    * Register - Crear nuevo usuario
    */
   register: async (userData: RegisterRequest): Promise<UserData> => {
