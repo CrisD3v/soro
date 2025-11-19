@@ -8,6 +8,19 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- **Módulo de Events (100% Completo)**:
+  - 1 página implementada (timeline de eventos)
+  - Timeline visual de eventos del sistema
+  - 19 tipos de eventos (usuarios, empresas, proyectos, tareas, deals, facturas, documentos, notificaciones)
+  - 4 estados: Pendiente, Procesando, Completado, Fallido
+  - Stats cards con métricas (total, pendientes, completados, fallidos)
+  - Filtros por categoría y estado
+  - Visualización de payload de eventos
+  - Timestamps de creación y procesamiento
+  - Iconos distintivos por estado
+  - Auto-refresh cada 30 segundos
+  - Colores distintivos por estado
+
 - **Módulo de Health (100% Completo)**:
   - 1 página implementada (health check y monitoreo)
   - Estado general del sistema (uptime, versión, última verificación)
