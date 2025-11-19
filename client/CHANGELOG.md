@@ -8,6 +8,24 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- **Módulo de Invoices (100% Completo)**:
+  - 2 páginas implementadas (lista, detalle)
+  - Context menu funcional con 2 opciones
+  - Gestión completa de facturas
+  - 5 estados: Borrador, Enviada, Pagada, Vencida, Cancelada
+  - Stats cards con métricas financieras (total, monto, pagadas, vencidas)
+  - Visualización de items de factura
+  - Formato de moneda USD profesional
+  - Cálculo automático de subtotal, impuestos y total
+
+- **Módulo de Documents (100% Completo)**:
+  - 1 página implementada (lista)
+  - Context menu funcional con 3 opciones
+  - Gestión de archivos y documentos
+  - Stats cards con métricas de archivos (total, tamaño, PDFs, imágenes)
+  - Formato de tamaño en B/KB/MB
+  - Descarga y visualización de documentos
+
 - **Módulo de Deals (100% Completo)**:
   - 3 páginas implementadas (lista, detalle, editar)
   - Context menu funcional con 3 opciones
@@ -60,6 +78,8 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   - Soporte para empresa padre/subsidiarias
 
 - **APIs Completas**:
+  - Invoice API (5 endpoints: getAll, getById, create, update, delete)
+  - Document API (5 endpoints: getAll, getById, create, update, delete)
   - Deal API (5 endpoints: getAll, getById, create, update, delete)
   - Contact API (5 endpoints: getAll, getById, create, update, delete)
   - Task API (5 endpoints: getAll, getById, create, update, delete)
@@ -81,11 +101,13 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   - Variantes success y destructive
 
 - **Patrón CRUD Establecido**:
-  - 73 commits atómicos organizados
+  - 81 commits atómicos organizados
   - Patrón replicable para nuevos módulos
   - Documentación completa en FRONT_CONTEXT.md
   - Layout de formularios optimizado (2 columnas)
   - Sistema CRM completo (Contacts + Deals)
+  - Sistema de facturación implementado
+  - Gestión de documentos funcional
 
 - **Páginas de Gestión de Usuarios Completas**:
   - `/dashboard/users/[id]` - Página de detalle con toda la información del usuario
@@ -109,9 +131,11 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Documentación de estados (hover, focus, disabled)
 - Guía de animaciones y transiciones
 - Layout del dashboard (`/dashboard/layout.tsx`) con DashboardLayout template
-- Enlaces en el sidebar: Usuarios, Empresas, Roles, Proyectos, Tareas, Contactos, Deals
+- Enlaces en el sidebar: Usuarios, Empresas, Roles, Proyectos, Tareas, Contactos, Deals, Documentos, Facturas
 - Páginas completamente integradas en el dashboard
 - Sistema CRM completo con pipeline de ventas
+- Sistema de facturación con items
+- Gestión de documentos y archivos
 
 ### Changed
 - **DataTable** - Mejorado soporte para light/dark mode
