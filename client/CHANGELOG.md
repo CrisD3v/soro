@@ -8,6 +8,18 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- **Módulo de Workflows (100% Completo)**:
+  - 3 páginas implementadas (lista, detalle, edición)
+  - CRUD completo con validación
+  - 3 tipos de trigger: Manual, Programado, Basado en Eventos
+  - Configuración JSON flexible
+  - Estados activo/inactivo
+  - Stats cards con métricas (total, activos, inactivos, manuales)
+  - WorkflowForm con editor JSON
+  - Ejemplos de configuración por tipo de trigger
+  - Colores distintivos por tipo de trigger
+  - Filtros por tipo de trigger y búsqueda
+
 - **Módulo de Events (100% Completo)**:
   - 1 página implementada (timeline de eventos)
   - Timeline visual de eventos del sistema
