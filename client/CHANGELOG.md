@@ -8,6 +8,20 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- **Módulo de Metrics (100% Completo)**:
+  - 1 página implementada (dashboard de métricas)
+  - Dashboard completo con 8 secciones de métricas
+  - Métricas de usuarios (total, activos, inactivos, nuevos)
+  - Métricas de proyectos (total, activos, completados, tasa de completación)
+  - Métricas de tareas (total, en progreso, completadas, tasa de completación)
+  - Métricas de deals (total, ganados, valor total, tasa de éxito)
+  - Métricas de facturas (total, monto, pagadas, tasa de cobro)
+  - Métricas de documentos (total, tamaño, subidos este mes)
+  - Métricas de performance (tiempo de respuesta, requests, tasa de error, uptime)
+  - Filtros por período (día, semana, mes, año)
+  - Formato de moneda y porcentajes
+  - Animaciones escalonadas con motion
+
 - **Módulo de Settings (100% Completo)**:
   - 3 páginas implementadas (lista, detalle, editar)
   - CRUD completo con validación
