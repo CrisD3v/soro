@@ -5,6 +5,7 @@ import {
   Bell,
   Building,
   CheckSquare,
+  FileText,
   FolderKanban,
   Handshake,
   LayoutDashboard,
@@ -94,6 +95,12 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
           label: 'Deals',
           icon: <Handshake className="w-5 h-5" />,
           href: '/dashboard/deals',
+        },
+        {
+          id: 'documents',
+          label: 'Documentos',
+          icon: <FileText className="w-5 h-5" />,
+          href: '/dashboard/documents',
         },
         {
           id: 'reports',
