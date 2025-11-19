@@ -165,7 +165,7 @@ client/
 - `/auth` - Autenticación (login/register/reset)
 - `/dashboard` - Dashboard principal (protegido) ✅
 
-### Módulos Completados (6/16 - 37.5%)
+### Módulos Completados (7/16 - 43.75%)
 
 #### Usuarios ✅
 - `/dashboard/users` - Lista con DataTable y stats
@@ -201,7 +201,12 @@ client/
 - `/dashboard/contacts/[id]` - Detalle completo
 - `/dashboard/contacts/[id]/edit` - Edición
 
-### Próximos Módulos (10/16 - 62.5%)
+#### Deals (CRM) ✅
+- `/dashboard/deals` - Lista con DataTable y stats
+- `/dashboard/deals/[id]` - Detalle completo
+- `/dashboard/deals/[id]/edit` - Edición
+
+### Próximos Módulos (9/16 - 56.25%)
 - `/dashboard/deals` - CRM - Deals
 - `/dashboard/invoices` - Facturación
 - `/dashboard/documents` - Gestión de documentos
@@ -311,6 +316,6 @@ Desarrollado por el equipo de SORO.
 
 ---
 
-**Versión**: 0.6.0
+**Versión**: 0.7.0
 **Última actualización**: 2025-11-19
-**Estado**: 🚧 En desarrollo activo - 6 módulos completados (37.5%)
+**Estado**: 🚧 En desarrollo activo - 7 módulos completados (43.75%) - CRM completo

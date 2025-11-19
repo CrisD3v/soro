@@ -8,6 +8,16 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- **Módulo de Deals (100% Completo)**:
+  - 3 páginas implementadas (lista, detalle, editar)
+  - Context menu funcional con 3 opciones
+  - CRUD completo con validación
+  - 6 etapas: Lead, Calificado, Propuesta, Negociación, Ganado, Perdido
+  - Stats cards con métricas de ventas (total, valor total, activos, ganados)
+  - DealForm con campos de valor monetario y probabilidad
+  - Colores distintivos por etapa del pipeline
+  - Formato de moneda USD profesional
+
 - **Módulo de Contacts (100% Completo)**:
   - 3 páginas implementadas (lista, detalle, editar)
   - Context menu funcional con 3 opciones
@@ -29,6 +39,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   - TaskForm con layout optimizado (2 filas de 2 columnas)
 
 - **Nuevos Selectores Dinámicos**:
+  - ContactSelect - Selector de contactos con carga desde API
   - UserSelect - Selector de usuarios con carga desde API
   - ProjectSelect - Selector de proyectos con carga desde API
   - Soporte para filtrado por companyId
@@ -49,6 +60,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   - Soporte para empresa padre/subsidiarias
 
 - **APIs Completas**:
+  - Deal API (5 endpoints: getAll, getById, create, update, delete)
   - Contact API (5 endpoints: getAll, getById, create, update, delete)
   - Task API (5 endpoints: getAll, getById, create, update, delete)
   - User API (7 endpoints incluyendo delete)
@@ -57,8 +69,8 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 - **Componentes Reutilizables**:
   - DataTable genérico con ag-grid y tema purple
-  - ContactForm, TaskForm, UserForm y CompanyForm con validación Zod
-  - UserSelect, ProjectSelect, CompanySelect y RoleSelect dinámicos
+  - DealForm, ContactForm, TaskForm, UserForm y CompanyForm con validación Zod
+  - ContactSelect, UserSelect, ProjectSelect, CompanySelect y RoleSelect dinámicos
   - Textarea component de shadcn/ui
   - ConfirmDialog para confirmaciones
   - Context menu support en DataTable
@@ -69,11 +81,11 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   - Variantes success y destructive
 
 - **Patrón CRUD Establecido**:
-  - 58 commits atómicos organizados
+  - 73 commits atómicos organizados
   - Patrón replicable para nuevos módulos
   - Documentación completa en FRONT_CONTEXT.md
   - Layout de formularios optimizado (2 columnas)
-  - Sistema CRM iniciado con Contacts
+  - Sistema CRM completo (Contacts + Deals)
 
 - **Páginas de Gestión de Usuarios Completas**:
   - `/dashboard/users/[id]` - Página de detalle con toda la información del usuario
@@ -97,9 +109,9 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Documentación de estados (hover, focus, disabled)
 - Guía de animaciones y transiciones
 - Layout del dashboard (`/dashboard/layout.tsx`) con DashboardLayout template
-- Enlaces en el sidebar: Usuarios, Empresas, Roles, Proyectos, Tareas, Contactos
+- Enlaces en el sidebar: Usuarios, Empresas, Roles, Proyectos, Tareas, Contactos, Deals
 - Páginas completamente integradas en el dashboard
-- Sistema CRM iniciado
+- Sistema CRM completo con pipeline de ventas
 
 ### Changed
 - **DataTable** - Mejorado soporte para light/dark mode
