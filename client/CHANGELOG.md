@@ -8,6 +8,16 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- **Módulo de Settings (100% Completo)**:
+  - 3 páginas implementadas (lista, detalle, editar)
+  - CRUD completo con validación
+  - 6 categorías: General, Seguridad, Notificaciones, Facturación, Integraciones, Apariencia
+  - Stats cards con métricas (total, públicas, privadas, categorías)
+  - SettingForm con campos de clave, valor, descripción, categoría y visibilidad
+  - Colores distintivos por categoría
+  - Filtros por categoría y búsqueda
+  - Gestión de configuraciones públicas y privadas
+
 - **Módulo de Invoices (100% Completo)**:
   - 2 páginas implementadas (lista, detalle)
   - Context menu funcional con 2 opciones
