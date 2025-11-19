@@ -3,6 +3,7 @@
 /**
  * Users Page
  * Página de gestión de usuarios con Dialog, Form y Context Menu
+ * Incluye filtrado automático por empresa (multi-tenant)
  */
 
 import { DataTable } from '@/components/organisms/DataTable';
@@ -22,8 +23,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 import type { CreateUserDto, User } from '@/lib/api/user.types';
 import { useCreateUser, useUsers } from '@/lib/queries/user.queries';
+import { getCompanyFilter } from '@/lib/utils/company';
 import type { ColDef } from 'ag-grid-community';
 import { Edit, Eye, FileSignature, Shield, Trash2 } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -33,7 +36,11 @@ import { useMemo, useState } from 'react';
 export default function UsersPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const { data: users = [], isLoading, error } = useUsers();
+  const { user: currentUser, currentCompanyId } = useAuth();
+
+  // Filtrado automático por empresa
+  const companyFilter = getCompanyFilter(currentUser, currentCompanyId || undefined);
+  const { data: users = [], isLoading, error } = useUsers({ companyId: companyFilter });
   const createUserMutation = useCreateUser();
 
   // Estado del dialog
