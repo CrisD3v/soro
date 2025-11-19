@@ -8,6 +8,17 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- **Módulo de Health (100% Completo)**:
+  - 1 página implementada (health check y monitoreo)
+  - Estado general del sistema (uptime, versión, última verificación)
+  - Monitoreo de servicios (estado, tiempo de respuesta, última verificación)
+  - Recursos del sistema (CPU, memoria, disco, red)
+  - Indicadores visuales de estado (saludable, degradado, no saludable)
+  - Barras de progreso para uso de recursos
+  - Formato de bytes y uptime
+  - Auto-refresh cada 30 segundos
+  - Colores distintivos por estado
+
 - **Módulo de Metrics (100% Completo)**:
   - 1 página implementada (dashboard de métricas)
   - Dashboard completo con 8 secciones de métricas
