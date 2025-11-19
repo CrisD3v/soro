@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Activity,
   BarChart3,
   Bell,
   Building,
@@ -121,6 +122,12 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
       id: 'system',
       label: 'Sistema',
       items: [
+        {
+          id: 'health',
+          label: 'Health Check',
+          icon: <Activity className="w-5 h-5" />,
+          href: '/dashboard/health',
+        },
         {
           id: 'settings',
           label: 'Ajustes',
