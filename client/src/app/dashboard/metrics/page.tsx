@@ -12,8 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { MetricFilters } from '@/lib/api/metric.types';
-import { useSystemMetrics } from '@/lib/queries/metric.queries';
+import type { MetricFilters, SystemMetrics } from '@/lib/api/metric.types';
 import {
   Activity,
   BarChart3,
@@ -29,10 +28,81 @@ import {
 import { motion } from 'motion/react';
 import { useState } from 'react';
 
+// Mock data hasta que el backend esté implementado
+const mockMetrics: SystemMetrics = {
+  users: {
+    total: 127,
+    active: 98,
+    inactive: 29,
+    newThisMonth: 12,
+    byRole: { admin: 5, manager: 15, employee: 107 },
+  },
+  companies: {
+    total: 45,
+    active: 42,
+    withHierarchy: 18,
+    newThisMonth: 3,
+  },
+  projects: {
+    total: 234,
+    active: 156,
+    completed: 67,
+    onHold: 8,
+    cancelled: 3,
+    completionRate: 28.6,
+  },
+  tasks: {
+    total: 1847,
+    todo: 423,
+    inProgress: 289,
+    inReview: 156,
+    done: 934,
+    cancelled: 45,
+    completionRate: 50.6,
+    avgCompletionTime: 3.2,
+  },
+  deals: {
+    total: 89,
+    active: 45,
+    won: 32,
+    lost: 12,
+    totalValue: 2450000,
+    wonValue: 1680000,
+    winRate: 72.7,
+    avgDealSize: 27528,
+  },
+  invoices: {
+    total: 156,
+    draft: 12,
+    sent: 34,
+    paid: 98,
+    overdue: 8,
+    cancelled: 4,
+    totalAmount: 3250000,
+    paidAmount: 2890000,
+    overdueAmount: 145000,
+    collectionRate: 88.9,
+  },
+  documents: {
+    total: 2341,
+    totalSize: 15728640000, // ~15GB
+    byType: { pdf: 1234, docx: 567, xlsx: 340, jpg: 200 },
+    uploadedThisMonth: 234,
+  },
+  performance: {
+    avgResponseTime: 145,
+    totalRequests: 45678,
+    errorRate: 0.8,
+    uptime: 99.9,
+  },
+};
+
 export default function MetricsPage() {
   const [period, setPeriod] = useState<MetricFilters['period']>('month');
 
-  const { data: metrics, isLoading } = useSystemMetrics({ period });
+  // Usar mock data en lugar de la API
+  const metrics = mockMetrics;
+  const isLoading = false;
 
   // Función para formatear moneda
   const formatCurrency = (amount: number) => {

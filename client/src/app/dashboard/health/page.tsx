@@ -5,13 +5,13 @@
  * Página de monitoreo y health checks del sistema
  */
 
+import type { HealthStatus } from '@/lib/api/health.types';
 import {
   HEALTH_STATUS_COLORS,
   HEALTH_STATUS_LABELS,
   SERVICE_STATUS_COLORS,
   SERVICE_STATUS_LABELS,
 } from '@/lib/api/health.types';
-import { useHealth } from '@/lib/queries/health.queries';
 import {
   Activity,
   AlertTriangle,
@@ -26,8 +26,86 @@ import {
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
+// Mock data hasta que el backend esté implementado
+const mockHealth: HealthStatus = {
+  status: 'healthy',
+  timestamp: new Date().toISOString(),
+  uptime: 2592000, // 30 días en segundos
+  version: '2.0.0',
+  services: [
+    {
+      name: 'Database',
+      status: 'up',
+      responseTime: 12,
+      lastCheck: new Date().toISOString(),
+      message: 'PostgreSQL funcionando correctamente',
+    },
+    {
+      name: 'API Server',
+      status: 'up',
+      responseTime: 8,
+      lastCheck: new Date().toISOString(),
+      message: 'Servidor API respondiendo',
+    },
+    {
+      name: 'Cache',
+      status: 'up',
+      responseTime: 3,
+      lastCheck: new Date().toISOString(),
+      message: 'Redis funcionando',
+    },
+    {
+      name: 'Storage',
+      status: 'up',
+      responseTime: 15,
+      lastCheck: new Date().toISOString(),
+      message: 'Almacenamiento disponible',
+    },
+    {
+      name: 'Email Service',
+      status: 'up',
+      responseTime: 45,
+      lastCheck: new Date().toISOString(),
+      message: 'Servicio de email operativo',
+    },
+    {
+      name: 'Background Jobs',
+      status: 'up',
+      responseTime: 5,
+      lastCheck: new Date().toISOString(),
+      message: 'Workers procesando tareas',
+    },
+  ],
+  system: {
+    cpu: {
+      usage: 35.2,
+      cores: 8,
+      model: 'Intel Core i7',
+    },
+    memory: {
+      total: 16777216000, // 16GB
+      used: 8388608000, // 8GB
+      free: 8388608000, // 8GB
+      usage: 50.0,
+    },
+    disk: {
+      total: 536870912000, // 500GB
+      used: 268435456000, // 250GB
+      free: 268435456000, // 250GB
+      usage: 50.0,
+    },
+    network: {
+      latency: 12,
+      bandwidth: 1000,
+      packetsLost: 0,
+    },
+  },
+};
+
 export default function HealthPage() {
-  const { data: health, isLoading } = useHealth();
+  // Usar mock data en lugar de la API
+  const health = mockHealth;
+  const isLoading = false;
 
   // Función para formatear bytes
   const formatBytes = (bytes: number) => {

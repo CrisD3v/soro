@@ -12,15 +12,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { EventFilters } from '@/lib/api/event.types';
+import type { Event, EventFilters } from '@/lib/api/event.types';
 import {
   EVENT_CATEGORIES,
   EVENT_STATUS_COLORS,
   EVENT_STATUS_LABELS,
   EVENT_TYPE_LABELS,
-  EventStatus
+  EventStatus,
+  EventType,
 } from '@/lib/api/event.types';
-import { useEvents } from '@/lib/queries/event.queries';
 import {
   Activity,
   AlertCircle,
@@ -32,6 +32,94 @@ import {
 import { motion } from 'motion/react';
 import { useState } from 'react';
 
+// Mock data hasta que el backend esté implementado
+const mockEvents: Event[] = [
+  {
+    id: '1',
+    type: EventType.USER_CREATED,
+    entityType: 'User',
+    entityId: 'user-123',
+    payload: { email: 'nuevo@example.com', name: 'Usuario Nuevo' },
+    status: EventStatus.COMPLETED,
+    processedAt: new Date(Date.now() - 3600000).toISOString(),
+    createdAt: new Date(Date.now() - 3600000).toISOString(),
+    updatedAt: new Date(Date.now() - 3600000).toISOString(),
+    companyId: 'company-1',
+  },
+  {
+    id: '2',
+    type: EventType.PROJECT_CREATED,
+    entityType: 'Project',
+    entityId: 'project-456',
+    payload: { name: 'Nuevo Proyecto', status: 'ACTIVE' },
+    status: EventStatus.COMPLETED,
+    processedAt: new Date(Date.now() - 7200000).toISOString(),
+    createdAt: new Date(Date.now() - 7200000).toISOString(),
+    updatedAt: new Date(Date.now() - 7200000).toISOString(),
+    companyId: 'company-1',
+  },
+  {
+    id: '3',
+    type: EventType.INVOICE_PAID,
+    entityType: 'Invoice',
+    entityId: 'invoice-789',
+    payload: { amount: 5000, currency: 'USD' },
+    status: EventStatus.COMPLETED,
+    processedAt: new Date(Date.now() - 10800000).toISOString(),
+    createdAt: new Date(Date.now() - 10800000).toISOString(),
+    updatedAt: new Date(Date.now() - 10800000).toISOString(),
+    companyId: 'company-1',
+  },
+  {
+    id: '4',
+    type: EventType.TASK_COMPLETED,
+    entityType: 'Task',
+    entityId: 'task-321',
+    payload: { title: 'Tarea Importante', completedBy: 'user-123' },
+    status: EventStatus.COMPLETED,
+    processedAt: new Date(Date.now() - 14400000).toISOString(),
+    createdAt: new Date(Date.now() - 14400000).toISOString(),
+    updatedAt: new Date(Date.now() - 14400000).toISOString(),
+    companyId: 'company-1',
+  },
+  {
+    id: '5',
+    type: EventType.DEAL_WON,
+    entityType: 'Deal',
+    entityId: 'deal-654',
+    payload: { value: 25000, client: 'Cliente ABC' },
+    status: EventStatus.COMPLETED,
+    processedAt: new Date(Date.now() - 18000000).toISOString(),
+    createdAt: new Date(Date.now() - 18000000).toISOString(),
+    updatedAt: new Date(Date.now() - 18000000).toISOString(),
+    companyId: 'company-1',
+  },
+  {
+    id: '6',
+    type: EventType.DOCUMENT_UPLOADED,
+    entityType: 'Document',
+    entityId: 'doc-987',
+    payload: { filename: 'contrato.pdf', size: 2048000 },
+    status: EventStatus.PROCESSING,
+    processedAt: null,
+    createdAt: new Date(Date.now() - 1800000).toISOString(),
+    updatedAt: new Date(Date.now() - 1800000).toISOString(),
+    companyId: 'company-1',
+  },
+  {
+    id: '7',
+    type: EventType.NOTIFICATION_SENT,
+    entityType: 'Notification',
+    entityId: 'notif-111',
+    payload: { type: 'EMAIL', recipient: 'user@example.com' },
+    status: EventStatus.PENDING,
+    processedAt: null,
+    createdAt: new Date(Date.now() - 900000).toISOString(),
+    updatedAt: new Date(Date.now() - 900000).toISOString(),
+    companyId: 'company-1',
+  },
+];
+
 export default function EventsPage() {
   const [statusFilter, setStatusFilter] = useState<EventStatus | 'ALL'>('ALL');
   const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
@@ -40,7 +128,9 @@ export default function EventsPage() {
     status: statusFilter !== 'ALL' ? statusFilter : undefined,
   };
 
-  const { data: events, isLoading } = useEvents(filters);
+  // Usar mock data en lugar de la API
+  const events = mockEvents;
+  const isLoading = false;
 
   // Filtrar por categoría en el cliente
   const filteredEvents = events?.filter((event) => {
