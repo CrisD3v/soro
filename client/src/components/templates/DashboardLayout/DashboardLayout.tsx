@@ -6,6 +6,7 @@ import {
   Building,
   CheckSquare,
   FolderKanban,
+  Handshake,
   LayoutDashboard,
   Package,
   Settings,
@@ -87,6 +88,12 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
           label: 'Contactos',
           icon: <UserCircle className="w-5 h-5" />,
           href: '/dashboard/contacts',
+        },
+        {
+          id: 'deals',
+          label: 'Deals',
+          icon: <Handshake className="w-5 h-5" />,
+          href: '/dashboard/deals',
         },
         {
           id: 'reports',
