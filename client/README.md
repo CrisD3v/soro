@@ -23,12 +23,17 @@ Sistema de gestión empresarial completo con autenticación, dashboard interacti
 - **Testimonials** - Sección de testimonios
 - **Navegación** - NavBar con scroll detection
 
-### 🔐 Autenticación
+### 🔐 Autenticación y Autorización
 - **Login** - Con validación completa
 - **Registro** - Formulario multi-campo
 - **Recuperación** - Reset de contraseña
 - **Refresh Token** - Automático en interceptor
 - **Middleware** - Protección de rutas /dashboard
+- **Multi-Tenant** - Filtrado automático por empresa ✅
+- **Rol OWNER** - Acceso a todas las empresas ✅
+- **Guards** - Protección por roles y permisos ✅
+- **Company Switcher** - Selector de empresa para OWNER ✅
+- **Skeleton Loaders** - Loading states profesionales en TopBar ⭐ NUEVO
 
 ### 🎨 Diseño y UX
 - **Atomic Design** - Componentes organizados y escalables
@@ -37,6 +42,7 @@ Sistema de gestión empresarial completo con autenticación, dashboard interacti
 - **Responsive** - Mobile-first design
 - **Tooltips** - shadcn/ui en sidebar colapsado
 - **Scrollbar Personalizado** - Estilo elegante y sutil
+- **Skeleton Loaders** - Loading states profesionales ⭐ NUEVO
 
 ### 🏗️ Arquitectura
 - **Patrones de Diseño** - Factory, Repository, Compound Components, Query Key Factory
@@ -341,6 +347,6 @@ Desarrollado por el equipo de SORO.
 
 ---
 
-**Versión**: 1.0.0
+**Versión**: 1.1.0
 **Última actualización**: 2025-11-19
-**Estado**: ✅ COMPLETADO - 16 módulos implementados (100%) - Production Ready
+**Estado**: ✅ COMPLETADO - 16 módulos implementados (100%) - Multi-Tenant + Skeleton Loaders - Production Ready

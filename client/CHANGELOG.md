@@ -8,6 +8,39 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- **Sistema Multi-Tenant con Rol OWNER (100% Completo)**:
+  - AuthContext mejorado con roles, permisos y empresa actual
+  - Verificación automática de rol OWNER
+  - Métodos de autorización (hasRole, hasPermission, canAccessCompany)
+  - Selector de empresa para OWNER (CompanySwitcher)
+  - Utilidades de filtrado automático por empresa
+  - Guards de protección (ProtectedRoute, CanAccess)
+  - AppProviders wrapper para Client Components
+  - Documentación completa (MULTI_TENANT_IMPLEMENTATION.md, QUICK_UPDATE_GUIDE.md)
+
+- **Skeleton Loaders en TopBar**:
+  - Skeleton para botón de usuario (avatar, nombre, chevron)
+  - Skeleton para menú desplegable (nombre y rol)
+  - Estados de carga combinados (usuario + rol)
+  - Hook useRole para obtener datos de roles
+  - Eliminación de "undefined" durante carga
+  - UX mejorada con loading states profesionales
+
+### Changed
+- TopBar ahora muestra skeleton loaders durante carga de datos
+- AuthContext ahora incluye empresa actual y métodos de autorización
+- Layout principal usa AppProviders para manejar Client Components
+
+### Fixed
+- Problema de "undefined" en TopBar durante carga de usuario
+- Import de Skeleton component faltante en TopBar
+- Estados de carga no manejados correctamente en TopBar
+
+---
+
+## [0.4.0] - 2025-11-19
+
+### Added
 - **Módulo de Workflows (100% Completo)**:
   - 3 páginas implementadas (lista, detalle, edición)
   - CRUD completo con validación
