@@ -164,21 +164,46 @@ client/
 - `/` - Landing page
 - `/auth` - Autenticación (login/register/reset)
 - `/dashboard` - Dashboard principal (protegido) ✅
-- `/dashboard/users` - Gestión de usuarios ✅
-  - Lista de usuarios con ag-grid
-  - Estadísticas (Total, Con Firma, Con/Sin Roles)
-  - Filtros, ordenamiento y paginación
-  - Click en fila para ver detalle
-- `/dashboard/users/create` - Crear usuario (próximamente)
-- `/dashboard/users/[id]` - Ver/editar usuario (próximamente)
-- `/dashboard/companies` - Gestión de empresas (próximamente)
-- `/dashboard/roles` - Gestión de roles (próximamente)
-- `/dashboard/projects` - Gestión de proyectos (próximamente)
-- `/dashboard/tasks` - Gestión de tareas (próximamente)
-- `/dashboard/contacts` - CRM - Contactos (próximamente)
-- `/dashboard/deals` - CRM - Deals (próximamente)
-- `/dashboard/invoices` - Facturación (próximamente)
-- `/dashboard/settings` - Configuración (próximamente)
+
+### Módulos Completados (5/16 - 31%)
+
+#### Usuarios ✅
+- `/dashboard/users` - Lista con DataTable y stats
+- `/dashboard/users/[id]` - Detalle completo
+- `/dashboard/users/[id]/edit` - Edición
+- `/dashboard/users/[id]/roles` - Asignación de roles
+- `/dashboard/users/[id]/signature` - Gestión de firma
+
+#### Empresas ✅
+- `/dashboard/companies` - Lista con DataTable y stats
+- `/dashboard/companies/[id]` - Detalle completo
+- `/dashboard/companies/[id]/edit` - Edición
+- `/dashboard/companies/[id]/hierarchy` - Jerarquía empresarial
+
+#### Roles ✅
+- `/dashboard/roles` - Lista con DataTable y stats
+- `/dashboard/roles/[id]` - Detalle completo
+- `/dashboard/roles/[id]/edit` - Edición
+- `/dashboard/roles/[id]/permissions` - Gestión de permisos
+
+#### Proyectos ✅
+- `/dashboard/projects` - Lista con DataTable y stats
+- `/dashboard/projects/[id]` - Detalle completo
+- `/dashboard/projects/[id]/edit` - Edición
+
+#### Tareas ✅
+- `/dashboard/tasks` - Lista con DataTable y stats
+- `/dashboard/tasks/[id]` - Detalle completo
+- `/dashboard/tasks/[id]/edit` - Edición
+
+### Próximos Módulos (11/16 - 69%)
+- `/dashboard/contacts` - CRM - Contactos
+- `/dashboard/deals` - CRM - Deals
+- `/dashboard/invoices` - Facturación
+- `/dashboard/documents` - Gestión de documentos
+- `/dashboard/notifications` - Centro de notificaciones
+- `/dashboard/settings` - Configuración
+- Y más...
 
 ## 🔧 Tecnologías
 
@@ -282,6 +307,6 @@ Desarrollado por el equipo de SORO.
 
 ---
 
-**Versión**: 0.3.0
-**Última actualización**: 2025-11-14
-**Estado**: 🚧 En desarrollo activo - Módulo Users completado
+**Versión**: 0.5.0
+**Última actualización**: 2025-11-19
+**Estado**: 🚧 En desarrollo activo - 5 módulos completados (31%)

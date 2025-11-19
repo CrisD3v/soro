@@ -8,6 +8,22 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- **Módulo de Tasks (100% Completo)**:
+  - 3 páginas implementadas (lista, detalle, editar)
+  - Context menu funcional con 3 opciones
+  - CRUD completo con validación
+  - 5 estados: Por Hacer, En Progreso, En Revisión, Completada, Cancelada
+  - 4 prioridades: Baja, Media, Alta, Urgente
+  - Stats cards con métricas (total, por hacer, en progreso, completadas)
+  - Integración con ProjectSelect y UserSelect
+  - TaskForm con layout optimizado (2 filas de 2 columnas)
+
+- **Nuevos Selectores Dinámicos**:
+  - UserSelect - Selector de usuarios con carga desde API
+  - ProjectSelect - Selector de proyectos con carga desde API
+  - Soporte para filtrado por companyId
+  - Loading states durante carga
+
 - **Módulo de Usuarios (100% Completo)**:
   - 7 páginas implementadas (lista, detalle, editar, roles, firma)
   - Context menu funcional con 5 opciones
@@ -23,14 +39,15 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   - Soporte para empresa padre/subsidiarias
 
 - **APIs Completas**:
+  - Task API (5 endpoints: getAll, getById, create, update, delete)
   - User API (7 endpoints incluyendo delete)
   - Company API (7 endpoints incluyendo hierarchy)
   - Role API (8 endpoints)
 
 - **Componentes Reutilizables**:
   - DataTable genérico con ag-grid y tema purple
-  - UserForm y CompanyForm con validación Zod
-  - CompanySelect y RoleSelect dinámicos
+  - TaskForm, UserForm y CompanyForm con validación Zod
+  - UserSelect, ProjectSelect, CompanySelect y RoleSelect dinámicos
   - ConfirmDialog para confirmaciones
   - Context menu support en DataTable
 
@@ -40,9 +57,10 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   - Variantes success y destructive
 
 - **Patrón CRUD Establecido**:
-  - 28 commits atómicos organizados
+  - 50+ commits atómicos organizados
   - Patrón replicable para nuevos módulos
   - Documentación completa en FRONT_CONTEXT.md
+  - Layout de formularios optimizado (2 filas de 2 columnas)
 
 - **Páginas de Gestión de Usuarios Completas**:
   - `/dashboard/users/[id]` - Página de detalle con toda la información del usuario
@@ -66,8 +84,8 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Documentación de estados (hover, focus, disabled)
 - Guía de animaciones y transiciones
 - Layout del dashboard (`/dashboard/layout.tsx`) con DashboardLayout template
-- Enlace de "Usuarios" en el sidebar del dashboard
-- Página de usuarios completamente integrada en el dashboard
+- Enlaces en el sidebar: Usuarios, Empresas, Roles, Proyectos, Tareas
+- Páginas completamente integradas en el dashboard
 
 ### Changed
 - **DataTable** - Mejorado soporte para light/dark mode
@@ -212,4 +230,4 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ---
 
 **Mantenido por**: Equipo Frontend SORO
-**Última actualización**: 2025-11-14
+**Última actualización**: 2025-11-19
