@@ -8,6 +8,16 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- **Módulo de Contacts (100% Completo)**:
+  - 3 páginas implementadas (lista, detalle, editar)
+  - Context menu funcional con 3 opciones
+  - CRUD completo con validación
+  - 4 estados: Lead, Calificado, Cliente, Inactivo
+  - 6 fuentes: Sitio Web, Referido, Redes Sociales, Email, Teléfono, Otro
+  - Stats cards con métricas (total, leads, calificados, clientes)
+  - ContactForm con Textarea para notas
+  - Colores distintivos por estado
+
 - **Módulo de Tasks (100% Completo)**:
   - 3 páginas implementadas (lista, detalle, editar)
   - Context menu funcional con 3 opciones
@@ -39,6 +49,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   - Soporte para empresa padre/subsidiarias
 
 - **APIs Completas**:
+  - Contact API (5 endpoints: getAll, getById, create, update, delete)
   - Task API (5 endpoints: getAll, getById, create, update, delete)
   - User API (7 endpoints incluyendo delete)
   - Company API (7 endpoints incluyendo hierarchy)
@@ -46,8 +57,9 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 - **Componentes Reutilizables**:
   - DataTable genérico con ag-grid y tema purple
-  - TaskForm, UserForm y CompanyForm con validación Zod
+  - ContactForm, TaskForm, UserForm y CompanyForm con validación Zod
   - UserSelect, ProjectSelect, CompanySelect y RoleSelect dinámicos
+  - Textarea component de shadcn/ui
   - ConfirmDialog para confirmaciones
   - Context menu support en DataTable
 
@@ -57,10 +69,11 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   - Variantes success y destructive
 
 - **Patrón CRUD Establecido**:
-  - 50+ commits atómicos organizados
+  - 58 commits atómicos organizados
   - Patrón replicable para nuevos módulos
   - Documentación completa en FRONT_CONTEXT.md
-  - Layout de formularios optimizado (2 filas de 2 columnas)
+  - Layout de formularios optimizado (2 columnas)
+  - Sistema CRM iniciado con Contacts
 
 - **Páginas de Gestión de Usuarios Completas**:
   - `/dashboard/users/[id]` - Página de detalle con toda la información del usuario
@@ -84,8 +97,9 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Documentación de estados (hover, focus, disabled)
 - Guía de animaciones y transiciones
 - Layout del dashboard (`/dashboard/layout.tsx`) con DashboardLayout template
-- Enlaces en el sidebar: Usuarios, Empresas, Roles, Proyectos, Tareas
+- Enlaces en el sidebar: Usuarios, Empresas, Roles, Proyectos, Tareas, Contactos
 - Páginas completamente integradas en el dashboard
+- Sistema CRM iniciado
 
 ### Changed
 - **DataTable** - Mejorado soporte para light/dark mode
