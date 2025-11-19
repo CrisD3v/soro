@@ -2,7 +2,7 @@
 
 ## 📊 Resumen de Commits
 
-### 6 Commits Atómicos Realizados
+### 8 Commits Atómicos Realizados
 
 1. **docs(📚)**: actualizar documentación con skeleton loaders y multi-tenant
    - CHANGELOG.md actualizado
@@ -40,6 +40,17 @@
    - Eliminación de "undefined"
    - 1 archivo modificado
 
+7. **docs(📝)**: agregar resumen de commits de la sesión
+   - COMMIT_MESSAGE.txt con resumen detallado
+   - Historial de commits documentado
+   - 1 archivo creado
+
+8. **feat(🔐 auth)**: agregar método me() para obtener usuario autenticado
+   - Método me() en auth.api.ts
+   - Obtiene usuario desde /auth/me
+   - Usa accessToken de cookie
+   - 1 archivo modificado
+
 ---
 
 ## 📁 Archivos Afectados
@@ -56,15 +67,16 @@
 - src/hooks/useUserRole.ts
 - src/hooks/useCurrentCompany.ts
 
-### Modificados (5)
+### Modificados (6)
 - CHANGELOG.md
 - README.md
 - src/app/layout.tsx
 - src/components/templates/DashboardLayout/DashboardLayout.tsx
 - src/app/dashboard/users/page.tsx
 - src/components/organisms/TopBar/TopBar.tsx
+- src/lib/api/auth.api.ts
 
-### Total: 15 archivos (10 nuevos + 5 modificados)
+### Total: 17 archivos (11 nuevos + 6 modificados)
 
 ---
 
@@ -100,8 +112,8 @@
 **Versión:** 1.1.0
 **Status:** ✅ COMPLETADO
 **Tiempo:** ~3 horas
-**Commits:** 6 commits atómicos
-**Líneas:** ~600 líneas de código
+**Commits:** 8 commits atómicos
+**Líneas:** ~620 líneas de código
 
 ---
 
