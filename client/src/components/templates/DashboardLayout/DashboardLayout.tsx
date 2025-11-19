@@ -10,6 +10,7 @@ import {
   Handshake,
   LayoutDashboard,
   Package,
+  Receipt,
   Settings,
   Shield,
   UserCircle,
@@ -101,6 +102,12 @@ export const DashboardLayout = ({ children, className = '' }: DashboardLayoutPro
           label: 'Documentos',
           icon: <FileText className="w-5 h-5" />,
           href: '/dashboard/documents',
+        },
+        {
+          id: 'invoices',
+          label: 'Facturas',
+          icon: <Receipt className="w-5 h-5" />,
+          href: '/dashboard/invoices',
         },
         {
           id: 'reports',
