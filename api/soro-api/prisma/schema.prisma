@@ -46,19 +46,19 @@ model User {
   updatedAt      DateTime       @updatedAt
 
   // Relationships
-  company            Company              @relation("UserCompany", fields: [companyId], references: [id], onDelete: Cascade)
-  enlacedRecords     UserEnlacedRecords[]
-  createdProjects    Project[]            @relation("ProjectCreator")
-  assignedTasks      Task[]               @relation("TaskAssignee")
-  auditLogs          AuditLog[]           @relation("AuditPerformer")
-  notifications      Notification[]       @relation("UserNotifications")
-  createdContacts    Contact[]            @relation("ContactCreator")
-  createdDeals       Deal[]               @relation("DealCreator")
-  assignedDeals      Deal[]               @relation("DealAssignee")
-  createdInvoices    Invoice[]            @relation("InvoiceCreator")
-  createdDocuments   Document[]           @relation("DocumentCreator")
-  createdWorkflows   Workflow[]           @relation("WorkflowCreator")
-  eventLogs          EventLog[]           @relation("EventPerformer")
+  company          Company              @relation("UserCompany", fields: [companyId], references: [id], onDelete: Cascade)
+  enlacedRecords   UserEnlacedRecords[]
+  createdProjects  Project[]            @relation("ProjectCreator")
+  assignedTasks    Task[]               @relation("TaskAssignee")
+  auditLogs        AuditLog[]           @relation("AuditPerformer")
+  notifications    Notification[]       @relation("UserNotifications")
+  createdContacts  Contact[]            @relation("ContactCreator")
+  createdDeals     Deal[]               @relation("DealCreator")
+  assignedDeals    Deal[]               @relation("DealAssignee")
+  createdInvoices  Invoice[]            @relation("InvoiceCreator")
+  createdDocuments Document[]           @relation("DocumentCreator")
+  createdWorkflows Workflow[]           @relation("WorkflowCreator")
+  eventLogs        EventLog[]           @relation("EventPerformer")
 
   // Indexes
   @@index([email])
@@ -170,24 +170,24 @@ model Company {
   updatedAt DateTime  @updatedAt
 
   // Relationships
-  parent           Company?           @relation("CompanyToChildren", fields: [parentId], references: [id], onDelete: SetNull)
-  children         Company[]          @relation("CompanyToChildren")
-  users            User[]             @relation("UserCompany")
-  projects         Project[]          @relation("ProjectCompany")
-  roles            UserRole[]         @relation("UserCompanyRoles")
-  enlacedRecords   EnlacedRecords[]
-  settings         Setting[]          @relation("CompanySettings")
-  subscriptions    Subscription[]     @relation("CompanySubscriptions")
-  contacts         Contact[]          @relation("CompanyContacts")
-  deals            Deal[]             @relation("CompanyDeals")
-  invoices         Invoice[]          @relation("CompanyInvoices")
-  documents        Document[]         @relation("CompanyDocuments")
-  workflows        Workflow[]         @relation("CompanyWorkflows")
-  integrations     Integration[]      @relation("CompanyIntegrations")
-  customFields     CustomField[]      @relation("CompanyCustomFields")
-  tenantConfig     TenantConfig?      @relation("CompanyTenantConfig")
-  resources        Resource[]         @relation("CompanyResources")
-  apiKeys          ApiKey[]           @relation("CompanyApiKeys")
+  parent         Company?         @relation("CompanyToChildren", fields: [parentId], references: [id], onDelete: SetNull)
+  children       Company[]        @relation("CompanyToChildren")
+  users          User[]           @relation("UserCompany")
+  projects       Project[]        @relation("ProjectCompany")
+  roles          UserRole[]       @relation("UserCompanyRoles")
+  enlacedRecords EnlacedRecords[]
+  settings       Setting[]        @relation("CompanySettings")
+  subscriptions  Subscription[]   @relation("CompanySubscriptions")
+  contacts       Contact[]        @relation("CompanyContacts")
+  deals          Deal[]           @relation("CompanyDeals")
+  invoices       Invoice[]        @relation("CompanyInvoices")
+  documents      Document[]       @relation("CompanyDocuments")
+  workflows      Workflow[]       @relation("CompanyWorkflows")
+  integrations   Integration[]    @relation("CompanyIntegrations")
+  customFields   CustomField[]    @relation("CompanyCustomFields")
+  tenantConfig   TenantConfig?    @relation("CompanyTenantConfig")
+  resources      Resource[]       @relation("CompanyResources")
+  apiKeys        ApiKey[]         @relation("CompanyApiKeys")
 
   @@unique([name, parentId])
   @@index([parentId])
@@ -197,17 +197,17 @@ model Company {
 }
 
 model TenantConfig {
-  id                String   @id @default(uuid())
-  companyId         String   @unique
-  maxUsers          Int      @default(10)
-  maxProjects       Int      @default(5)
-  maxStorage        BigInt   @default(1073741824) // 1GB in bytes
-  features          Json     @default("{}") // Feature flags
-  customDomain      String?
-  timezone          String   @default("UTC")
-  locale            String   @default("en")
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id           String   @id @default(uuid())
+  companyId    String   @unique
+  maxUsers     Int      @default(10)
+  maxProjects  Int      @default(5)
+  maxStorage   BigInt   @default(1073741824) // 1GB in bytes
+  features     Json     @default("{}") // Feature flags
+  customDomain String?
+  timezone     String   @default("UTC")
+  locale       String   @default("en")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   company Company @relation("CompanyTenantConfig", fields: [companyId], references: [id], onDelete: Cascade)
 
@@ -242,18 +242,18 @@ model CustomField {
 // ============================================
 
 model Project {
-  id          String    @id @default(uuid())
+  id          String     @id @default(uuid())
   name        String
   description String?
-  status      String    @default("pending")
+  status      String     @default("pending")
   startDate   DateTime?
   endDate     DateTime?
   companyId   String
   createdBy   String
   tasks       Task[]
   documents   Document[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   company  Company   @relation("ProjectCompany", fields: [companyId], references: [id], onDelete: Cascade)
   creator  User      @relation("ProjectCreator", fields: [createdBy], references: [id])
@@ -276,8 +276,8 @@ model Task {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  assignee User?  @relation("TaskAssignee", fields: [assignedTo], references: [id])
+  project  Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignee User?   @relation("TaskAssignee", fields: [assignedTo], references: [id])
 
   @@index([projectId])
   @@index([assignedTo])
@@ -290,18 +290,18 @@ model Task {
 // ============================================
 
 model Contact {
-  id          String   @id @default(uuid())
-  companyId   String
-  type        String   @default("lead") // lead, client, supplier, partner
-  name        String
-  email       String?
-  phone       String?
-  address     String?
-  notes       String?
-  customData  Json     @default("{}") // Custom fields data
-  createdBy   String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(uuid())
+  companyId  String
+  type       String   @default("lead") // lead, client, supplier, partner
+  name       String
+  email      String?
+  phone      String?
+  address    String?
+  notes      String?
+  customData Json     @default("{}") // Custom fields data
+  createdBy  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   company  Company   @relation("CompanyContacts", fields: [companyId], references: [id], onDelete: Cascade)
   creator  User      @relation("ContactCreator", fields: [createdBy], references: [id])
@@ -315,26 +315,26 @@ model Contact {
 }
 
 model Deal {
-  id          String    @id @default(uuid())
-  companyId   String
-  contactId   String
-  title       String
-  description String?
-  value       Float
-  currency    String    @default("USD")
-  stage       String    @default("prospecting") // prospecting, qualified, proposal, negotiation, closed_won, closed_lost
-  probability Int       @default(0) // 0-100
+  id                String    @id @default(uuid())
+  companyId         String
+  contactId         String
+  title             String
+  description       String?
+  value             Float
+  currency          String    @default("USD")
+  stage             String    @default("prospecting") // prospecting, qualified, proposal, negotiation, closed_won, closed_lost
+  probability       Int       @default(0) // 0-100
   expectedCloseDate DateTime?
-  closedAt    DateTime?
-  assignedTo  String?
-  createdBy   String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  closedAt          DateTime?
+  assignedTo        String?
+  createdBy         String
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
-  company  Company @relation("CompanyDeals", fields: [companyId], references: [id], onDelete: Cascade)
-  contact  Contact @relation("ContactDeals", fields: [contactId], references: [id])
-  assignee User?   @relation("DealAssignee", fields: [assignedTo], references: [id])
-  creator  User    @relation("DealCreator", fields: [createdBy], references: [id])
+  company  Company   @relation("CompanyDeals", fields: [companyId], references: [id], onDelete: Cascade)
+  contact  Contact   @relation("ContactDeals", fields: [contactId], references: [id])
+  assignee User?     @relation("DealAssignee", fields: [assignedTo], references: [id])
+  creator  User      @relation("DealCreator", fields: [createdBy], references: [id])
   invoices Invoice[] @relation("DealInvoices")
 
   @@index([companyId])
@@ -370,13 +370,13 @@ model Invoice {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  company  Company        @relation("CompanyInvoices", fields: [companyId], references: [id], onDelete: Cascade)
-  deal     Deal?          @relation("DealInvoices", fields: [dealId], references: [id])
-  contact  Contact?       @relation("ContactInvoices", fields: [contactId], references: [id])
-  project  Project?       @relation("ProjectInvoices", fields: [projectId], references: [id])
-  creator  User           @relation("InvoiceCreator", fields: [createdBy], references: [id])
-  items    InvoiceItem[]  @relation("InvoiceItems")
-  payments Payment[]      @relation("InvoicePayments")
+  company  Company       @relation("CompanyInvoices", fields: [companyId], references: [id], onDelete: Cascade)
+  deal     Deal?         @relation("DealInvoices", fields: [dealId], references: [id])
+  contact  Contact?      @relation("ContactInvoices", fields: [contactId], references: [id])
+  project  Project?      @relation("ProjectInvoices", fields: [projectId], references: [id])
+  creator  User          @relation("InvoiceCreator", fields: [createdBy], references: [id])
+  items    InvoiceItem[] @relation("InvoiceItems")
+  payments Payment[]     @relation("InvoicePayments")
 
   @@index([companyId])
   @@index([dealId])
@@ -388,14 +388,14 @@ model Invoice {
 }
 
 model InvoiceItem {
-  id           String  @id @default(uuid())
+  id           String @id @default(uuid())
   invoiceId    String
   description  String
   quantity     Float
   unitPrice    Float
   total        Float
-  taxRate      Float   @default(0)
-  discountRate Float   @default(0)
+  taxRate      Float  @default(0)
+  discountRate Float  @default(0)
 
   invoice Invoice @relation("InvoiceItems", fields: [invoiceId], references: [id], onDelete: Cascade)
 
@@ -403,15 +403,15 @@ model InvoiceItem {
 }
 
 model Payment {
-  id            String   @id @default(uuid())
+  id            String    @id @default(uuid())
   invoiceId     String
   amount        Float
-  currency      String   @default("USD")
+  currency      String    @default("USD")
   method        String // card, transfer, cash, etc.
   transactionId String?
-  status        String   @default("pending") // pending, completed, failed
+  status        String    @default("pending") // pending, completed, failed
   paidAt        DateTime?
-  createdAt     DateTime @default(now())
+  createdAt     DateTime  @default(now())
 
   invoice Invoice @relation("InvoicePayments", fields: [invoiceId], references: [id], onDelete: Cascade)
 
@@ -424,20 +424,20 @@ model Payment {
 // ============================================
 
 model Resource {
-  id          String   @id @default(uuid())
-  companyId   String
-  name        String
-  type        String // material, equipment, vehicle, etc.
-  sku         String?
-  quantity    Float    @default(0)
-  unit        String   @default("unit")
-  cost        Float?
-  currency    String   @default("USD")
-  location    String?
-  notes       String?
-  customData  Json     @default("{}")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(uuid())
+  companyId  String
+  name       String
+  type       String // material, equipment, vehicle, etc.
+  sku        String?
+  quantity   Float    @default(0)
+  unit       String   @default("unit")
+  cost       Float?
+  currency   String   @default("USD")
+  location   String?
+  notes      String?
+  customData Json     @default("{}")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   company Company @relation("CompanyResources", fields: [companyId], references: [id], onDelete: Cascade)
 
@@ -451,17 +451,17 @@ model Resource {
 // ============================================
 
 model Document {
-  id          String   @id @default(uuid())
-  companyId   String
-  projectId   String?
-  name        String
-  type        String // contract, invoice, report, etc.
-  fileUrl     String
-  fileSize    BigInt
-  mimeType    String
-  uploadedBy  String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(uuid())
+  companyId  String
+  projectId  String?
+  name       String
+  type       String // contract, invoice, report, etc.
+  fileUrl    String
+  fileSize   BigInt
+  mimeType   String
+  uploadedBy String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   company  Company  @relation("CompanyDocuments", fields: [companyId], references: [id], onDelete: Cascade)
   project  Project? @relation(fields: [projectId], references: [id])
@@ -478,17 +478,17 @@ model Document {
 // ============================================
 
 model Workflow {
-  id          String         @id @default(uuid())
-  companyId   String
-  name        String
-  description String?
-  trigger     String // manual, scheduled, event-based
-  triggerConfig Json         @default("{}")
-  isActive    Boolean        @default(true)
-  createdBy   String
-  steps       WorkflowStep[]
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id            String         @id @default(uuid())
+  companyId     String
+  name          String
+  description   String?
+  trigger       String // manual, scheduled, event-based
+  triggerConfig Json           @default("{}")
+  isActive      Boolean        @default(true)
+  createdBy     String
+  steps         WorkflowStep[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   company Company @relation("CompanyWorkflows", fields: [companyId], references: [id], onDelete: Cascade)
   creator User    @relation("WorkflowCreator", fields: [createdBy], references: [id])
@@ -498,12 +498,12 @@ model Workflow {
 }
 
 model WorkflowStep {
-  id          String   @id @default(uuid())
-  workflowId  String
-  order       Int
-  action      String // send_email, create_task, update_field, etc.
-  config      Json     @default("{}")
-  createdAt   DateTime @default(now())
+  id         String   @id @default(uuid())
+  workflowId String
+  order      Int
+  action     String // send_email, create_task, update_field, etc.
+  config     Json     @default("{}")
+  createdAt  DateTime @default(now())
 
   workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
 
@@ -569,14 +569,14 @@ model AuditLog {
 // ============================================
 
 model Integration {
-  id          String   @id @default(uuid())
-  companyId   String
-  name        String // stripe, mercadopago, google_drive, slack, etc.
-  type        String // payment, storage, communication, etc.
-  config      Json     @default("{}") // API keys, webhooks, etc.
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  companyId String
+  name      String // stripe, mercadopago, google_drive, slack, etc.
+  type      String // payment, storage, communication, etc.
+  config    Json     @default("{}") // API keys, webhooks, etc.
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   company Company @relation("CompanyIntegrations", fields: [companyId], references: [id], onDelete: Cascade)
 
@@ -608,16 +608,16 @@ model ApiKey {
 // ============================================
 
 model Notification {
-  id          String   @id @default(uuid())
-  userId      String
-  title       String
-  message     String
-  type        String // info, warning, task, approval, etc.
-  entityType  String? // project, task, invoice, etc.
-  entityId    String?
-  read        Boolean  @default(false)
-  readAt      DateTime?
-  createdAt   DateTime @default(now())
+  id         String    @id @default(uuid())
+  userId     String
+  title      String
+  message    String
+  type       String // info, warning, task, approval, etc.
+  entityType String? // project, task, invoice, etc.
+  entityId   String?
+  read       Boolean   @default(false)
+  readAt     DateTime?
+  createdAt  DateTime  @default(now())
 
   user User @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
 
@@ -672,17 +672,31 @@ model Plan {
 // ============================================
 
 model Setting {
-  id        String   @id @default(uuid())
-  companyId String
-  key       String
-  value     Json
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String          @id @default(uuid())
+  key         String
+  value       String
+  description String?
+  category    SettingCategory @default(GENERAL)
+  isPublic    Boolean         @default(false)
+  companyId   String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 
   company Company @relation("CompanySettings", fields: [companyId], references: [id], onDelete: Cascade)
 
-  @@unique([companyId, key])
+  @@unique([key, companyId])
   @@index([companyId])
+  @@index([category])
+  @@index([isPublic])
+}
+
+enum SettingCategory {
+  GENERAL
+  SECURITY
+  NOTIFICATIONS
+  BILLING
+  INTEGRATIONS
+  APPEARANCE
 }
 
 // ============================================
